@@ -1,0 +1,21 @@
+# Store and check out text as LF on every platform. Without eol=lf a Windows
+# checkout produces CRLF while CI produces LF, and since a .unitypackage embeds
+# file bytes verbatim the same commit would build to different packages. Pinning
+# LF keeps the build reproducible everywhere and makes the result independent of
+# each contributor's core.autocrlf setting.
+* text=auto eol=lf
+
+*.cs      text diff=csharp
+*.asmdef  text
+*.meta    text
+*.json    text
+*.md      text
+*.yml     text
+*.py      text
+
+# Managed plugins must never be line-ending converted.
+*.dll binary
+
+# Built packages are gitignored. This is a guard for the blanket rule above: if
+# one is ever force-added, it must not be line-ending converted.
+*.unitypackage binary

@@ -1,0 +1,115 @@
+name: Unity packages
+
+# Builds one .unitypackage per tool. Tools are discovered from the repository, so adding one needs no edit here.
+
+on:
+  push:
+    branches: [main]
+    tags:
+      - 'v*'
+      - '*-v*'
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: unitypackages-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  discover:
+    name: Discover tools
+    runs-on: ubuntu-latest
+    outputs:
+      tools: ${{ steps.tools.outputs.list }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+
+      - name: List tools
+        id: tools
+        run: |
+          list=$(python scripts/build-unitypackage.py --list)
+          echo "$list"
+          echo "list=$list" >> "$GITHUB_OUTPUT"
+
+  package:
+    name: ${{ matrix.tool.name }} ${{ matrix.tool.version }}
+    needs: discover
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        tool: ${{ fromJson(needs.discover.outputs.tools) }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+
+      - name: Build package
+        env:
+          TOOL: ${{ matrix.tool.name }}
+        run: python scripts/build-unitypackage.py --tool "$TOOL"
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: ${{ matrix.tool.name }}-${{ matrix.tool.version }}
+          path: dist/*.unitypackage
+          if-no-files-found: error
+
+  release:
+    name: Publish release
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: package
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          path: dist
+          merge-multiple: true
+
+      - name: Publish packages for this tag
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          if [[ "$TAG" =~ ^(.+)-v([0-9]+\.[0-9]+\.[0-9]+.*)$ ]]; then
+            tool="${BASH_REMATCH[1]}"
+            version="${BASH_REMATCH[2]}"
+            expected="dist/${tool}-${version}.unitypackage"
+
+            if [[ ! -f "$expected" ]]; then
+              echo "::error::Tag $TAG expects ${tool}-${version}.unitypackage, which was not built."
+              echo "Built packages:"
+              ls -1 dist
+              echo "Set the newest version under '## ${tool}' in CHANGELOG.md to ${version}, then retag."
+              exit 1
+            fi
+
+            files=("$expected")
+            title="${tool} ${version}"
+          elif [[ "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+ ]]; then
+            files=(dist/*.unitypackage)
+            title="Fynn's Tools Free ${TAG#v}"
+          else
+            echo "::error::Tag $TAG matches no release scheme. Use <Tool>-v<x.y.z> or v<x.y.z>."
+            exit 1
+          fi
+
+          echo "Releasing as '$title': ${files[*]}"
+          if gh release view "$TAG" --repo "$REPO" >/dev/null 2>&1; then
+            gh release upload "$TAG" "${files[@]}" --repo "$REPO" --clobber
+          else
+            gh release create "$TAG" "${files[@]}" --repo "$REPO" --title "$title" --generate-notes
+          fi

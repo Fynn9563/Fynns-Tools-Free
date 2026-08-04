@@ -1,0 +1,24 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <ui:Label tabindex="-1" text="&#10;GoGoLoco Pose Changer (NDMF)&#10;v{0}&#10;" parse-escape-sequences="true" display-tooltip-when-elided="true" enable-rich-text="false" name="title" style="-unity-text-align: upper-center; white-space: normal; -unity-font-style: bold; font-size: 15px;" />
+    <ui:VisualElement name="av" />
+    <ui:Label tabindex="-1" parse-escape-sequences="true" display-tooltip-when-elided="true" enable-rich-text="false" text="&#10;Specify the animations to replace.&#10;Items set to None (Motion) will not be changed.&#10;" style="white-space: normal;" />
+    <ui:Foldout text="Basic Motions" view-data-key="fold1key" style="border-bottom-width: 15px;">
+        <uie:ObjectField label="Avatar Thumbnail" name="avatarThumbnail" type="UnityEngine.Motion, UnityEngine.AnimationModule" binding-path="avatarThumbnail" style="flex-direction: column;" />
+        <uie:ObjectField label="Stand" name="stand" type="UnityEngine.Motion, UnityEngine.AnimationModule" binding-path="stand" style="flex-direction: column;" />
+        <uie:ObjectField label="Crouch" name="crouch" type="UnityEngine.Motion, UnityEngine.AnimationModule" binding-path="crouch" style="flex-direction: column;" />
+        <uie:ObjectField label="Prone" name="prone" type="UnityEngine.Motion, UnityEngine.AnimationModule" binding-path="prone" style="flex-direction: column;" />
+        <uie:ObjectField label="Fall" name="fall" type="UnityEngine.Motion, UnityEngine.AnimationModule" binding-path="fall" style="flex-direction: column;" />
+    </ui:Foldout>
+    <ui:Foldout text="AFK Motions" view-data-key="fold2key" style="border-bottom-width: 15px;">
+        <ui:Toggle label=" AFK motion has start and end " value="false" name="isExtended" binding-path="isExtended" style="flex-direction: row-reverse; align-self: flex-start;" />
+        <uie:ObjectField label="AFK" name="afk" type="UnityEngine.Motion, UnityEngine.AnimationModule" binding-path="afk" style="flex-direction: column;" />
+        <uie:ObjectField label="AFK Start (Required)" name="afkInit" type="UnityEngine.Motion, UnityEngine.AnimationModule" binding-path="afkInit" style="flex-direction: column;" />
+        <uie:ObjectField label="AFK Loop (Required)" name="afkLoop" type="UnityEngine.Motion, UnityEngine.AnimationModule" binding-path="afkLoop" style="flex-direction: column;" />
+        <uie:ObjectField label="AFK End (Required)" name="afkStop" type="UnityEngine.Motion, UnityEngine.AnimationModule" binding-path="afkStop" style="flex-direction: column;" />
+    </ui:Foldout>
+    <ui:VisualElement name="bi" />
+    <ui:Foldout text="Settings" view-data-key="fold3key" value="false">
+        <ui:Toggle label=" Enable Debug Logging" name="debug" binding-path="debug" tooltip="Logs replaced animations to the Console during build" style="flex-direction: row-reverse; align-self: flex-start;" />
+    </ui:Foldout>
+    <ui:Label tabindex="-1" text="Created by Fynn9563" parse-escape-sequences="true" display-tooltip-when-elided="true" enable-rich-text="false" name="credit" tooltip="https://github.com/Fynn9563" style="-unity-text-align: upper-right; font-size: 10px; cursor: link; opacity: 0.6; margin-top: 14px; margin-bottom: 4px;" />
+</ui:UXML>
