@@ -1,5 +1,18 @@
 # Changelog
 
+## FaceEmoPatches
+
+### [1.0.0] - 2026-08-25
+
+First release.
+
+#### Added
+- Optional fixes for [FaceEmo](https://suzuryg.github.io/face-emo/), each turned on individually from **Tools > Fynn's Tools > FaceEmo Patches > Settings**
+- Transparent thumbnail backgrounds, so the expression menu icons FaceEmo generates keep their alpha instead of arriving with a solid backdrop behind the face
+- Blend shape picker sized to its contents, so long names stay readable in the popup opened by the **+** button under Excluded Blend Shapes
+- Patches are applied to the running editor only. FaceEmo's own files are never modified, and clearing a tick box restores the original behaviour straight away
+- A patch reports itself as unavailable instead of failing when FaceEmo is missing, or when a future version of it moves what the patch relies on
+
 ## GoGoLocoPoseChanger
 
 ### [1.0.0] - 2026-08-04

@@ -1,0 +1,24 @@
+{
+    "name": "FynnsTools.FaceEmoPatches.Editor",
+    "rootNamespace": "FynnsTools.FaceEmoPatches",
+    "references": [],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [
+        "0Harmony.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.vrchat.base",
+            "expression": "",
+            "define": "VRC_SDK_VRCSDK3"
+        }
+    ],
+    "noEngineReferences": false
+}
