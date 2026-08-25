@@ -12,7 +12,7 @@ Free tools for the Unity Editor.
 ## FaceEmo Patches
 
 Optional fixes for [FaceEmo](https://suzuryg.github.io/face-emo/). Each one is a tick box, and
-nothing is on until you tick it.
+both are on as soon as you install it. Untick one to turn it off.
 
 FaceEmo is never edited to do it. The fixes are applied to the Unity Editor while it is running, so
 FaceEmo itself stays untouched and updating it changes nothing here.
@@ -34,8 +34,10 @@ Unity project, and click **Import**.
 
 ### How to use
 
+Both fixes are already on, so there is nothing to do to start using them. To turn one off:
+
 1. **Tools > Fynn's Tools > FaceEmo Patches > Settings**
-2. Tick the fixes you want
+2. Untick it
 
 Ticking or unticking one takes effect straight away. There is nothing to save and no need to restart
 Unity.
