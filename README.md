@@ -7,6 +7,7 @@ Free tools for the Unity Editor.
 | [FaceEmo Patches](#faceemo-patches) | Optional fixes for FaceEmo: transparent menu icons, and a blend shape picker that fits its contents |
 | [GoGoLoco Pose Changer](#gogoloco-pose-changer) | Swap GoGo Loco's stand, crouch, prone, fall and AFK animations on your VRChat avatar |
 | [Unity Pet Framework](#unity-pet-framework) | An animated pet that walks around on top of the Unity Editor |
+| [VRC SDK Patches](#vrc-sdk-patches) | Optional fixes for the VRChat SDK's build panel: Select jumps to the object using an unsupported shader |
 
 ---
 
@@ -205,6 +206,58 @@ than the project you happened to import them in.
 The **Pet** tab says why underneath the tick box. The usual reasons are that you are not on
 Windows, or that part of the tool folder was moved and the pet that ships with it could not be
 found.
+
+---
+
+## VRC SDK Patches
+
+Optional fixes for the VRChat SDK's build panel. Each one is a tick box, and it is on as soon as you
+install it. Untick it to turn it off.
+
+The SDK is never edited to do it. The fixes are applied to the Unity Editor while it is running, so
+the SDK itself stays untouched and updating it changes nothing here.
+
+### Requirements
+
+Unity 2022.3 or newer, plus:
+
+| Needed | Install |
+|---|---|
+| VRChat SDK (Avatars 3.0) | Already included with VCC |
+
+### Install
+
+Download the latest `.unitypackage` from
+[Releases](https://github.com/Fynn9563/Fynns-Tools-Free/releases/latest), drag it into your open
+Unity project, and click **Import**.
+
+### How to use
+
+The fix is already on, so there is nothing to do to start using it. To turn it off:
+
+1. **Tools > Fynn's Tools > VRC SDK Patches > Settings**
+2. Untick it
+
+Ticking or unticking it takes effect straight away. There is nothing to save and no need to restart
+Unity.
+
+### What each one fixes
+
+| Patch | What it changes |
+|---|---|
+| Select the object using an unsupported shader | Building for Quest reports every shader that is not allowed, with a **Select** button that selects your avatar root, which does not tell you where the shader is. This makes **Select** pick the objects actually using that shader instead, all of them at once when several share it, and highlight the first in the Hierarchy. |
+
+The Quest shader errors only show up while your build target is set to Android, so switch to Android
+in **File > Build Settings** if the panel is not listing them.
+
+If nothing on the avatar is using the shader by the time you press **Select**, for instance because
+you already swapped the material, the button falls back to the SDK's own behaviour and selects the
+avatar root.
+
+### If a tick box is greyed out
+
+The patch says why underneath it. That happens when the Avatars SDK is not installed, or when the
+installed SDK version has moved the part the patch relies on. Your project is left alone either way.
 
 ---
 

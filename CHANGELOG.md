@@ -58,3 +58,15 @@ First release.
 - Optional sounds, one per animation
 - The pet is editor only. Nothing it uses is included in a built game, and nothing is written into your scenes or project assets
 - A pet package can only contain pictures, sounds and a description of its animations. It is never added to your project and nothing inside it is ever run
+
+## VRCSdkPatches
+
+### [1.0.0] - 2026-09-25
+
+First release.
+
+#### Added
+- Optional fixes for the VRChat SDK's build panel, on by default and switchable individually from **Tools > Fynn's Tools > VRC SDK Patches > Settings**
+- The **Select** button on the "unsupported shader" Quest build error now selects the objects actually using that shader, instead of the avatar root. All of them are selected at once when several share the shader, and the first is highlighted in the Hierarchy
+- Patches are applied to the running editor only. The SDK's own files are never modified, and clearing a tick box restores the original behaviour straight away
+- A patch reports itself as unavailable instead of failing when the Avatars SDK is missing, or when a future SDK version moves what the patch relies on
