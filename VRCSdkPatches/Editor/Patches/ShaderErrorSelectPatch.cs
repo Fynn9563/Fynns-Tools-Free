@@ -25,8 +25,8 @@ namespace FynnsTools.VRCSdkPatches
 
 		public override string Description =>
 			"Makes the Select button on the SDK's \"unsupported shader\" build error pick the objects that " +
-			"actually use the shader, instead of the avatar root. Quest shader errors only appear while the " +
-			"build target is set to Android.";
+			"actually use the shader, instead of the avatar root. These errors only appear once the SDK is " +
+			"on Android.";
 
 		protected override string CheckAvailability()
 		{

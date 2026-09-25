@@ -247,17 +247,12 @@ Unity.
 |---|---|
 | Select the object using an unsupported shader | Building for Quest reports every shader that is not allowed, with a **Select** button that selects your avatar root, which does not tell you where the shader is. This makes **Select** pick the objects actually using that shader instead, all of them at once when several share it, and highlight the first in the Hierarchy. |
 
-The Quest shader errors only show up while your build target is set to Android, so switch to Android
-in **File > Build Settings** if the panel is not listing them.
+These errors only show up once the SDK is on Android, which you pick in the platform selector in the
+VRChat SDK panel's **Builder** tab. The SDK asks to confirm and switches the build target for you.
 
 If nothing on the avatar is using the shader by the time you press **Select**, for instance because
 you already swapped the material, the button falls back to the SDK's own behaviour and selects the
 avatar root.
-
-### If a tick box is greyed out
-
-The patch says why underneath it. That happens when the Avatars SDK is not installed, or when the
-installed SDK version has moved the part the patch relies on. Your project is left alone either way.
 
 ---
 
