@@ -31,6 +31,7 @@ import json
 import re
 import sys
 import tarfile
+import time
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -145,12 +146,17 @@ def collect_assets(tool: str, install_root: str) -> list[Asset]:
     return assets
 
 
-def add_entry(tar: tarfile.TarFile, name: str, payload: bytes | None) -> None:
-    """Add one entry with fixed mtime and ownership, so builds are reproducible."""
+def add_entry(tar: tarfile.TarFile, name: str, payload: bytes | None, mtime: int) -> None:
+    """Add one entry.
+
+    The mtime must be a real timestamp. Unity puts it on the files it extracts, so a
+    zero mtime makes imported source look older than the assembly built from the
+    previous import and nothing recompiles.
+    """
     info = tarfile.TarInfo(name)
     info.uid = info.gid = 0
     info.uname = info.gname = ""
-    info.mtime = 0
+    info.mtime = mtime
     if payload is None:
         info.type = tarfile.DIRTYPE
         info.mode = 0o755
@@ -168,16 +174,18 @@ def build(tool: str, out_dir: Path, install_root: str) -> Path:
     out_dir.mkdir(parents=True, exist_ok=True)
     out_path = out_dir / f"{tool}-{version}.unitypackage"
 
-    # mtime=0 in the gzip header keeps output byte-identical between runs.
+    # One timestamp for the whole archive, so every file in an import shares it.
+    stamp = int(time.time())
+
     with open(out_path, "wb") as raw, \
-            gzip.GzipFile(filename="", mode="wb", fileobj=raw, mtime=0) as gz, \
+            gzip.GzipFile(filename="", mode="wb", fileobj=raw, mtime=stamp) as gz, \
             tarfile.open(fileobj=gz, mode="w", format=tarfile.GNU_FORMAT) as tar:
         for asset in assets:
-            add_entry(tar, asset.guid, None)
-            add_entry(tar, f"{asset.guid}/pathname", asset.pathname.encode("utf-8"))
-            add_entry(tar, f"{asset.guid}/asset.meta", asset.meta)
+            add_entry(tar, asset.guid, None, stamp)
+            add_entry(tar, f"{asset.guid}/pathname", asset.pathname.encode("utf-8"), stamp)
+            add_entry(tar, f"{asset.guid}/asset.meta", asset.meta, stamp)
             if not asset.is_folder:
-                add_entry(tar, f"{asset.guid}/asset", asset.contents)
+                add_entry(tar, f"{asset.guid}/asset", asset.contents, stamp)
 
     folders = sum(1 for asset in assets if asset.is_folder)
     files = len(assets) - folders
