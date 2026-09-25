@@ -6,6 +6,7 @@ Free tools for the Unity Editor.
 |---|---|
 | [FaceEmo Patches](#faceemo-patches) | Optional fixes for FaceEmo: transparent menu icons, and a blend shape picker that fits its contents |
 | [GoGoLoco Pose Changer](#gogoloco-pose-changer) | Swap GoGo Loco's stand, crouch, prone, fall and AFK animations on your VRChat avatar |
+| [Unity Pet Framework](#unity-pet-framework) | An animated pet that walks around on top of the Unity Editor |
 
 ---
 
@@ -101,6 +102,109 @@ A warning appears in the Console and your avatar is left untouched when:
 - GoGo Loco is not in the project
 - No animations have been set
 - **AFK motion has start and end** is ticked but Start, Loop, or End is missing
+
+---
+
+## Unity Pet Framework
+
+An animated pet that walks around on top of the Unity Editor. Four pets are included, and you can
+build your own from any sprite sheet without writing anything.
+
+The pet lives in the editor only. Nothing it uses is included in a built game, and nothing is
+written into your scenes or project assets. The pet itself is shown on Windows; the rest of the
+tool, including building and sharing pets, works the same everywhere.
+
+### Requirements
+
+Unity 2022.3 or newer. Nothing else: no SDK, no other packages.
+
+The pet is drawn on Windows only.
+
+### Install
+
+Download the latest `.unitypackage` from
+[Releases](https://github.com/Fynn9563/Fynns-Tools-Free/releases/latest), drag it into your open
+Unity project, and click **Import**.
+
+### How to use
+
+1. **Tools > Fynn's Tools > Unity Pet Framework**
+2. On the **Pet** tab, tick **Show the pet**
+
+The pet walks along the bottom of whatever it is standing on, turns around when it reaches the end,
+stops to think, sits down for a rest, jumps about, and goes to sleep when it runs out of energy.
+
+| What you do | What it does |
+|---|---|
+| Click it | Looks pleased |
+| Click and hold | Gets petted, for as long as you hold, and perks up |
+| Click it again and again | Puts up with three, then gets annoyed |
+| Double click it | Startles, and once that has played, walks somewhere else. Use this when it is in the way |
+| Double click and hold | Picks it up, if the pet has a carry pose. Drop it where you like |
+
+It also reacts to Unity: thinking while it compiles, startling at errors in the Console, and
+celebrating when you enter play mode. All of that can be turned off under **Settings**, and the
+**About** tab lists every interaction.
+
+**Settings** has its size, speed, how calm it is, how long its energy lasts, and whether it stays
+inside the Scene and Game views or roams the whole Unity window.
+
+### Making your own pet
+
+The **Pet Creator** tab builds a pet from a sprite sheet. Every frame lives on one PNG laid out on
+an even grid.
+
+1. Choose the sheet and set the frame size
+2. Pick an animation from the list on the left
+3. Click cells on the sheet in the order they play
+4. Watch it in the preview underneath
+
+**Smart Slice** reads the sheet's transparency and works out where the frames are, so the normal
+job is correcting a detection rather than drawing a box around every sprite by hand. It groups
+frames into likely animations and attaches detached effects, such as a heart or a question mark, to
+the frame they belong with. **Strict**, **Normal** and **Loose** control how eagerly it does that;
+Normal is the default.
+
+When it gets something wrong you can select, merge, split, delete, add a missed piece, resize,
+reorder, move a frame to another group, or undo.
+
+Frames do not have to be the same size, and animations can be any length. Each frame carries its
+own anchor so differently cropped frames sit still rather than jittering; anchors are generated for
+you and only need correcting occasionally.
+
+You only draw each animation once. The pet is drawn facing one way, and the framework mirrors it
+when it walks the other way, so there is no second walk cycle to draw or to keep in step. Artwork
+that reads wrong backwards can opt out with **Allow Mirroring**.
+
+Turning is the exception, because a turn is a rotation rather than the same pose seen from the
+other side. One **Turn Standing** animation covers both directions: it plays forwards to turn left
+to right, and backwards to turn the other way. **Turn Sitting** is the same thing sat down, used
+when the pet rolls over in its sleep.
+
+If a sheet really is a clean grid, there is still a grid mode that takes either the frame size or
+the number of columns and rows and works out the rest.
+
+You can also assign frames as a **Pet Icon**. One frame gives a still icon, several give an
+animated one, and it is used wherever the tool lists pets.
+
+### Sharing pets
+
+**Import / Export** writes a pet out as a single `.fynnpet` file. Exporting packs the sheet down to
+only the frames the pet actually uses, cropped to the drawn area, which usually makes it a good
+deal smaller.
+
+A pet package can only contain pictures, sounds and a description of its animations. It is never
+added to your project and nothing inside it is ever run. Anything unexpected inside one and the
+whole package is refused.
+
+Imported pets are kept outside your project, in your own app data folder, so they follow you rather
+than the project you happened to import them in.
+
+### If the pet does not appear
+
+The **Pet** tab says why underneath the tick box. The usual reasons are that you are not on
+Windows, or that part of the tool folder was moved and the pet that ships with it could not be
+found.
 
 ---
 

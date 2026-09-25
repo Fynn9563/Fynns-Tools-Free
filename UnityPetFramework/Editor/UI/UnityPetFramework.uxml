@@ -1,0 +1,20 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <ui:Label tabindex="-1" text="Unity Pet Framework&#10;v{0}" parse-escape-sequences="true" display-tooltip-when-elided="true" enable-rich-text="false" name="title" style="-unity-text-align: upper-center; white-space: normal; -unity-font-style: bold; font-size: 15px; margin-top: 8px; margin-bottom: 8px;" />
+    <ui:VisualElement name="tabs" style="flex-direction: row; justify-content: center; flex-wrap: wrap; margin-bottom: 6px;">
+        <ui:Button text="Pet" name="tab-pet" />
+        <ui:Button text="Settings" name="tab-settings" />
+        <ui:Button text="Pet Creator" name="tab-creator" />
+        <ui:Button text="Import / Export" name="tab-io" />
+        <ui:Button text="About" name="tab-about" />
+    </ui:VisualElement>
+    <ui:VisualElement name="pages" style="flex-grow: 1; margin-left: 6px; margin-right: 6px;">
+        <ui:VisualElement name="page-pet" style="flex-grow: 1;" />
+        <ui:VisualElement name="page-settings" style="flex-grow: 1;" />
+        <ui:VisualElement name="page-creator" style="flex-grow: 1;" />
+        <ui:VisualElement name="page-io" style="flex-grow: 1;" />
+        <ui:VisualElement name="page-about" style="flex-grow: 1;">
+            <ui:Label tabindex="-1" text="An animated pet that walks around on top of the Unity Editor.&#10;&#10;The pet lives in the editor only. Nothing it uses is included in a built game, and nothing is written into your scenes or project assets.&#10;&#10;The overlay needs Windows. On any other platform the rest of the tool still works, and the Pet page says so." parse-escape-sequences="true" display-tooltip-when-elided="true" enable-rich-text="false" style="white-space: normal; margin-top: 4px;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <ui:Label tabindex="-1" text="Created by Fynn9563" parse-escape-sequences="true" display-tooltip-when-elided="true" enable-rich-text="false" name="credit" tooltip="https://github.com/Fynn9563" style="-unity-text-align: upper-right; font-size: 10px; cursor: link; opacity: 0.6; margin-top: 14px; margin-bottom: 4px; margin-right: 6px;" />
+</ui:UXML>

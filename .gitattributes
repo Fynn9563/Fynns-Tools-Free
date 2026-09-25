@@ -16,6 +16,11 @@
 # Managed plugins must never be line-ending converted.
 *.dll binary
 
+# Sprite sheets and pet sounds. text=auto already detects these as binary, so
+# this is a guard against the blanket rule above rather than a fix.
+*.png binary
+*.wav binary
+
 # Built packages are gitignored. This is a guard for the blanket rule above: if
 # one is ever force-added, it must not be line-ending converted.
 *.unitypackage binary
