@@ -4,10 +4,50 @@ Free tools for the Unity Editor.
 
 | Tool | What it does |
 |---|---|
+| [ClientSim Storage Cleaner](#clientsim-storage-cleaner) | Deletes the ClientSimStorage folder every time play mode ends, so each ClientSim test starts as a new player |
 | [FaceEmo Patches](#faceemo-patches) | Optional fixes for FaceEmo: transparent menu icons, and a blend shape picker that fits its contents |
 | [GoGoLoco Pose Changer](#gogoloco-pose-changer) | Swap GoGo Loco's stand, crouch, prone, fall and AFK animations on your VRChat avatar |
 | [Unity Pet Framework](#unity-pet-framework) | An animated pet that walks around on top of the Unity Editor |
 | [VRC SDK Patches](#vrc-sdk-patches) | Optional fixes for the VRChat SDK's build panel: Select jumps to the object using an unsupported shader |
+
+---
+
+## ClientSim Storage Cleaner
+
+ClientSim saves the player data and player objects of every test run in a `ClientSimStorage` folder
+next to `Assets`, and loads them again on the next run. This deletes that folder every time play mode
+ends, so each run starts as a new player would. It is on as soon as you install it.
+
+### Requirements
+
+Unity 2022.3 or newer. It does nothing in a project that has no `ClientSimStorage` folder, so it can
+be installed in any project.
+
+### Install
+
+Download the latest `.unitypackage` from
+[Releases](https://github.com/Fynn9563/Fynns-Tools-Free/releases/latest), drag it into your open
+Unity project, and click **Import**.
+
+### How to use
+
+It is already on, so there is nothing to do. To turn it off:
+
+1. **Tools > Fynn's Tools > ClientSim Storage Cleaner > Settings**
+2. Untick it
+
+The setting is editor-wide, so it holds across every project you open. **Clear Now** in the same
+menu deletes the folder at any time outside play mode.
+
+### What it deletes
+
+`<project>/ClientSimStorage`, with its `PlayerData` and `PlayerObjects` folders. Nothing under
+`Assets`, `Packages` or `Library` is touched. The folder is deleted once play mode has fully ended,
+and ClientSim creates it again the next time you press Play.
+
+ClientSim writes its last file on a background thread while the editor leaves play mode, so the
+delete is retried for a few seconds if a file is still open. If it still cannot be deleted, a warning
+in the Console says so, and **Clear Now** does it once ClientSim is finished.
 
 ---
 

@@ -1,5 +1,17 @@
 # Changelog
 
+## ClientSimStorageCleaner
+
+### [1.0.0] - 2026-09-30
+
+First release.
+
+#### Added
+- Deletes the `ClientSimStorage` folder at the project root every time play mode ends, so each ClientSim test run starts as a new player. On by default, switchable from **Tools > Fynn's Tools > ClientSim Storage Cleaner > Settings**
+- **Clear Now** in the same menu, for deleting the folder at any time outside play mode
+- The delete waits for ClientSim to finish writing and retries for a few seconds, then warns in the Console instead of failing silently
+- Nothing under `Assets`, `Packages` or `Library` is touched, and a project without the folder is left alone
+
 ## FaceEmoPatches
 
 ### [1.0.0] - 2026-08-25
