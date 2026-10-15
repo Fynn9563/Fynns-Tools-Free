@@ -22,7 +22,7 @@ def read_manifest(repository, asset):
     return json.loads(data)
 
 
-def build_listing(repository, branch, releases, load_manifest):
+def build_listing(repository, branch, releases, load_manifest, excluded_versions=None):
     packages = {}
     # Newest publication wins when the same version appears in multiple releases.
     releases = sorted(releases, key=lambda r: (r.get('published_at') or '', r['id']), reverse=True)
@@ -50,6 +50,8 @@ def build_listing(repository, branch, releases, load_manifest):
                 raise ValueError(f'{filename}: download URL does not match release ZIP')
             if not re.fullmatch(r'[0-9a-fA-F]{64}', manifest.get('zipSHA256', '')):
                 raise ValueError(f'{filename}: missing or invalid ZIP checksum')
+            if version in (excluded_versions or {}).get(name, []):
+                continue
             versions = packages.setdefault(name, {'versions': {}})['versions']
             versions.setdefault(version, manifest)
     return {
@@ -75,7 +77,9 @@ def main():
         if not release.get('draft'):
             asset_pages = github_json(f'repos/{args.repository}/releases/{int(release["id"])}/assets?per_page=100', paginate=True)
             release['assets'] = [asset for page in asset_pages for asset in page]
-    listing = build_listing(args.repository, args.branch, releases, lambda asset: read_manifest(args.repository, asset))
+    settings = json.loads((Path(__file__).parent / 'packages.json').read_text(encoding='utf-8'))
+    excluded = {entry['name']: entry.get('excludedListingVersions', []) for entry in settings.values()}
+    listing = build_listing(args.repository, args.branch, releases, lambda asset: read_manifest(args.repository, asset), excluded)
     args.output.write_text(json.dumps(listing, indent=2, sort_keys=True) + '\n', encoding='utf-8')
     print(f'Wrote {args.output}: {len(listing["packages"])} packages, '
           f'{sum(len(p["versions"]) for p in listing["packages"].values())} versions')

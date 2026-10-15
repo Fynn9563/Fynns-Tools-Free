@@ -65,7 +65,7 @@ class PackageTests(unittest.TestCase):
         with zipfile.ZipFile(archive) as package:
             self.assertEqual(package.namelist(), ['package.json'])
             manifest = json.loads(package.read('package.json'))
-        self.assertEqual(manifest['vpmDependencies'], {'com.fynn.tools.example': '>=1.2.3'})
+        self.assertEqual(manifest['vpmDependencies'], {'com.vrchat.avatars': '>=3.10.5', 'com.fynn.tools.example': '>=1.2.3'})
         self.assertEqual(manifest['name'], 'com.fynn.tools.complete')
         self.assertIn('/download/v2.0.0/Complete-1.0.0.zip', manifest['url'])
         listing = json.loads(archive.with_name('Complete-1.0.0.package.json').read_text())
@@ -75,6 +75,25 @@ class PackageTests(unittest.TestCase):
         builder.CHANGELOG.write_text('## Complete\n\n### [1.0.0]\n', encoding='utf-8')
         with self.assertRaises(builder.BuildError):
             builder.build_vpm(builder.COMPLETE, self.root / 'dist', 'owner/repo')
+
+    def test_complete_packages_exclude_opposite_sdk_tools(self):
+        settings = json.loads(builder.PACKAGE_SETTINGS.read_text())
+        for name, sdk in [('AvatarOnly', 'com.vrchat.avatars'), ('WorldOnly', 'com.vrchat.worlds')]:
+            (self.root / name).mkdir()
+            (self.root / (name + '.meta')).write_text('fileFormatVersion: 2\nguid: ' + 'a' * 32)
+            settings[name] = {'name': 'com.fynn.tools.' + name.lower(), 'vpmDependencies': {sdk: '>=3.10.5'}}
+            with builder.CHANGELOG.open('a') as log:
+                log.write('\n## ' + name + '\n\n### [1.0.0]\n')
+        builder.PACKAGE_SETTINGS.write_text(json.dumps(settings))
+        for bundle, sdk, included, excluded in [
+            ('Complete', 'com.vrchat.avatars', 'avataronly', 'worldonly'),
+            ('CompleteWorlds', 'com.vrchat.worlds', 'worldonly', 'avataronly')
+        ]:
+            dependencies = builder.package_settings(bundle)['vpmDependencies']
+            self.assertIn(sdk, dependencies)
+            self.assertIn('com.fynn.tools.example', dependencies)
+            self.assertIn('com.fynn.tools.' + included, dependencies)
+            self.assertNotIn('com.fynn.tools.' + excluded, dependencies)
 
     def test_missing_metadata_rejected(self):
         (self.root / 'Example/Editor/Tool.cs.meta').unlink()

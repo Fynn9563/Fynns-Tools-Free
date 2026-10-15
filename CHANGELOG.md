@@ -1,6 +1,17 @@
 # Changelog
 
+## CompleteWorlds
+
+### [1.0.0] - 2026-10-15
+
+- Added a World SDK Complete package containing shared tools and world tools, excluding tools that require the Avatar SDK.
+
 ## Complete
+
+### [1.0.1] - 2026-10-15
+
+- Declare Avatar SDK compatibility and exclude World SDK tools from Complete.
+- Exclude the original unscoped Complete and ClientSim Storage Cleaner versions from the VPM listing so older metadata cannot bypass project compatibility.
 
 ### [1.0.0] - 2026-10-15
 
@@ -96,6 +107,10 @@ Initial standalone source package.
 - One menu under **Tools > Fynn's Tools > Clipping Tester** with Fynn9563 GitHub credit; visual inspection without automatic clipping detection.
 
 ## ClientSimStorageCleaner
+
+### [1.0.1] - 2026-10-15
+
+- Require the VRChat World SDK so VPM offers ClientSim Storage Cleaner for world projects.
 
 ### [1.0.0] - 2026-09-30
 

@@ -105,7 +105,7 @@ jobs:
 
             zip="dist/${tool}-${version}.zip"
             manifest="dist/${tool}-${version}.package.json"
-            if [[ ! -f "$zip" || ! -f "$manifest" || ( "$tool" != "Complete" && ! -f "$expected" ) ]]; then
+            if [[ ! -f "$zip" || ! -f "$manifest" || ( "$tool" != "Complete" && "$tool" != "CompleteWorlds" && ! -f "$expected" ) ]]; then
               echo "::error::Tag $TAG expects ${tool}-${version}.unitypackage, which was not built."
               echo "Built packages:"
               ls -1 dist
@@ -114,7 +114,7 @@ jobs:
             fi
 
             files=("$zip" "$manifest")
-            if [[ "$tool" != "Complete" ]]; then files+=("$expected"); fi
+            if [[ "$tool" != "Complete" && "$tool" != "CompleteWorlds" ]]; then files+=("$expected"); fi
             title="${tool} ${version}"
           elif [[ "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+ ]]; then
             files=(dist/*.unitypackage dist/*.zip dist/*.package.json)

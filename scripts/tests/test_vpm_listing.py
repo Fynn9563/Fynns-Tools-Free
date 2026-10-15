@@ -42,6 +42,12 @@ class ListingTests(unittest.TestCase):
         draft['draft'] = True
         self.assertEqual(self.build([draft, {'id': 2, 'assets': [{'name': 'old.unitypackage'}]}])['packages'], {})
 
+    def test_known_incompatible_versions_are_excluded(self):
+        result = listing.build_listing('Fynn9563/Fynns-Tools-Free', 'main',
+            [self.release(), self.release('1.0.1', 2)], lambda a: a['manifest'],
+            {'com.fynn.tools.example': ['1.0.0']})
+        self.assertEqual(set(result['packages']['com.fynn.tools.example']['versions']), {'1.0.1'})
+
     def test_prerelease_included(self):
         release = self.release('1.2.0-beta.1')
         release['prerelease'] = True

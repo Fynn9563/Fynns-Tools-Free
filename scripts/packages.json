@@ -27,7 +27,12 @@
     "name": "com.fynn.tools.clientsimstoragecleaner",
     "displayName": "ClientSim Storage Cleaner",
     "description": "Clear local ClientSim storage between play sessions.",
-    "vpmDependencies": {}
+    "vpmDependencies": {
+      "com.vrchat.worlds": ">=3.10.5"
+    },
+    "excludedListingVersions": [
+      "1.0.0"
+    ]
   },
   "ClippingTester": {
     "name": "com.fynn.tools.clippingtester",
@@ -139,8 +144,17 @@
   },
   "Complete": {
     "name": "com.fynn.tools.complete",
-    "displayName": "Fynn's Tools Free Complete",
-    "description": "Install all Fynn's Tools Free tools as individual packages.",
+    "displayName": "Fynn's Tools Free Complete \u2014 Avatars",
+    "description": "Install all Fynn's Tools Free tools compatible with VRChat avatar projects.",
+    "vpmDependencies": {},
+    "excludedListingVersions": [
+      "1.0.0"
+    ]
+  },
+  "CompleteWorlds": {
+    "name": "com.fynn.tools.complete.worlds",
+    "displayName": "Fynn's Tools Free Complete \u2014 Worlds",
+    "description": "Install all Fynn's Tools Free tools compatible with VRChat world projects.",
     "vpmDependencies": {}
   }
 }

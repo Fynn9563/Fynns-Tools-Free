@@ -47,6 +47,7 @@ CHANGELOG = REPO_ROOT / "CHANGELOG.md"
 PACKAGE_SETTINGS = REPO_ROOT / "scripts" / "packages.json"
 UNVERSIONED = "0.0.0"
 COMPLETE = "Complete"
+COMPLETE_PACKAGES = {COMPLETE: "com.vrchat.avatars", "CompleteWorlds": "com.vrchat.worlds"}
 
 
 # Unity skips these on import, so they never belong in a package.
@@ -118,7 +119,7 @@ def read_version(tool: str) -> str:
 
 def collect_assets(tool: str, install_root: str) -> list[Asset]:
     """The tool folder and everything inside it, paired with its .meta."""
-    if tool == COMPLETE:
+    if tool in COMPLETE_PACKAGES:
         return []
     tool_dir = REPO_ROOT / tool
     install_base = f"{install_root}/{tool}"
@@ -207,11 +208,15 @@ def build(tool: str, out_dir: Path, install_root: str) -> Path:
 def package_settings(tool: str) -> dict:
     settings = json.loads(PACKAGE_SETTINGS.read_text(encoding="utf-8")) if PACKAGE_SETTINGS.is_file() else {}
     entry = settings.get(tool, {})
-    if tool == COMPLETE:
-        entry = dict(entry, vpmDependencies={
-            package_settings(name)["name"]: ">=" + read_version(name)
-            for name in discover_tools()
-        })
+    if tool in COMPLETE_PACKAGES:
+        sdk = COMPLETE_PACKAGES[tool]
+        opposite = "com.vrchat.worlds" if sdk == "com.vrchat.avatars" else "com.vrchat.avatars"
+        dependencies = {sdk: ">=3.10.5"}
+        for name in discover_tools():
+            package = package_settings(name)
+            if opposite not in package["vpmDependencies"]:
+                dependencies[package["name"]] = ">=" + read_version(name)
+        entry = dict(entry, vpmDependencies=dependencies)
         if any(version == ">=" + UNVERSIONED for version in entry["vpmDependencies"].values()):
             raise BuildError("Complete: every dependency needs a release version.")
     name = entry.get("name", "com.fynn.tools." + tool.lower())
@@ -309,7 +314,7 @@ def main() -> int:
 
     available = discover_tools()
     if available and args.format != "unitypackage":
-        available.append(COMPLETE)
+        available.extend(COMPLETE_PACKAGES)
     if not available:
         print("No tools found. A tool is a top-level folder with a sibling <name>.meta file.",
               file=sys.stderr)
@@ -331,7 +336,7 @@ def main() -> int:
         if len(package_ids) != len(set(package_ids)):
             raise BuildError("Package IDs must be unique.")
         for name in args.tools or available:
-            if args.format != "vpm" and name != COMPLETE:
+            if args.format != "vpm" and name not in COMPLETE_PACKAGES:
                 build(name, args.out_dir, args.install_root)
             if args.format != "unitypackage":
                 build_vpm(name, args.out_dir, repository, args.release_tag)

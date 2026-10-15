@@ -2,7 +2,7 @@
 
 Free tools for the Unity Editor.
 
-**Fynn's Tools Free Complete** installs all 21 tools as individual VPM dependencies. Each tool is also available separately.
+**Fynn's Tools Free Complete — Avatars** and **Fynn's Tools Free Complete — Worlds** install the tools compatible with their project type as individual VPM dependencies. Each tool is also available separately.
 
 | Tool | What it does |
 |---|---|
@@ -10,7 +10,7 @@ Free tools for the Unity Editor.
 | [Asset Organizer](AssetOrganizer/README.md) | Organize assets and their dependencies into folders by asset type. |
 | [Build Size Viewer](BuildSizeViewer/README.md) | View Unity build size reports to see which assets contribute to avatar and world build sizes. |
 | [Camera Utility](CameraUtility/README.md) | Match the position, rotation and lens of scene cameras and the Scene view. |
-| [ClientSim Storage Cleaner](ClientSimStorageCleaner/README.md) | Clear local ClientSim storage between play sessions. |
+| [ClientSim Storage Cleaner](ClientSimStorageCleaner/README.md) | Clear local ClientSim storage between play sessions in VRChat world projects. |
 | [Clipping Tester](ClippingTester/README.md) | Preview avatar animations on a temporary copy to check clothing and accessories for clipping. |
 | [Controller Cleaner](ControllerCleaner/README.md) | Find and remove unused embedded objects from Animator Controllers. |
 | [Controllers+](ControllersPlus/README.md) | Edit Animator controllers, states, transitions, parameters and BlendTrees, with templates, searches, toggle creation and optional VRChat tools. |
@@ -64,7 +64,7 @@ Based on CameraUtility by Dreadrith. Toolkit modifications by Fynn9563.
 
 ## ClientSim Storage Cleaner
 
-Automatically clear local ClientSim player data and player objects after Play Mode, with an option to clear them manually.
+Automatically clear local ClientSim player data and player objects after Play Mode in VRChat world projects, with an option to clear them manually.
 
 Created by [Fynn9563](https://github.com/Fynn9563).
 
