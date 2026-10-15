@@ -14,10 +14,10 @@
           "displayName": "Animation Tools",
           "name": "com.fynn.tools.animationhierarchyeditor",
           "unity": "2022.3",
-          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.0/AnimationHierarchyEditor-1.1.0.zip",
+          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.1/AnimationHierarchyEditor-1.1.0.zip",
           "version": "1.1.0",
           "vpmDependencies": {},
-          "zipSHA256": "d0f55a661af21851676dc0f2bd3fa382f7418d9b301a5dcb5d0b2100e9886a77"
+          "zipSHA256": "1b4a4fcdc3c6bd95c0a5e945d45f71efb5ffc614fc0cc4d1c64f732069ba9a4e"
         }
       }
     },
@@ -32,10 +32,10 @@
           "displayName": "Asset Organizer",
           "name": "com.fynn.tools.assetorganizer",
           "unity": "2022.3",
-          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.0/AssetOrganizer-1.0.3.zip",
+          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.1/AssetOrganizer-1.0.3.zip",
           "version": "1.0.3",
           "vpmDependencies": {},
-          "zipSHA256": "70222ff3615558fbb0fcc224d4b7583595720f01fe1a9352481795c2152cbfc1"
+          "zipSHA256": "4ad9a006850a3b60fad1406c8c01bb47aecbbba9e6873c8ddaec8d15ae1cdcdc"
         }
       }
     },
@@ -50,10 +50,10 @@
           "displayName": "Build Size Viewer",
           "name": "com.fynn.tools.buildsizeviewer",
           "unity": "2022.3",
-          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.0/BuildSizeViewer-1.0.0.zip",
+          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.1/BuildSizeViewer-1.0.0.zip",
           "version": "1.0.0",
           "vpmDependencies": {},
-          "zipSHA256": "1381e53985f6de8ecfe560fbecc6d22916e5d9a56b1eecd46d6247af34a923fb"
+          "zipSHA256": "58eb17fccc561fb17bd4683843ce4ad5947820839aeb0c76cbcba3c2d6ffebe0"
         }
       }
     },
@@ -68,10 +68,30 @@
           "displayName": "Camera Utility",
           "name": "com.fynn.tools.camerautility",
           "unity": "2022.3",
-          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.0/CameraUtility-1.0.0.zip",
+          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.1/CameraUtility-1.0.0.zip",
           "version": "1.0.0",
           "vpmDependencies": {},
-          "zipSHA256": "e2c5f25c5ff7350a0a2e6df5992db1d0d8f320e96855f1d3c1d6a4ef6cab8e55"
+          "zipSHA256": "0f08a9090e2532b2c160c035898bbd61aa8c6f554c6b005eed21984506303c1f"
+        }
+      }
+    },
+    "com.fynn.tools.clientsimstoragecleaner": {
+      "versions": {
+        "1.0.1": {
+          "author": {
+            "name": "Fynn9563"
+          },
+          "dependencies": {},
+          "description": "Clear local ClientSim storage between play sessions.",
+          "displayName": "ClientSim Storage Cleaner",
+          "name": "com.fynn.tools.clientsimstoragecleaner",
+          "unity": "2022.3",
+          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.1/ClientSimStorageCleaner-1.0.1.zip",
+          "version": "1.0.1",
+          "vpmDependencies": {
+            "com.vrchat.worlds": ">=3.10.5"
+          },
+          "zipSHA256": "6ae7e619b1dbc78e55974a7a9344f0631eab2bee7917dea6330641e81afeaf41"
         }
       }
     },
@@ -86,10 +106,89 @@
           "displayName": "Clipping Tester",
           "name": "com.fynn.tools.clippingtester",
           "unity": "2022.3",
-          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.0/ClippingTester-1.0.0.zip",
+          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.1/ClippingTester-1.0.0.zip",
           "version": "1.0.0",
           "vpmDependencies": {},
-          "zipSHA256": "746981fff3a846cd40aca3958194e340a4cedf30a9413f114a98988657689bec"
+          "zipSHA256": "a12b06aea2f1cdf6731c25e133620f0325a7eecce91cb71bbf57769df5eabd0d"
+        }
+      }
+    },
+    "com.fynn.tools.complete": {
+      "versions": {
+        "1.0.1": {
+          "author": {
+            "name": "Fynn9563"
+          },
+          "dependencies": {},
+          "description": "Install all Fynn's Tools Free tools compatible with VRChat avatar projects.",
+          "displayName": "Fynn's Tools Free Complete \u2014 Avatars",
+          "name": "com.fynn.tools.complete",
+          "unity": "2022.3",
+          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.1/Complete-1.0.1.zip",
+          "version": "1.0.1",
+          "vpmDependencies": {
+            "com.fynn.tools.animationhierarchyeditor": ">=1.1.0",
+            "com.fynn.tools.assetorganizer": ">=1.0.3",
+            "com.fynn.tools.buildsizeviewer": ">=1.0.0",
+            "com.fynn.tools.camerautility": ">=1.0.0",
+            "com.fynn.tools.clippingtester": ">=1.0.0",
+            "com.fynn.tools.controllercleaner": ">=1.0.0",
+            "com.fynn.tools.controllersplus": ">=1.0.0",
+            "com.fynn.tools.copycutpaste": ">=1.0.0",
+            "com.fynn.tools.dynamicsplus": ">=1.1.0",
+            "com.fynn.tools.faceemopatches": ">=1.0.0",
+            "com.fynn.tools.gogolocoposechanger": ">=1.0.0",
+            "com.fynn.tools.hierarchyplus": ">=1.0.1",
+            "com.fynn.tools.matcapmaker": ">=1.0.0",
+            "com.fynn.tools.noautogame": ">=1.0.0",
+            "com.fynn.tools.packageimporter": ">=1.0.0",
+            "com.fynn.tools.quicktoggle": ">=1.0.0",
+            "com.fynn.tools.resethumanoidtpose": ">=1.0.0",
+            "com.fynn.tools.texturetools": ">=1.0.0",
+            "com.fynn.tools.unitypetframework": ">=1.0.0",
+            "com.fynn.tools.vrcsdkplus": ">=1.0.0",
+            "com.vrchat.avatars": ">=3.10.5"
+          },
+          "zipSHA256": "db8c89e07bd7176d91a0f25a403094561653366c7287e03bdbe33bc7be3f1be6"
+        }
+      }
+    },
+    "com.fynn.tools.complete.worlds": {
+      "versions": {
+        "1.0.0": {
+          "author": {
+            "name": "Fynn9563"
+          },
+          "dependencies": {},
+          "description": "Install all Fynn's Tools Free tools compatible with VRChat world projects.",
+          "displayName": "Fynn's Tools Free Complete \u2014 Worlds",
+          "name": "com.fynn.tools.complete.worlds",
+          "unity": "2022.3",
+          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.1/CompleteWorlds-1.0.0.zip",
+          "version": "1.0.0",
+          "vpmDependencies": {
+            "com.fynn.tools.animationhierarchyeditor": ">=1.1.0",
+            "com.fynn.tools.assetorganizer": ">=1.0.3",
+            "com.fynn.tools.buildsizeviewer": ">=1.0.0",
+            "com.fynn.tools.camerautility": ">=1.0.0",
+            "com.fynn.tools.clientsimstoragecleaner": ">=1.0.1",
+            "com.fynn.tools.clippingtester": ">=1.0.0",
+            "com.fynn.tools.controllercleaner": ">=1.0.0",
+            "com.fynn.tools.controllersplus": ">=1.0.0",
+            "com.fynn.tools.copycutpaste": ">=1.0.0",
+            "com.fynn.tools.dynamicsplus": ">=1.1.0",
+            "com.fynn.tools.faceemopatches": ">=1.0.0",
+            "com.fynn.tools.hierarchyplus": ">=1.0.1",
+            "com.fynn.tools.matcapmaker": ">=1.0.0",
+            "com.fynn.tools.noautogame": ">=1.0.0",
+            "com.fynn.tools.packageimporter": ">=1.0.0",
+            "com.fynn.tools.quicktoggle": ">=1.0.0",
+            "com.fynn.tools.resethumanoidtpose": ">=1.0.0",
+            "com.fynn.tools.texturetools": ">=1.0.0",
+            "com.fynn.tools.unitypetframework": ">=1.0.0",
+            "com.vrchat.worlds": ">=3.10.5"
+          },
+          "zipSHA256": "1a6d65f29867d2a67eaf65d42d3041f2175b6bc3c40490b45993561f8e958cbb"
         }
       }
     },
@@ -104,10 +203,10 @@
           "displayName": "Controller Cleaner",
           "name": "com.fynn.tools.controllercleaner",
           "unity": "2022.3",
-          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.0/ControllerCleaner-1.0.0.zip",
+          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.1/ControllerCleaner-1.0.0.zip",
           "version": "1.0.0",
           "vpmDependencies": {},
-          "zipSHA256": "13b12fd1151a7b7c9cc47c18418ac6f222eead78ce94d66c256ba40bd60140f3"
+          "zipSHA256": "9c9c79c416fe5f344e97bfbb11d1f366ba68f65dab938f566b8203d41fdaf7de"
         }
       }
     },
@@ -122,10 +221,10 @@
           "displayName": "Controllers+",
           "name": "com.fynn.tools.controllersplus",
           "unity": "2022.3",
-          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.0/ControllersPlus-1.0.0.zip",
+          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.1/ControllersPlus-1.0.0.zip",
           "version": "1.0.0",
           "vpmDependencies": {},
-          "zipSHA256": "5f938a2e58889f2f78b362fd740bae6918489fbd46439101983e5a4bca751f8b"
+          "zipSHA256": "023bc254d073d0dd6c7d14e81ea3d0d180cf194cfe8b2f513a266cc7edc2ff8e"
         }
       }
     },
@@ -140,10 +239,10 @@
           "displayName": "Copy/Cut/Paste",
           "name": "com.fynn.tools.copycutpaste",
           "unity": "2022.3",
-          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.0/CopyCutPaste-1.0.0.zip",
+          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.1/CopyCutPaste-1.0.0.zip",
           "version": "1.0.0",
           "vpmDependencies": {},
-          "zipSHA256": "4c30dfa6e84034c6526fa10620818b572902f7c283040cc9c4f86358c5107a2c"
+          "zipSHA256": "8829dd0a2a9f01911757d264301daddb45b2f6d0e9664c5032c13e0d1a216de5"
         }
       }
     },
@@ -158,12 +257,12 @@
           "displayName": "Dynamics+",
           "name": "com.fynn.tools.dynamicsplus",
           "unity": "2022.3",
-          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.0/DynamicsPlus-1.1.0.zip",
+          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.1/DynamicsPlus-1.1.0.zip",
           "version": "1.1.0",
           "vpmDependencies": {
             "com.vrchat.base": ">=3.10.5"
           },
-          "zipSHA256": "725568a6e18e474acff0321aeee48732e52d2dede2e41aef07b4ea7f5583dbab"
+          "zipSHA256": "feb4e91e7ed772e14ebb35e4f79d99771b4df88217d395cfe7f3c2498cb86fce"
         }
       }
     },
@@ -178,12 +277,12 @@
           "displayName": "FaceEmo Patches",
           "name": "com.fynn.tools.faceemopatches",
           "unity": "2022.3",
-          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.0/FaceEmoPatches-1.0.0.zip",
+          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.1/FaceEmoPatches-1.0.0.zip",
           "version": "1.0.0",
           "vpmDependencies": {
             "com.vrchat.base": ">=3.5.0"
           },
-          "zipSHA256": "f37eb60a47d9fd91d30edcd6e908167f8ab3e0b4ce7e226fd1469e64084939f4"
+          "zipSHA256": "3d485d9f74928ad31ccd281a11cfb22941e7a6e4b2998d53085d08e8cd94c743"
         }
       }
     },
@@ -198,13 +297,13 @@
           "displayName": "GoGoLoco Pose Changer",
           "name": "com.fynn.tools.gogolocoposechanger",
           "unity": "2022.3",
-          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.0/GoGoLocoPoseChanger-1.0.0.zip",
+          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.1/GoGoLocoPoseChanger-1.0.0.zip",
           "version": "1.0.0",
           "vpmDependencies": {
             "com.vrchat.avatars": ">=3.5.0",
             "nadena.dev.ndmf": ">=1.0.0"
           },
-          "zipSHA256": "a855b40be6234f304370c052a3d27c62bef33a7fdafc5f08b12645f6dd44c8ef"
+          "zipSHA256": "6db444e377089cc83f587f0520e45f8bb1e4004661048794602d330d80b08e7b"
         }
       }
     },
@@ -219,10 +318,10 @@
           "displayName": "Hierarchy+",
           "name": "com.fynn.tools.hierarchyplus",
           "unity": "2022.3",
-          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.0/HierarchyPlus-1.0.1.zip",
+          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.1/HierarchyPlus-1.0.1.zip",
           "version": "1.0.1",
           "vpmDependencies": {},
-          "zipSHA256": "eadd7a8acb4db44d9fa2adc5e5f94451af41819a61e82a2d8527a179ff3a92f1"
+          "zipSHA256": "69a7b251b8de9ef4e5e9499d89047cafb6f7b195b68f15c995a8f4262c387508"
         }
       }
     },
@@ -237,10 +336,10 @@
           "displayName": "MatCap Maker",
           "name": "com.fynn.tools.matcapmaker",
           "unity": "2022.3",
-          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.0/MatCapMaker-1.0.0.zip",
+          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.1/MatCapMaker-1.0.0.zip",
           "version": "1.0.0",
           "vpmDependencies": {},
-          "zipSHA256": "c5f058abcfdcaeb2655d7f0ffd9d6ab1aa94b1e07b12a3432bfafddfe6e99622"
+          "zipSHA256": "b174027ee87ca290e27c5348b5fbe2b682594b3108f588045ffeedd9f42670a2"
         }
       }
     },
@@ -255,10 +354,10 @@
           "displayName": "No Auto Game",
           "name": "com.fynn.tools.noautogame",
           "unity": "2022.3",
-          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.0/NoAutoGame-1.0.0.zip",
+          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.1/NoAutoGame-1.0.0.zip",
           "version": "1.0.0",
           "vpmDependencies": {},
-          "zipSHA256": "73fced819ded56676e85e920cf46bc546227fb941db569b01c8b4d69f283a24e"
+          "zipSHA256": "e84510ff232eb575191d0230163b91e7b3a462cdd90e45e04a4ef0f836c4cf32"
         }
       }
     },
@@ -273,10 +372,10 @@
           "displayName": "Package Importer",
           "name": "com.fynn.tools.packageimporter",
           "unity": "2022.3",
-          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.0/PackageImporter-1.0.0.zip",
+          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.1/PackageImporter-1.0.0.zip",
           "version": "1.0.0",
           "vpmDependencies": {},
-          "zipSHA256": "e633f1d3180b0d1b2490a1f856f86326226b6390a8f0c055e787593e8215c07f"
+          "zipSHA256": "f061bbefdc1f0690e123d402f705ebc8e7f9176625d7fa4df9242fa684e1fef7"
         }
       }
     },
@@ -291,10 +390,10 @@
           "displayName": "Quick Toggle",
           "name": "com.fynn.tools.quicktoggle",
           "unity": "2022.3",
-          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.0/QuickToggle-1.0.0.zip",
+          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.1/QuickToggle-1.0.0.zip",
           "version": "1.0.0",
           "vpmDependencies": {},
-          "zipSHA256": "7b6e610138822442f831841f4cf22421cf64ac9b2a32bf2021da881676081609"
+          "zipSHA256": "42343455c72e55b8b4412d789270ca6401dc0ef2ab74014c57c1dc316d44e9b6"
         }
       }
     },
@@ -309,10 +408,10 @@
           "displayName": "Reset Humanoid",
           "name": "com.fynn.tools.resethumanoidtpose",
           "unity": "2022.3",
-          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.0/ResetHumanoidTPose-1.0.0.zip",
+          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.1/ResetHumanoidTPose-1.0.0.zip",
           "version": "1.0.0",
           "vpmDependencies": {},
-          "zipSHA256": "f13615cee7ce9c8fb4f0c29b44fac4969e9d372f3f4d133ab24733617312fa89"
+          "zipSHA256": "b386295117c9a801b2fc21d83ef8eb21c9d03be730a4bef7937a4b6d714f6a8f"
         }
       }
     },
@@ -329,10 +428,10 @@
           "displayName": "Texture Tools",
           "name": "com.fynn.tools.texturetools",
           "unity": "2022.3",
-          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.0/TextureTools-1.0.0.zip",
+          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.1/TextureTools-1.0.0.zip",
           "version": "1.0.0",
           "vpmDependencies": {},
-          "zipSHA256": "08f87efd91caa77732d1f2a8f414a8ce5c42c3165103de8f5d407c3d4897ddfc"
+          "zipSHA256": "d13283938c00bfaa9456871444eef1c2549878107714e749ea9785f90a7cc3a1"
         }
       }
     },
@@ -347,10 +446,10 @@
           "displayName": "Unity Pet Framework",
           "name": "com.fynn.tools.unitypetframework",
           "unity": "2022.3",
-          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.0/UnityPetFramework-1.0.0.zip",
+          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.1/UnityPetFramework-1.0.0.zip",
           "version": "1.0.0",
           "vpmDependencies": {},
-          "zipSHA256": "d980275b1073a391195898170aa870be85daa9bb319725f0a7de0f13278dc756"
+          "zipSHA256": "6f444bbed0ef1c87271503c6a459df530925828bc30d227bc7b0807e399a3e1c"
         }
       }
     },
@@ -365,12 +464,12 @@
           "displayName": "VRCSDK+",
           "name": "com.fynn.tools.vrcsdkplus",
           "unity": "2022.3",
-          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.0/VRCSDKPlus-1.0.0.zip",
+          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.1/VRCSDKPlus-1.0.0.zip",
           "version": "1.0.0",
           "vpmDependencies": {
             "com.vrchat.avatars": ">=3.10.5"
           },
-          "zipSHA256": "61b60620faf8903a9445dadb9b1460cf987b44616b1026a6c5b434686986c867"
+          "zipSHA256": "5dc8cb5de02fdfd09c213462f26219cc1fc669a34456065359894aba4da80184"
         }
       }
     }
