@@ -6,10 +6,8 @@ using UnityEngine;
 
 namespace FynnsTools.UnityPetFramework
 {
-	// Opening and saving a pet, and the folder its parts live in while it is being made.
 	internal sealed partial class PetCreatorPage
 	{
-		// The pet being authored, on disk, while it is authored.
 		private string WorkingFolder
 		{
 			get
@@ -26,7 +24,6 @@ namespace FynnsTools.UnityPetFramework
 
 			try
 			{
-				// Parsed here rather than at export.
 				if (!WavReader.TryRead(File.ReadAllBytes(picked), "preview", out AudioClip preview, out string error))
 				{
 					SetStatus(error, MessageType.Warning);
@@ -62,7 +59,6 @@ namespace FynnsTools.UnityPetFramework
 
 			if (!string.IsNullOrEmpty(picked)) SavePet(picked);
 		}
-		// Writes the package first and installs it second.
 		private void SavePet(string packagePath)
 		{
 			if (_atlas == null)
@@ -93,7 +89,6 @@ namespace FynnsTools.UnityPetFramework
 
 			if (!InstallSaved(packagePath, out string installError))
 			{
-				// The package is on disk and is the thing that was asked for.
 				SetStatus(string.Format(
 					"Saved {0}, but it could not be added to your pet list: {1}",
 					Path.GetFileName(packagePath), installError),
@@ -108,7 +103,6 @@ namespace FynnsTools.UnityPetFramework
 				MessageType.Info);
 		}
 
-		// Read back through the same hardened reader an imported package goes through.
 		private bool InstallSaved(string packagePath, out string error)
 		{
 			if (!PetPackageReader.TryRead(packagePath, out PetPackage package, out error)) return false;
@@ -149,7 +143,6 @@ namespace FynnsTools.UnityPetFramework
 			LoadPet(picked);
 		}
 
-		// Unpacked into the draft folder and opened from there.
 		private void OpenPackage(string packagePath)
 		{
 			if (!PetPackageReader.TryRead(packagePath, out PetPackage package, out string error))
@@ -177,7 +170,6 @@ namespace FynnsTools.UnityPetFramework
 
 					foreach (KeyValuePair<string, byte[]> sound in package.Sounds)
 					{
-						// Checked once before the archive was read and again here.
 						string path = PetDefinitionSerializer.SafeCombineRelative(folder, sound.Key);
 						if (path == null) continue;
 
@@ -212,7 +204,7 @@ namespace FynnsTools.UnityPetFramework
 				return;
 			}
 
-			// Swapped only once the new pet is known good.
+			// Swap only after validating the new pet.
 			_atlas?.Dispose();
 			_atlas = loadedAtlas;
 			_atlasError = null;

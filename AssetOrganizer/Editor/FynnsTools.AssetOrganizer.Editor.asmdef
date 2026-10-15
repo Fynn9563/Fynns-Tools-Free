@@ -1,0 +1,6 @@
+{
+  "name": "FynnsTools.AssetOrganizer.Editor",
+  "rootNamespace": "FynnsTools.AssetOrganization",
+  "includePlatforms": ["Editor"],
+  "autoReferenced": true
+}

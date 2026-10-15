@@ -1,0 +1,6 @@
+{
+  "name": "FynnsToolkit.QuickToggle.Editor",
+  "rootNamespace": "FynnsToolkit.QuickToggle",
+  "includePlatforms": ["Editor"],
+  "autoReferenced": true
+}

@@ -4,14 +4,12 @@ using UnityEngine;
 
 namespace FynnsTools.UnityPetFramework
 {
-	// How the pet behaves.
 	internal sealed partial class PetCreatorPage
 	{
 		private bool _mappingExpanded;
 
 		private static readonly string[] FacingLabels = { "Right", "Left" };
 
-		// Which way the artwork is drawn, for the pet as a whole.
 		private void DrawFacingRow()
 		{
 			EditorGUI.BeginChangeCheck();

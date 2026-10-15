@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace FynnsTools.UnityPetFramework
 {
-	// How a sprite sheet is cut into frames.
 	internal enum PetSliceMode
 	{
 		Grid,
@@ -21,18 +20,15 @@ namespace FynnsTools.UnityPetFramework
 		private PetSliceMode _sliceMode = PetSliceMode.Grid;
 		private PetGridSlice _gridSlice = new PetGridSlice();
 
-		// Set once a grid has actually been applied to this sheet.
 		private bool _gridApplied;
 		private bool _gridPaddingExpanded;
 
-		// False when a pet was opened whose frames are not on any regular grid.
 		private bool _gridInferred = true;
 
 		private void LoadSlicingPrefs()
 		{
 			_sliceMode = (PetSliceMode)EditorPrefs.GetInt(SliceModeKey, (int)PetSliceMode.Grid);
 
-			// Restored from the working pet rather than from a preference.
 			_gridApplied = _definition != null && _definition.HasRectangles;
 
 			string json = EditorPrefs.GetString(GridKey, "");
@@ -49,7 +45,6 @@ namespace FynnsTools.UnityPetFramework
 			EditorPrefs.SetString(GridKey, JsonUtility.ToJson(_gridSlice));
 		}
 
-		// Recovers the grid of a pet being reopened.
 		private void AdoptLoadedSlicing(PetDefinition loaded)
 		{
 			ResetSmartState();
@@ -67,13 +62,11 @@ namespace FynnsTools.UnityPetFramework
 			ApplyFramesToAtlas();
 		}
 
-		// Both modes finish with explicit rectangles.
 		private void ApplyFramesToAtlas()
 		{
 			if (_atlas != null && _definition.HasRectangles) _atlas.SetFrames(_definition.spriteFrames);
 		}
 
-		// Loads the sheet whole.
 		private void ReloadAtlas()
 		{
 			_atlas?.Dispose();
@@ -88,7 +81,6 @@ namespace FynnsTools.UnityPetFramework
 				return;
 			}
 
-			// One cell covering the whole sheet, purely to decode it.
 			_atlas = PetAtlas.FromFile(_sheetPath, 1, 1, out _atlasError);
 			if (_atlas == null) return;
 
@@ -141,7 +133,6 @@ namespace FynnsTools.UnityPetFramework
 			"Grid Slice",
 			"Smart Slice"
 		};
-		// Cell size and count are two views of one number when there is no padding.
 		private void DrawGridControls()
 		{
 			int sheetWidth = _atlas?.Sheet != null ? _atlas.Sheet.width : 0;
@@ -210,7 +201,6 @@ namespace FynnsTools.UnityPetFramework
 					EditorStyles.miniLabel);
 			}
 		}
-		// A row when there is room for one, a column when there is not.
 		private IDisposable Paired()
 		{
 			float available = _container != null && _container.contentRect.width > 1f
@@ -286,7 +276,6 @@ namespace FynnsTools.UnityPetFramework
 			int columns = PetGridSlice.FitCount(sheetWidth, _gridSlice.cellWidth, _gridSlice.offsetX, _gridSlice.spacingX);
 			int rows = PetGridSlice.FitCount(sheetHeight, _gridSlice.cellHeight, _gridSlice.offsetY, _gridSlice.spacingY);
 
-			// Zero means not even one cell fits.
 			if (columns > 0) _gridSlice.columns = columns;
 			if (rows > 0) _gridSlice.rows = rows;
 		}
@@ -300,7 +289,6 @@ namespace FynnsTools.UnityPetFramework
 			if (cellHeight > 0) _gridSlice.cellHeight = cellHeight;
 		}
 
-		// Turns the grid into the frame table everything downstream reads.
 		private void ApplyGrid()
 		{
 			if (_atlas == null)

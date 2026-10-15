@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace FynnsTools.UnityPetFramework
 {
-	// Resolves the tool's own folder by locating its assembly definition.
 	internal static class UnityPetFrameworkPaths
 	{
 		private const string AsmdefFileName = "FynnsTools.UnityPetFramework.Editor.asmdef";
@@ -23,6 +22,13 @@ namespace FynnsTools.UnityPetFramework
 					return _toolRoot;
 				}
 
+				var package = UnityEditor.PackageManager.PackageInfo.FindForAssembly(typeof(UnityPetFrameworkPaths).Assembly);
+				if (package != null)
+				{
+					_toolRoot = package.assetPath;
+					return _toolRoot;
+				}
+
 				foreach (string guid in AssetDatabase.FindAssets("FynnsTools.UnityPetFramework.Editor"))
 				{
 					string path = AssetDatabase.GUIDToAssetPath(guid);
@@ -31,7 +37,6 @@ namespace FynnsTools.UnityPetFramework
 						continue;
 					}
 
-					// <root>/Editor/<asmdef>, so step up twice to reach the tool root.
 					string editorDir = path.Substring(0, path.LastIndexOf('/'));
 					_toolRoot = editorDir.Substring(0, editorDir.LastIndexOf('/'));
 					return _toolRoot;
@@ -47,7 +52,6 @@ namespace FynnsTools.UnityPetFramework
 
 		public static string BundledPetsFolder => InToolFolder("Pets");
 
-		// Pets the user imported are not project assets.
 		public static string ImportedPetsFolder
 		{
 			get
@@ -74,7 +78,6 @@ namespace FynnsTools.UnityPetFramework
 			}
 		}
 
-		// Turns a path under the tool folder into one the file APIs can read.
 		public static string ToAbsolute(string assetPath)
 		{
 			if (string.IsNullOrEmpty(assetPath))
@@ -82,7 +85,16 @@ namespace FynnsTools.UnityPetFramework
 				return null;
 			}
 
-			// Application.dataPath ends at Assets, and an asset path starts with it.
+			if (Path.IsPathRooted(assetPath)) return Path.GetFullPath(assetPath);
+			assetPath = assetPath.Replace('\\', '/');
+			if (assetPath.StartsWith("Packages/", StringComparison.Ordinal))
+			{
+				var package = UnityEditor.PackageManager.PackageInfo.FindForAssetPath(assetPath);
+				if (package == null) return null;
+				string relative = assetPath.Substring(package.assetPath.Length).TrimStart('/');
+				return Path.GetFullPath(Path.Combine(package.resolvedPath, relative));
+			}
+
 			string projectRoot = Directory.GetParent(Application.dataPath)?.FullName;
 			return projectRoot == null ? null : Path.GetFullPath(Path.Combine(projectRoot, assetPath));
 		}

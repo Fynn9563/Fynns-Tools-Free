@@ -3,10 +3,8 @@ using UnityEngine;
 
 namespace FynnsTools.UnityPetFramework
 {
-	// Works out how much of a cell a pet actually draws in.
 	internal static class PetContentBounds
 	{
-		// Recalculates and writes the result onto the definition.
 		public static bool Recalculate(PetDefinition definition, PetAtlas atlas, out string error)
 		{
 			if (definition == null || atlas == null)
@@ -46,7 +44,6 @@ namespace FynnsTools.UnityPetFramework
 			return true;
 		}
 
-		// True when the stored box no longer matches the frames in use.
 		public static bool IsStale(PetDefinition definition, PetAtlas atlas)
 		{
 			if (definition == null || atlas == null)

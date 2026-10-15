@@ -1,0 +1,16 @@
+{
+  "name": "FynnsTools.ControllerEditor.Editor",
+  "rootNamespace": "FynnsTools.ControllerEditor",
+  "includePlatforms": [
+    "Editor"
+  ],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [
+    {
+      "name": "com.vrchat.avatars",
+      "expression": "3.10.5",
+      "define": "FYNNS_CONTROLLER_EDITOR_AVATARS"
+    }
+  ]
+}

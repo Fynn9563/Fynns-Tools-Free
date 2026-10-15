@@ -6,7 +6,6 @@ using UnityEngine;
 
 namespace FynnsTools.UnityPetFramework
 {
-	// The sprite sheet drawn as a clickable grid, with pan and zoom.
 	internal sealed class PetFrameGrid
 	{
 		private const float MinZoom = 0.05f;
@@ -27,12 +26,10 @@ namespace FynnsTools.UnityPetFramework
 
 		private GUIStyle _badgeStyle;
 
-		// Raised with the atlas cell index that was clicked.
 		public event Action<int> CellClicked;
 
 		public event Action<int> CellRemoveRequested;
 
-		// Drops the framing so the next Draw fits the sheet again.
 		public void Reset()
 		{
 			_framed = false;
@@ -63,7 +60,6 @@ namespace FynnsTools.UnityPetFramework
 			HandleInput(area, content, atlas);
 		}
 
-		// Draws a one-line summary of the view for a status strip.
 		public string ZoomLabel()
 		{
 			return Mathf.RoundToInt(_zoom * 100f) + "%";
@@ -71,13 +67,12 @@ namespace FynnsTools.UnityPetFramework
 
 		private void DrawSheet(Rect content, PetAtlas atlas, IList<PetFrameRef> selectedFrames)
 		{
-			// One draw call for the whole sheet.
 			GUI.DrawTexture(content, atlas.Sheet, ScaleMode.StretchToFill, true);
 
 			float scaleX = content.width / atlas.Sheet.width;
 			float scaleY = content.height / atlas.Sheet.height;
 
-			// Where each selected cell sits in the clip, so a cell used twice can show both positions.
+			// Repeated cells can occupy several clip positions.
 			Dictionary<int, List<string>> orderByCell = BuildOrderLookup(selectedFrames);
 
 			for (int index = 0; index < atlas.CellCount; index++)
@@ -86,7 +81,6 @@ namespace FynnsTools.UnityPetFramework
 
 				if (atlas.IsCellEmpty(index))
 				{
-					// Dimmed rather than hidden.
 					EditorGUI.DrawRect(cell, EmptyCellTint);
 				}
 
@@ -123,7 +117,6 @@ namespace FynnsTools.UnityPetFramework
 					lookup[frame.cell] = positions;
 				}
 
-				// The arrow marks a mirrored frame.
 				positions.Add(frame.flip ? position + "<" : position.ToString());
 			}
 
@@ -134,7 +127,6 @@ namespace FynnsTools.UnityPetFramework
 		{
 			if (cell.width < 18f || cell.height < 14f)
 			{
-				// Below this the label is unreadable and only adds clutter.
 				return;
 			}
 
@@ -156,7 +148,6 @@ namespace FynnsTools.UnityPetFramework
 					text.Append(',');
 				}
 
-				// Shown as the position in the animation, which is what the user picked.
 				text.Append(positions[i]);
 
 				if (i == 2 && positions.Count > 3)
@@ -171,14 +162,12 @@ namespace FynnsTools.UnityPetFramework
 			GUI.Label(label, text.ToString(), _badgeStyle);
 		}
 
-		// An outline per cell rather than lines across the whole sheet.
 		private static void DrawGridLines(Rect content, PetAtlas atlas, float scaleX, float scaleY)
 		{
 			for (int index = 0; index < atlas.CellCount; index++)
 			{
 				Rect cell = CellRect(content, atlas, index, scaleX, scaleY);
 
-				// Below this the outlines are the only thing visible.
 				if (cell.width < 6f || cell.height < 6f) return;
 
 				DrawOutline(cell, GridLineColor);
@@ -193,12 +182,11 @@ namespace FynnsTools.UnityPetFramework
 			EditorGUI.DrawRect(new Rect(rect.xMax - 1f, rect.y, 1f, rect.height), color);
 		}
 
-		// Read from the cell's own pixel rectangle rather than worked out from the column count.
 		private static Rect CellRect(Rect content, PetAtlas atlas, int index, float scaleX, float scaleY)
 		{
 			RectInt cell = atlas.CellPixelRect(index);
 
-			// CellPixelRect is bottom-up, the way the texture is stored.
+			// Texture rectangles use bottom-up coordinates.
 			float top = atlas.Sheet.height - cell.y - cell.height;
 			return new Rect(
 				content.x + cell.x * scaleX,
@@ -238,7 +226,6 @@ namespace FynnsTools.UnityPetFramework
 			_hoveredCell = inside ? CellAt(content, atlas, e.mousePosition) : -1;
 			if (_hoveredCell != previousHover)
 			{
-				// Only the outline changed, but IMGUI has no finer unit than a repaint.
 				GUI.changed = true;
 			}
 
@@ -255,7 +242,6 @@ namespace FynnsTools.UnityPetFramework
 					break;
 
 				case EventType.MouseDrag:
-					// Middle button, or left with alt held, which is what every other Unity view uses for panning.
 					if (e.button == 2 || (e.button == 0 && e.alt))
 					{
 						_pan += e.delta;
@@ -276,7 +262,7 @@ namespace FynnsTools.UnityPetFramework
 						break;
 					}
 
-					// Ctrl or Cmd removes rather than appends, so a misclick is undone without leaving the grid.
+					// Ctrl/Cmd removes the clicked cell from the selection.
 					if (e.control || e.command)
 					{
 						CellRemoveRequested?.Invoke(cell);
@@ -300,14 +286,12 @@ namespace FynnsTools.UnityPetFramework
 				return;
 			}
 
-			// Keep whatever is under the cursor under the cursor.
 			Vector2 origin = area.position + _pan;
 			Vector2 pointInSheet = (mouse - origin) / before;
 			_pan = mouse - pointInSheet * after - area.position;
 			_zoom = after;
 		}
 
-		// Which cell the cursor is over, by testing the rectangles.
 		private int CellAt(Rect content, PetAtlas atlas, Vector2 position)
 		{
 			if (!content.Contains(position)) return -1;

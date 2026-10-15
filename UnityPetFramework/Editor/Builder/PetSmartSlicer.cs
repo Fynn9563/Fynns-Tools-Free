@@ -11,10 +11,8 @@ namespace FynnsTools.UnityPetFramework
 		Loose
 	}
 
-	// Works out where the frames are on a sheet that was never laid out on a grid.
 	internal static class PetSmartSlicer
 	{
-		// The knobs sensitivity turns.
 		internal readonly struct Tuning
 		{
 			private Tuning(float reach, float primary, float merge, float rowGap)
@@ -25,25 +23,20 @@ namespace FynnsTools.UnityPetFramework
 				RowGap = rowGap;
 			}
 
-			// How far from a frame a loose piece may sit and still be attached to it.
 			public float Reach { get; }
 			public float Primary { get; }
 
-			// How close two sprites must be.
 			public float Merge { get; }
 
-			// How large a vertical gap is still treated as being inside one row.
 			public float RowGap { get; }
 
 			public static Tuning For(PetSliceSensitivity sensitivity)
 			{
 				switch (sensitivity)
 				{
-					// Leaves more pieces standing alone.
 					case PetSliceSensitivity.Strict:
 						return new Tuning(.35f, .10f, .22f, .18f);
 
-					// Absorbs larger and more distant pieces.
 					case PetSliceSensitivity.Loose:
 						return new Tuning(1f, .30f, .55f, .45f);
 
@@ -81,7 +74,6 @@ namespace FynnsTools.UnityPetFramework
 			return model;
 		}
 
-		// The size of a component that is probably a sprite.
 		private static int TypicalSize(PetSliceModel model)
 		{
 			List<int> sizes = new List<int>();
@@ -110,7 +102,7 @@ namespace FynnsTools.UnityPetFramework
 			{
 				int start = y * width + x;
 
-				// The pixel buffer is bottom-up.
+				// Unity pixel buffers are bottom-up.
 				if (model.labels[start] != 0 || pixels[(height - 1 - y) * width + x].a <= alpha) continue;
 
 				if (model.components.Count >= 65536)
@@ -148,7 +140,6 @@ namespace FynnsTools.UnityPetFramework
 
 				int w = right - left + 1, h = bottom - top + 1;
 
-				// A wide, flat, almost colourless solid block is a credits bar.
 				bool panel = w > h * 2.5f && count > 256 && grey > count * .94f && count > w * h * .82f;
 
 				model.components.Add(new PetSliceComponent
@@ -161,7 +152,6 @@ namespace FynnsTools.UnityPetFramework
 			return model;
 		}
 
-		// A run of small, similarly sized, bottom-aligned islands is a line of text.
 		private static void FlagTextRuns(PetSliceModel model)
 		{
 			foreach (PetSliceComponent component in model.components)
@@ -181,7 +171,6 @@ namespace FynnsTools.UnityPetFramework
 				if (neighbours >= 6) component.ignored = true;
 			}
 		}
-		// Step 2: the horizontal bands the sheet's animations are laid out in.
 		private static List<Vector2Int> Bands(PetSliceModel model, Tuning tuning, int typical)
 		{
 			int floor = Mathf.Max(24, Mathf.RoundToInt(typical * .15f));
@@ -211,7 +200,6 @@ namespace FynnsTools.UnityPetFramework
 			heights.Sort();
 			int median = heights[heights.Count / 2];
 
-			// Measured before the gaps are closed.
 			float pitch = RowPitch(runs, median);
 
 			List<Vector2Int> merged = new List<Vector2Int> { runs[0] };
@@ -227,7 +215,6 @@ namespace FynnsTools.UnityPetFramework
 			return bands;
 		}
 
-		// The distance from one row of the sheet to the next.
 		private static float RowPitch(List<Vector2Int> runs, int median)
 		{
 			if (runs.Count < 3) return median;
@@ -239,7 +226,6 @@ namespace FynnsTools.UnityPetFramework
 			return Mathf.Max(gaps[gaps.Count / 2], median);
 		}
 
-		// Cuts an over-tall band at the emptiest pixel rows near where the boundaries ought to be.
 		private static void Split(Vector2Int run, int[] coverage, float pitch, List<Vector2Int> bands)
 		{
 			int height = run.y - run.x;
@@ -279,7 +265,6 @@ namespace FynnsTools.UnityPetFramework
 			bands.Add(new Vector2Int(previous, run.y));
 		}
 
-		// Everything goes to the band holding its vertical centre.
 		private static void AssignToBands(PetSliceModel model, List<Vector2Int> bands)
 		{
 			foreach (PetSliceComponent component in model.components)
@@ -300,7 +285,6 @@ namespace FynnsTools.UnityPetFramework
 				if (component.row < 0) component.ignored = true;
 			}
 		}
-		// Steps 3 to 5.
 		private static void BuildRows(PetSliceModel model, List<Vector2Int> bands, Tuning tuning, int typical)
 		{
 			model.rows.Clear();
@@ -315,7 +299,6 @@ namespace FynnsTools.UnityPetFramework
 
 				if (members.Count == 0) continue;
 
-				// Step 3.
 				int largest = 0;
 				foreach (PetSliceComponent component in members) largest = Mathf.Max(largest, component.pixels);
 
@@ -330,7 +313,6 @@ namespace FynnsTools.UnityPetFramework
 
 				if (primaries.Count == 0)
 				{
-					// A band with nothing sprite-sized in it is not an animation row.
 					foreach (PetSliceComponent component in members) component.ignored = true;
 					continue;
 				}
@@ -345,7 +327,6 @@ namespace FynnsTools.UnityPetFramework
 			}
 		}
 
-		// Step 4: how far apart consecutive frames sit in this row.
 		private static float FrameSpacing(List<PetSliceComponent> primaries)
 		{
 			int largest = 0;
@@ -366,7 +347,7 @@ namespace FynnsTools.UnityPetFramework
 				widestBody = Mathf.Max(widestBody, component.width);
 			}
 
-			// Too few to measure a pitch from, so fall back to sprite width.
+			// Fall back to sprite width when pitch cannot be measured.
 			if (bodies.Count < 3) return Mathf.Max(widestBody * 1.6f, widest * 1.2f);
 
 			List<float> gaps = new List<float>();
@@ -376,7 +357,6 @@ namespace FynnsTools.UnityPetFramework
 			return Mathf.Max(gaps[gaps.Count / 2], widestBody * .9f);
 		}
 
-		// Consecutive sprites that sit far closer together than one frame pitch.
 		private static void MergePrimaries(List<PetSliceComponent> primaries, float spacing, float merge, PetSliceRow row)
 		{
 			PetSliceFrame frame = new PetSliceFrame();

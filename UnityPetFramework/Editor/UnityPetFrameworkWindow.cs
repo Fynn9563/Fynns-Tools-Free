@@ -5,19 +5,17 @@ using UnityEngine.UIElements;
 
 namespace FynnsTools.UnityPetFramework
 {
-	// The one window for the whole tool.
 	public sealed class UnityPetFrameworkWindow : EditorWindow
 	{
 		private const string SelectedPageKey = "FynnsTools.UnityPetFramework.SelectedPage";
 
-		// A page id is the suffix of both its tab button and its container in the layout.
 		private static readonly string[] PageIds = { "pet", "settings", "creator", "io", "about" };
 
 		private static readonly Vector2 MinWindowSize = new Vector2(760f, 520f);
 
 		private string _selectedPage;
 
-		// Owns a sprite sheet texture, so it has to be disposed rather than dropped.
+		// Dispose the owned sprite-sheet texture.
 		private PetCreatorPage _creatorPage;
 
 		private PetPage _petPage;
@@ -44,7 +42,6 @@ namespace FynnsTools.UnityPetFramework
 
 			if (uxml == null)
 			{
-				// The layout is the entire window, so there is nothing to degrade to.
 				root.Add(new HelpBox(
 					"The window layout could not be loaded. Was part of the Unity Pet Framework folder moved or deleted?",
 					HelpBoxMessageType.Warning));
@@ -61,7 +58,7 @@ namespace FynnsTools.UnityPetFramework
 
 			foreach (string id in PageIds)
 			{
-				// Captured per iteration, or every tab would select the last page.
+				// Capture each tab separately.
 				string pageId = id;
 				Button tab = root.Q<Button>("tab-" + pageId);
 				if (tab != null)
@@ -82,7 +79,6 @@ namespace FynnsTools.UnityPetFramework
 			SelectPage(Array.IndexOf(PageIds, remembered) < 0 ? PageIds[0] : remembered);
 		}
 
-		// Each page builds its own content into the empty container the layout declares for it.
 		private void AttachPages(VisualElement root)
 		{
 			VisualElement petContainer = root.Q<VisualElement>("page-pet");
@@ -124,7 +120,6 @@ namespace FynnsTools.UnityPetFramework
 
 		private void OnDisable()
 		{
-			// Runs on window close and before every assembly reload.
 			DisposeCreatorPage();
 		}
 
@@ -143,7 +138,6 @@ namespace FynnsTools.UnityPetFramework
 			{
 				bool active = id == _selectedPage;
 
-				// Opening the Pet page is the moment a newly imported or saved pet should appear in its list.
 				if (active && id == "pet")
 				{
 					_petPage?.Refresh();
@@ -158,7 +152,6 @@ namespace FynnsTools.UnityPetFramework
 				Button tab = rootVisualElement.Q<Button>("tab-" + id);
 				if (tab != null)
 				{
-					// The active tab is marked with weight and opacity rather than a style class.
 					tab.style.unityFontStyleAndWeight = active ? FontStyle.Bold : FontStyle.Normal;
 					tab.style.opacity = active ? 1f : 0.6f;
 				}

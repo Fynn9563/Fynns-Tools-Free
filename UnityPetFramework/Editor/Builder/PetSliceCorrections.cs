@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace FynnsTools.UnityPetFramework
 {
-	// Every edit the Smart Slice review can make, as operations on the model.
 	internal static class PetSliceCorrections
 	{
 		public static PetSliceFrame FrameAt(PetSliceModel model, int row, int frame)
@@ -14,7 +13,6 @@ namespace FynnsTools.UnityPetFramework
 			return model.rows[row].frames[frame];
 		}
 
-		// Folds several frames of one row into the earliest of them.
 		public static void MergeFrames(PetSliceModel model, int row, List<int> frames)
 		{
 			if (row < 0 || row >= model.rows.Count || frames.Count < 2) return;
@@ -33,7 +31,6 @@ namespace FynnsTools.UnityPetFramework
 			}
 		}
 
-		// One frame back into its separate pieces, in reading order.
 		public static void SplitFrame(PetSliceModel model, int row, int frame)
 		{
 			PetSliceFrame source = FrameAt(model, row, frame);
@@ -52,7 +49,6 @@ namespace FynnsTools.UnityPetFramework
 			}
 		}
 
-		// Removes a frame and ignores what was in it.
 		public static void DeleteFrame(PetSliceModel model, int row, int frame)
 		{
 			PetSliceFrame target = FrameAt(model, row, frame);
@@ -67,7 +63,6 @@ namespace FynnsTools.UnityPetFramework
 			model.rows[row].frames.RemoveAt(frame);
 		}
 
-		// Takes a component out of whatever frame holds it, without deciding what happens to it next.
 		public static void Detach(PetSliceModel model, int id)
 		{
 			foreach (PetSliceRow row in model.rows)
@@ -89,7 +84,6 @@ namespace FynnsTools.UnityPetFramework
 			target.components.Add(id);
 		}
 
-		// A new frame from the given components, placed in reading order within the row.
 		public static void AddFrame(PetSliceModel model, int row, IEnumerable<int> components)
 		{
 			if (row < 0 || row >= model.rows.Count) return;
@@ -121,7 +115,6 @@ namespace FynnsTools.UnityPetFramework
 
 			model.rows[row].frames.Insert(at, frame);
 		}
-		// Moves a component one frame along its row.
 		public static void Nudge(PetSliceModel model, int id, int direction)
 		{
 			PetSliceComponent component = model.Component(id);
@@ -196,7 +189,6 @@ namespace FynnsTools.UnityPetFramework
 			model.rows.RemoveAt(row);
 		}
 
-		// A row built from components detection left out, for a band it missed entirely.
 		public static void CreateRow(PetSliceModel model, IEnumerable<int> components)
 		{
 			List<int> ids = new List<int>(components);
@@ -227,7 +219,6 @@ namespace FynnsTools.UnityPetFramework
 			AddFrame(model, at, ids);
 		}
 
-		// Left to right.
 		private static void SortReadingOrder(PetSliceModel model, PetSliceRow row)
 		{
 			row.frames.Sort((a, b) => model.FrameBounds(a).x.CompareTo(model.FrameBounds(b).x));

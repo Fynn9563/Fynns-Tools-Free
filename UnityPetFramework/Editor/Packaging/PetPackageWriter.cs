@@ -4,12 +4,10 @@ using System.IO;
 using System.IO.Compression;
 using UnityEngine;
 
-// UnityEngine has a CompressionLevel of its own, for asset bundles, and it is not this one.
 using CompressionLevel = System.IO.Compression.CompressionLevel;
 
 namespace FynnsTools.UnityPetFramework
 {
-	// Writes a .fynnpet, and proves the repacked sheet still shows the same pictures before it does.
 	internal static class PetPackageWriter
 	{
 		internal sealed class Report
@@ -36,10 +34,8 @@ namespace FynnsTools.UnityPetFramework
 		{
 			report = null;
 
-			// Canonical before anything reads it.
 			definition.Normalise();
 
-			// Measured again on the way out rather than trusted.
 			if (!PetContentBounds.Recalculate(definition, atlas, out error))
 			{
 				return false;
@@ -50,7 +46,6 @@ namespace FynnsTools.UnityPetFramework
 				return false;
 			}
 
-			// The index remap is the one thing here that fails quietly.
 			if (!VerifyRoundTrip(atlas, definition, packed, out error))
 			{
 				return false;
@@ -80,7 +75,6 @@ namespace FynnsTools.UnityPetFramework
 			return true;
 		}
 
-		// Every frame of every animation.
 		internal static bool VerifyRoundTrip(
 			PetAtlas source,
 			PetDefinition sourceDefinition,
@@ -157,7 +151,6 @@ namespace FynnsTools.UnityPetFramework
 			return true;
 		}
 
-		// Sampled on a grid rather than every pixel.
 		private static bool SameFrame(PetAtlas source, int sourceCell, RectInt content, PetAtlas packed, int packedCell)
 		{
 			const int step = 1;
@@ -179,7 +172,6 @@ namespace FynnsTools.UnityPetFramework
 			return true;
 		}
 
-		// Everything about an animation except its frames, which are checked pixel by pixel afterwards.
 		private static bool SameSettings(PetClipDefinition original, PetClipDefinition rewritten, out string difference)
 		{
 			difference = null;
@@ -201,7 +193,6 @@ namespace FynnsTools.UnityPetFramework
 			return difference == null;
 		}
 
-		// Numbers that only ever pass straight through the JSON copy are compared with a tolerance.
 		private static bool Near(float a, float b)
 		{
 			return Mathf.Abs(a - b) < .01f;
@@ -230,7 +221,6 @@ namespace FynnsTools.UnityPetFramework
 			packed.Definition.schemaVersion = UnityPetFrameworkInfo.PetSchemaVersion;
 
 			Dictionary<string, byte[]> sounds = CollectSounds(packed.Definition, petFolder);
-			// The icon's first frame.
 			byte[] thumbnail = iconThumbnail ?? ReadThumbnail(original, petFolder);
 			packed.Definition.thumbnail = thumbnail != null ? PetPackageFormat.ThumbnailEntry : "";
 
@@ -241,7 +231,6 @@ namespace FynnsTools.UnityPetFramework
 					System.Text.Encoding.UTF8.GetBytes(JsonUtility.ToJson(packed.Definition, true)),
 					CompressionLevel.Optimal);
 
-				// PNG is already deflate compressed inside.
 				WriteEntry(archive, PetPackageFormat.AtlasEntry, packed.AtlasPng, CompressionLevel.NoCompression);
 
 				if (thumbnail != null)
@@ -265,7 +254,6 @@ namespace FynnsTools.UnityPetFramework
 			}
 		}
 
-		// Sounds are named by the clips, and each one is re-read from beside the pet.
 		private static Dictionary<string, byte[]> CollectSounds(PetDefinition definition, string petFolder)
 		{
 			Dictionary<string, byte[]> sounds = new Dictionary<string, byte[]>();

@@ -2,12 +2,10 @@ using UnityEngine;
 
 namespace FynnsTools.UnityPetFramework
 {
-	// The still picture a pet is shown by, taken from the first frame of its Pet Icon animation.
 	internal static class PetThumbnailRenderer
 	{
 		private const int MaxSide = 512;
 
-		// Returns null when the pet has no icon.
 		public static byte[] Render(PetAtlas atlas, PetDefinition definition)
 		{
 			if (atlas == null || definition?.icon == null || definition.icon.FrameCount == 0)
@@ -38,7 +36,6 @@ namespace FynnsTools.UnityPetFramework
 
 				for (int y = 0; y < frame.height; y++)
 				{
-					// GetPixel counts down from the top of the cell.
 					int row = (frame.height - 1 - y) * frame.width;
 					for (int x = 0; x < frame.width; x++)
 					{

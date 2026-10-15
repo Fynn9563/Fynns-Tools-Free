@@ -4,23 +4,18 @@ using UnityEngine;
 
 namespace FynnsTools.UnityPetFramework
 {
-	// One island of opaque pixels found in the source sheet.
 	[Serializable]
 	internal sealed class PetSliceComponent
 	{
-		// 1-based, and the value stored in PetSliceModel.labels.
 		public int id;
 
 		public int x, y, width, height;
 		public int pixels;
 
-		// Text, credits or anything the user marked with Ignore Region.
 		public bool ignored;
 
-		// Big enough to be a sprite in its own right rather than an effect that belongs to one.
 		public bool primary;
 
-		// Where this ended up.
 		public int row = -1;
 		public int frame = -1;
 
@@ -29,7 +24,6 @@ namespace FynnsTools.UnityPetFramework
 		public Vector2 Centre => new Vector2(x + width * .5f, y + height * .5f);
 	}
 
-	// One output frame: the components that make it up, and nothing else.
 	[Serializable]
 	internal sealed class PetSliceFrame
 	{
@@ -41,14 +35,13 @@ namespace FynnsTools.UnityPetFramework
 	{
 		public string name;
 
-		// Band bounds in source pixels, top-down.
+		// Source pixel bounds are top-down.
 		public int top;
 		public int bottom;
 
 		public List<PetSliceFrame> frames = new List<PetSliceFrame>();
 	}
 
-	// A rectangle of the source sheet that detection pretends is empty.
 	[Serializable]
 	internal sealed class PetSliceIgnoreRegion
 	{
@@ -56,23 +49,20 @@ namespace FynnsTools.UnityPetFramework
 
 		public RectInt Rect => new RectInt(x, y, width, height);
 	}
-	// Everything Smart Slice has worked out about a sheet.
 	internal sealed class PetSliceModel
 	{
 		public int width;
 		public int height;
 
-		// Component id per source pixel, top-down, 0 for transparent.
+		// Top-down component IDs; zero means transparent.
 		public int[] labels;
 
-		// Index i holds the component with id i+1.
 		public List<PetSliceComponent> components = new List<PetSliceComponent>();
 
 		public List<PetSliceRow> rows = new List<PetSliceRow>();
 
 		public List<PetSliceIgnoreRegion> ignoreRegions = new List<PetSliceIgnoreRegion>();
 
-		// Components detection decided were text, noise or outside every band.
 		public int IgnoredCount
 		{
 			get
@@ -112,7 +102,6 @@ namespace FynnsTools.UnityPetFramework
 			return id >= 1 && id <= components.Count ? components[id - 1] : null;
 		}
 
-		// The union of a frame's components.
 		public RectInt FrameBounds(PetSliceFrame frame)
 		{
 			bool any = false;
@@ -142,7 +131,6 @@ namespace FynnsTools.UnityPetFramework
 			return any ? new RectInt(left, top, right - left, bottom - top) : new RectInt(0, 0, 0, 0);
 		}
 
-		// The uniform cell every frame is padded to.
 		public Vector2Int CellSize()
 		{
 			int cellWidth = 1;
@@ -203,7 +191,6 @@ namespace FynnsTools.UnityPetFramework
 			}
 		}
 
-		// Centre rather than any overlap.
 		public bool InIgnoredRegion(RectInt bounds)
 		{
 			Vector2Int centre = new Vector2Int(
@@ -227,14 +214,13 @@ namespace FynnsTools.UnityPetFramework
 		}
 	}
 
-	// The part of a model an edit can change, small enough to keep sixty-four of on an undo stack.
+	// Snapshot editable state for the bounded Undo history.
 	[Serializable]
 	internal sealed class PetSliceSnapshot
 	{
 		public List<PetSliceRow> rows = new List<PetSliceRow>();
 		public List<PetSliceIgnoreRegion> ignoreRegions = new List<PetSliceIgnoreRegion>();
 
-		// One entry per component: bit 0 ignored, bit 1 primary.
 		public List<int> flags = new List<int>();
 
 		public static PetSliceSnapshot Capture(PetSliceModel model)
@@ -265,7 +251,6 @@ namespace FynnsTools.UnityPetFramework
 			model.Rebuild();
 		}
 
-		// Deep copies in both directions.
 		private static List<PetSliceRow> CopyRows(List<PetSliceRow> source)
 		{
 			List<PetSliceRow> copy = new List<PetSliceRow>(source.Count);

@@ -5,14 +5,13 @@ using UnityEngine;
 
 namespace FynnsTools.ClientSimStorageCleaner
 {
-	// Deletes the ClientSimStorage folder next to Assets after play mode ends.
 	[InitializeOnLoad]
 	internal static class ClientSimStorage
 	{
 		private const string LogPrefix = "[ClientSim Storage Cleaner] ";
 		private const string FolderName = "ClientSimStorage";
 
-		// ClientSim can still be writing a file when play mode ends, so the delete is retried.
+		// Retry while ClientSim is finishing file writes.
 		private const int MaxAttempts = 12;
 		private const double SecondsBetweenAttempts = 0.25;
 
@@ -68,7 +67,6 @@ namespace FynnsTools.ClientSimStorageCleaner
 			_nextAttemptAt = EditorApplication.timeSinceStartup + SecondsBetweenAttempts;
 		}
 
-		// True when the folder is gone.
 		public static bool Clear(out string error)
 		{
 			error = null;

@@ -4,8 +4,6 @@ using UnityEngine;
 
 namespace FynnsTools.FaceEmoPatches
 {
-	// The tick boxes. Toggling one applies or undoes the patch straight away, so there is
-	// nothing to save and no reason to restart Unity.
 	internal sealed class FaceEmoPatchesWindow : EditorWindow
 	{
 		private const string WindowTitle = "FaceEmo Patches";
@@ -24,9 +22,7 @@ namespace FynnsTools.FaceEmoPatches
 			RefreshPatches();
 		}
 
-		// FaceEmo can be installed, updated or removed while the window sits open, and
-		// that changes which patches are applicable, so availability is re-checked on
-		// focus rather than only when the window is first created.
+		// Refresh availability when installed packages change.
 		private void OnFocus()
 		{
 			RefreshPatches();

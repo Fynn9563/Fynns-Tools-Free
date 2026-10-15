@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace FynnsTools.ClientSimStorageCleaner
 {
-	// One tick box, saved as soon as it is changed.
 	internal sealed class ClientSimStorageCleanerWindow : EditorWindow
 	{
 		private const string WindowTitle = "ClientSim Storage Cleaner";
@@ -53,7 +52,6 @@ namespace FynnsTools.ClientSimStorageCleaner
 			}
 		}
 
-		// The folder status can change while the window is not in front.
 		private void OnFocus()
 		{
 			Repaint();

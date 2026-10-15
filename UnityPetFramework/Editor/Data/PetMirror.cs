@@ -1,6 +1,5 @@
 namespace FynnsTools.UnityPetFramework
 {
-	// Which way a pet is drawn, per animation.
 	internal enum PetDrawnFacing
 	{
 		SameAsPet = 0,
@@ -8,10 +7,8 @@ namespace FynnsTools.UnityPetFramework
 		Left = 2
 	}
 
-	// The whole of the left and right question, in one place.
 	internal static class PetMirror
 	{
-		// Which way this animation's artwork is drawn.
 		public static bool ArtFacesRight(PetDefinition definition, PetClipDefinition clip)
 		{
 			if (clip != null && clip.drawnFacing != (int)PetDrawnFacing.SameAsPet)
@@ -22,7 +19,6 @@ namespace FynnsTools.UnityPetFramework
 			return definition == null || definition.artFacesRight;
 		}
 
-		// Whether to draw this frame mirrored.
 		public static bool ShouldMirror(PetDefinition definition, PetClipDefinition clip, PetFrameRef frame, PetFacing facing)
 		{
 			bool facingMirror = false;

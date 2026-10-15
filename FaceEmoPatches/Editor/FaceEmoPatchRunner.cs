@@ -7,9 +7,7 @@ using UnityEngine;
 
 namespace FynnsTools.FaceEmoPatches
 {
-	// Harmony holds its patches in memory, and a domain reload throws that memory away.
-	// So the enabled set lives in EditorPrefs and is re-applied on every load, rather
-	// than being applied once and assumed to stick.
+	// Reapply saved patch preferences after domain reload.
 	[InitializeOnLoad]
 	internal static class FaceEmoPatchRunner
 	{
@@ -27,14 +25,10 @@ namespace FynnsTools.FaceEmoPatches
 
 		static FaceEmoPatchRunner()
 		{
-			// FaceEmo's assemblies are not guaranteed to be loaded while static
-			// constructors run, and every patch looks its targets up by name, so the first
-			// pass waits until the editor has finished starting up.
+			// Wait until FaceEmo assemblies are loaded before resolving targets.
 			EditorApplication.delayCall += SyncAll;
 
-			// Patches are handed back before the domain goes away. Harmony would discard
-			// them regardless, but unpatching keeps FaceEmo's methods in a known state if
-			// the reload is cancelled part way through.
+			// Unpatch before reload, including cancelled reloads.
 			AssemblyReloadEvents.beforeAssemblyReload += RevertAll;
 		}
 
@@ -46,8 +40,6 @@ namespace FynnsTools.FaceEmoPatches
 			}
 		}
 
-		// Brings one patch in line with its tick box. Every apply and revert in the tool
-		// goes through here, so this is the only place that has to handle a patch failing.
 		public static void Sync(FaceEmoPatch patch)
 		{
 			bool wanted = FaceEmoPatchesSettings.IsEnabled(patch.Id);
@@ -64,9 +56,7 @@ namespace FynnsTools.FaceEmoPatches
 			}
 			catch (Exception exception)
 			{
-				// A patch that throws half way through would leave FaceEmo partly rewritten,
-				// and would try again on every reload. Undo what it managed and turn the tick
-				// box off, so the editor is left exactly as it would be without this tool.
+				// Revert partial patches and disable failed preferences.
 				patch.Revert(HarmonyInstance);
 				FaceEmoPatchesSettings.SetEnabled(patch.Id, false);
 				Debug.LogWarning($"{LogPrefix} Could not apply \"{patch.Title}\", so it has been turned back off.\n{exception}");

@@ -7,7 +7,6 @@ using UnityEngine.UIElements;
 
 namespace FynnsTools.UnityPetFramework
 {
-	// Fills in a pet's animations by clicking cells on its sprite sheet.
 	internal sealed partial class PetCreatorPage : IDisposable
 	{
 		private const string PetPathKey = "FynnsTools.UnityPetFramework.Builder.PetPath";
@@ -21,10 +20,8 @@ namespace FynnsTools.UnityPetFramework
 		private const float ChipWidth = 38f;
 		private const float ChipHeight = 20f;
 
-		// Index order matches PetDrawnFacing.
 		private static readonly string[] DrawnFacingLabels = { "Same as pet", "Right", "Left" };
 
-		// A newline inside a dialog string, kept as a constant so the escape is not repeated in prose.
 		private static readonly string Newline = "\n";
 
 		private readonly PetFrameGrid _grid = new PetFrameGrid();
@@ -43,17 +40,14 @@ namespace FynnsTools.UnityPetFramework
 
 		private PetDefinition _definition;
 
-		// Which slot the cells being clicked go into.
 		private string _selectedSlot = PetClipSlots.Stand1;
 
-		// Whether the next cell clicked is added mirrored.
 		private bool _addMirrored;
 
 		private bool _identityExpanded;
 
 		private Vector2 _sidePanelScroll;
 
-		// The panel's width this frame.
 		private float _sidePanelMeasured = 300f;
 		private string _status;
 		private MessageType _statusType = MessageType.None;
@@ -101,7 +95,6 @@ namespace FynnsTools.UnityPetFramework
 			_container = null;
 		}
 
-		// Drives the preview and repaints, but only while something is actually animating.
 		private void Tick()
 		{
 			double now = EditorApplication.timeSinceStartup;
@@ -113,7 +106,6 @@ namespace FynnsTools.UnityPetFramework
 				return;
 			}
 
-			// Clamped for the same reason the live pet clamps.
 			_preview.Tick(Mathf.Clamp(delta, 0f, 0.25f));
 			_container?.MarkDirtyRepaint();
 		}
@@ -122,7 +114,6 @@ namespace FynnsTools.UnityPetFramework
 		{
 			DrawPage();
 
-			// Anything that opens a modal picker runs here, outside every layout scope.
 			if (_deferred.Run()) _container?.MarkDirtyRepaint();
 		}
 
@@ -146,10 +137,8 @@ namespace FynnsTools.UnityPetFramework
 				return;
 			}
 
-			// The frame table is what the slot list and the grid both read.
 			if (!_gridApplied || !_definition.HasRectangles) return;
 
-			// Measured from the container, never from the window.
 			float available = _container != null && _container.contentRect.width > 1f
 				? _container.contentRect.width
 				: EditorGUIUtility.currentViewWidth;
@@ -174,7 +163,6 @@ namespace FynnsTools.UnityPetFramework
 			}
 			else
 			{
-				// Too narrow for both.
 				DrawSidePanel(0f);
 				DrawGrid();
 				DrawPreview();
@@ -186,7 +174,6 @@ namespace FynnsTools.UnityPetFramework
 			}
 		}
 
-		// The row of pet actions needs about 520 pixels laid out in one line.
 		private const float PetActionRowWidth = 520f;
 
 		private void DrawPetSection()
@@ -253,7 +240,6 @@ namespace FynnsTools.UnityPetFramework
 			GUILayout.FlexibleSpace();
 		}
 
-		// Who the pet is.
 		private void DrawIdentity()
 		{
 			_identityExpanded = EditorGUILayout.Foldout(_identityExpanded, "Pet Details", true);
@@ -284,7 +270,6 @@ namespace FynnsTools.UnityPetFramework
 
 				if (EditorGUI.EndChangeCheck())
 				{
-					// An id has to survive being used as a folder name.
 					_definition.id = PetLibrary.SanitiseId(_definition.id);
 					SaveWorkingPet();
 				}
@@ -293,14 +278,12 @@ namespace FynnsTools.UnityPetFramework
 			}
 		}
 
-		// A width of zero means take the whole row, which the stacked layout uses.
 		private void DrawSidePanel(float width)
 		{
 			GUILayoutOption[] options = width > 0f ? new[] { GUILayout.Width(width) } : new GUILayoutOption[0];
 			float measured = width > 0f ? width : EditorGUIUtility.currentViewWidth;
 			_sidePanelMeasured = measured;
 
-			// The default label width is about 150.
 			float previousLabel = EditorGUIUtility.labelWidth;
 			EditorGUIUtility.labelWidth = Mathf.Clamp(measured * .42f, 80f, 150f);
 
@@ -308,7 +291,6 @@ namespace FynnsTools.UnityPetFramework
 			{
 				using (new EditorGUILayout.VerticalScope(options))
 
-				// Horizontal scrolling off.
 				using (EditorGUILayout.ScrollViewScope scroll = new EditorGUILayout.ScrollViewScope(
 					_sidePanelScroll, false, false, GUIStyle.none, GUI.skin.verticalScrollbar, GUI.skin.scrollView))
 				{
@@ -329,7 +311,6 @@ namespace FynnsTools.UnityPetFramework
 			}
 		}
 
-		// Every slot, always, in a fixed order.
 		private void DrawSlotList()
 		{
 			EditorGUILayout.LabelField("Animations", EditorStyles.boldLabel);
@@ -369,7 +350,6 @@ namespace FynnsTools.UnityPetFramework
 					_selectedSlot = slot.Name;
 					_undo.Clear();
 
-					// Alignment is about one animation.
 					_aligning = false;
 					_preview.ShowOnionSkin = false;
 					_preview.Unpin();
@@ -378,7 +358,6 @@ namespace FynnsTools.UnityPetFramework
 				Color previous = GUI.color;
 				if (frameCount == 0 && slot.Required)
 				{
-					// The one state worth colouring: a pet missing this will not load.
 					GUI.color = new Color(1f, 0.76f, 0.03f);
 				}
 
@@ -410,13 +389,11 @@ namespace FynnsTools.UnityPetFramework
 				}
 
 				EditorGUI.BeginChangeCheck();
-				// Rounded as it is set.
 				clip.fps = Mathf.Round(EditorGUILayout.Slider("FPS", clip.fps, 1f, 24f) * 10f) / 10f;
 				clip.loop = EditorGUILayout.Toggle(
 					new GUIContent("Loop", "Off means it plays once and then hands control back."),
 					clip.loop);
 
-				// Only meaningful for a one-shot: a loop has no last frame to rest on.
 				using (new EditorGUI.DisabledScope(clip.loop))
 				{
 					clip.holdSeconds = Mathf.Round(EditorGUILayout.Slider(
@@ -424,7 +401,6 @@ namespace FynnsTools.UnityPetFramework
 						clip.holdSeconds, 0f, 5f) * 10f) / 10f;
 				}
 
-				// The icon is never mirrored for facing and never plays a sound.
 				bool isIcon = _selectedSlot == PetClipSlots.PetIcon;
 
 				if (!isIcon)
@@ -457,7 +433,6 @@ namespace FynnsTools.UnityPetFramework
 			}
 		}
 
-		// One optional sound per animation, played as it starts.
 		private void DrawSoundRow(PetClipDefinition clip)
 		{
 			using (new EditorGUILayout.HorizontalScope())
@@ -483,7 +458,6 @@ namespace FynnsTools.UnityPetFramework
 			}
 		}
 
-		// The animation as the user built it.
 		private void DrawFrameSequence(PetClipDefinition clip)
 		{
 			EditorGUILayout.LabelField(
@@ -515,7 +489,6 @@ namespace FynnsTools.UnityPetFramework
 		{
 			PetFrameRef frame = clip.frames[position];
 
-			// One short line.
 			string label = frame.flip ? position + "<" : position.ToString();
 			string tooltip = string.Format(
 				"Position {0}, cell {1}{2}\n\nClick for options.",
@@ -526,7 +499,6 @@ namespace FynnsTools.UnityPetFramework
 				return;
 			}
 
-			// A menu rather than modifier clicks.
 			int index = position;
 			GenericMenu menu = new GenericMenu();
 			menu.AddItem(new GUIContent(frame.flip ? "Draw normally" : "Draw mirrored"), false, () => ToggleFrameFlip(clip, index));
@@ -628,11 +600,9 @@ namespace FynnsTools.UnityPetFramework
 
 			_preview.Draw(pad, _atlas);
 
-			// The pad's own rect is the available width.
 			_preview.DrawControls(_atlas, pad.width);
 		}
 
-		// Starts again with nothing.
 		private void NewPet()
 		{
 			if (!EditorUtility.DisplayDialog(
@@ -694,7 +664,6 @@ namespace FynnsTools.UnityPetFramework
 
 			_sheetPath = picked;
 
-			// A different sheet means different cell numbers.
 			_definition.clips.Clear();
 			_definition.icon = null;
 			_definition.spriteFrames.Clear();
@@ -721,7 +690,6 @@ namespace FynnsTools.UnityPetFramework
 			return empty;
 		}
 
-		// Slots hold no clip until something is put in one.
 		private PetClipDefinition EnsureClip(string slotName)
 		{
 			PetClipDefinition clip = _definition.FindClip(slotName);
@@ -737,7 +705,6 @@ namespace FynnsTools.UnityPetFramework
 				loop = DefaultLoopFor(slotName)
 			};
 
-			// The icon has its own field and is not one of the pet's animations.
 			if (slotName == PetClipSlots.PetIcon) _definition.icon = clip;
 			else _definition.clips.Add(clip);
 
@@ -745,7 +712,6 @@ namespace FynnsTools.UnityPetFramework
 			return clip;
 		}
 
-		// Walking and idling carry on until something stops them.
 		private static bool DefaultLoopFor(string slotName)
 		{
 			switch (slotName)
@@ -770,7 +736,6 @@ namespace FynnsTools.UnityPetFramework
 			SaveWorkingPet();
 		}
 
-		// Ctrl+click on the sheet takes out the last use of that cell.
 		private void RemoveFrameByCell(int cellIndex)
 		{
 			PetClipDefinition clip = _definition.FindClip(_selectedSlot);
@@ -823,7 +788,6 @@ namespace FynnsTools.UnityPetFramework
 
 		private void PushUndo(PetClipDefinition clip)
 		{
-			// Whole-list snapshots.
 			_undo.Add(new List<PetFrameRef>(clip.frames));
 			if (_undo.Count > MaxUndoSteps)
 			{
@@ -862,7 +826,6 @@ namespace FynnsTools.UnityPetFramework
 			};
 		}
 
-		// The work in progress lives in SessionState.
 		private void SaveWorkingPet()
 		{
 			SessionState.SetString(WorkingPetKey, JsonUtility.ToJson(_definition));
@@ -888,7 +851,6 @@ namespace FynnsTools.UnityPetFramework
 			}
 			catch (Exception)
 			{
-				// A stored blob from an older layout is not worth a message.
 				return null;
 			}
 		}

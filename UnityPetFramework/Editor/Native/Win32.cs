@@ -4,10 +4,8 @@ using System.Runtime.InteropServices;
 
 namespace FynnsTools.UnityPetFramework
 {
-	// Declarations only.
 	internal static class Win32
 	{
-		// Window styles.
 		public const uint WS_POPUP = 0x80000000;
 
 		public const uint WS_EX_LAYERED = 0x00080000;
@@ -17,45 +15,35 @@ namespace FynnsTools.UnityPetFramework
 
 		public const int GWL_EXSTYLE = -20;
 
-		// Class styles.
 		public const uint CS_HREDRAW = 0x0002;
 		public const uint CS_VREDRAW = 0x0001;
 
 		public const int ERROR_CLASS_ALREADY_EXISTS = 1410;
 
-		// UpdateLayeredWindow.
 		public const int ULW_ALPHA = 0x00000002;
 		public const byte AC_SRC_OVER = 0x00;
 		public const byte AC_SRC_ALPHA = 0x01;
 
-		// CreateDIBSection.
 		public const uint BI_RGB = 0;
 		public const uint DIB_RGB_COLORS = 0;
 
-		// ShowWindow.
 		public const int SW_HIDE = 0;
 		public const int SW_SHOWNOACTIVATE = 4;
 
-		// SetWindowPos.
 		public const uint SWP_NOSIZE = 0x0001;
 		public const uint SWP_NOMOVE = 0x0002;
 		public const uint SWP_NOACTIVATE = 0x0010;
 		public const uint SWP_NOOWNERZORDER = 0x0200;
 		public static readonly IntPtr HWND_TOP = IntPtr.Zero;
 
-		// PeekMessage.
 		public const uint PM_REMOVE = 0x0001;
 
-		// GetAsyncKeyState.
 		public const int VK_LBUTTON = 0x01;
 
-		// GetAncestor.
 		public const uint GA_ROOTOWNER = 3;
 
-		// GetWindow.
 		public const uint GW_OWNER = 4;
 
-		// DwmGetWindowAttribute.
 		public const int DWMWA_EXTENDED_FRAME_BOUNDS = 9;
 
 		[StructLayout(LayoutKind.Sequential)]
@@ -107,7 +95,7 @@ namespace FynnsTools.UnityPetFramework
 			public uint biSize;
 			public int biWidth;
 
-			// Positive means the rows run bottom to top.
+			// Positive DIB height means bottom-up rows.
 			public int biHeight;
 			public ushort biPlanes;
 			public ushort biBitCount;
@@ -124,11 +112,9 @@ namespace FynnsTools.UnityPetFramework
 		{
 			public BITMAPINFOHEADER bmiHeader;
 
-			// One entry is enough.
 			public uint bmiColors;
 		}
 
-		// lpfnWndProc is an IntPtr rather than a delegate on purpose.
 		[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
 		public struct WNDCLASSEX
 		{
@@ -214,7 +200,6 @@ namespace FynnsTools.UnityPetFramework
 		[return: MarshalAs(UnmanagedType.Bool)]
 		public static extern bool GetCursorPos(out POINT lpPoint);
 
-		// Respects the per-pixel alpha of a layered window.
 		[DllImport("user32.dll")]
 		public static extern IntPtr WindowFromPoint(POINT point);
 

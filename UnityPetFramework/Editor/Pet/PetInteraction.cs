@@ -3,17 +3,13 @@ using UnityEngine;
 
 namespace FynnsTools.UnityPetFramework
 {
-	// What the mouse does to the pet.
 	internal sealed class PetInteraction
 	{
-		// How far from where it started a press may be released and still count as a click.
 		private const float ClickSlopPixels = 6f;
 		private const float ClickTravelPixels = 16f;
 
-		// How long the button has to be down before a press stops being a click and becomes petting.
 		private const float PetHoldSeconds = .35f;
 
-		// How long the second press of a double click has to be held before the pet is picked up.
 		private const float PickupHoldSeconds = .25f;
 
 		private bool _pressed;
@@ -26,7 +22,6 @@ namespace FynnsTools.UnityPetFramework
 		private double _pressTime;
 		private double _lastClickTime;
 
-		// Whether this press is the second half of a double click, and whether it has already petted.
 		private bool _pressIsSecondClick;
 		private bool _petted;
 
@@ -34,7 +29,6 @@ namespace FynnsTools.UnityPetFramework
 
 		public bool IsDragging { get; private set; }
 
-		// True for as long as the pet is being petted.
 		public bool IsPetting { get; private set; }
 
 		public bool IsPressOnPet => _pressed && _pressStartedOnPet;
@@ -80,14 +74,12 @@ namespace FynnsTools.UnityPetFramework
 		{
 			_pressed = true;
 
-			// The only place this is decided.
 			_pressStartedOnPet = pointer.IsOverPet;
 			_pressOrigin = pointer.DesktopPosition;
 			_pressTravel = 0f;
 			_pressTime = now;
 			_petted = false;
 
-			// Recorded as the button goes down.
 			_pressIsSecondClick = now - _lastClickTime <= doubleClickSeconds;
 		}
 
@@ -101,13 +93,11 @@ namespace FynnsTools.UnityPetFramework
 			_pressTravel += moved;
 			double held = now - _pressTime;
 
-			// A pet with no pickup pose, or with pickup turned off, falls through to petting instead.
 			if (_pressIsSecondClick && PickupEnabled && held >= PickupHoldSeconds)
 			{
 				IsDragging = true;
 			}
 
-			// Stops the moment the cursor leaves the pet and picks up again when it comes back.
 			IsPetting = !IsDragging && pointer.IsOverPet && held >= PetHoldSeconds;
 			if (IsPetting) _petted = true;
 		}
@@ -125,7 +115,6 @@ namespace FynnsTools.UnityPetFramework
 				return;
 			}
 
-			// A press that petted was a pet, not a click.
 			if (_petted)
 			{
 				_lastClickTime = 0d;

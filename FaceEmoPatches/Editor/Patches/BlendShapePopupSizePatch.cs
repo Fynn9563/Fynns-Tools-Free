@@ -10,27 +10,16 @@ using UnityEngine;
 
 namespace FynnsTools.FaceEmoPatches
 {
-	// The "+" button under Excluded Blend Shapes opens a ListSelectPopupContent, which
-	// never overrides PopupWindowContent.GetWindowSize and so inherits Unity's fixed
-	// 200 by 200 default. Every row is a BlendShape, and BlendShape.ToString returns
-	// "<hierarchy path>.<blend shape name>", so on any real avatar the path fills the
-	// popup before the name starts and the part worth reading is the part cut off.
-	//
-	// Patching the base GetWindowSize is narrow rather than broad, because a class that
-	// overrides it never calls it. Only content that took Unity's default is reachable
-	// here, the result is filtered down to FaceEmo's popup, and it is only ever grown.
+	// Grow FaceEmo's default popup to fit blendshape paths.
 	internal sealed class BlendShapePopupSizePatch : FaceEmoPatch
 	{
 		private const string PopupTypeName = "Suzuryg.FaceEmo.Detail.View.Element.ListSelectPopupContent`1";
 		private const string TreeViewFieldName = "_listTreeView";
 		private const string ContentsFieldName = "_contents";
 
-		// Row foldout indent, the vertical scrollbar, the popup's own 5px margins, and
-		// slack so the longest name does not sit flush against the scrollbar.
+		// Include indent, scrollbar and popup margins.
 		private const float RowDecorationWidth = 60;
 
-		// The popup gives its list everything except the OK and Cancel row: 25px of
-		// button plus four 5px margins.
 		private const float ButtonRowHeight = 45;
 
 		private const float MaxWidth = 900;
@@ -88,8 +77,7 @@ namespace FynnsTools.FaceEmoPatches
 				Mathf.Min(Mathf.Max(__result.y, fitted.y), MaxHeight));
 		}
 
-		// Compared as an open generic type name so nothing has to be resolved or loaded,
-		// and so the check holds for every T the popup is used with.
+		// Match the open generic name without loading FaceEmo types.
 		private static bool IsListSelectPopup(PopupWindowContent content)
 		{
 			Type type = content?.GetType();
@@ -134,16 +122,13 @@ namespace FynnsTools.FaceEmoPatches
 					return Vector2.zero;
 				}
 
-				// TreeView already knows how tall its rows add up to, so the popup does not
-				// have to guess a row height that FaceEmo might have changed.
+				// Use TreeView's measured height.
 				float rowsHeight = treeView is TreeView tree ? tree.totalHeight : 0;
 				return new Vector2(widest + RowDecorationWidth, rowsHeight + ButtonRowHeight);
 			}
 			catch (Exception exception)
 			{
-				// This runs inside Unity's own popup layout, so throwing here would break the
-				// window rather than the patch. Falling back to zero leaves Unity's default
-				// size in place, which is the unpatched behaviour.
+				// Keep Unity's default size if reflection fails.
 				if (!_measureFailureLogged)
 				{
 					_measureFailureLogged = true;

@@ -1,0 +1,7 @@
+{
+  "name": "FynnsTools.CameraUtility.Editor",
+  "rootNamespace": "FynnsTools.Cameras",
+  "references": [],
+  "includePlatforms": ["Editor"],
+  "autoReferenced": true
+}

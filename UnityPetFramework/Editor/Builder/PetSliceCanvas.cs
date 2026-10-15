@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace FynnsTools.UnityPetFramework
 {
-	// The source sheet with what detection made of it drawn on top.
 	internal sealed class PetSliceCanvas
 	{
 		internal enum Tool
@@ -21,7 +20,6 @@ namespace FynnsTools.UnityPetFramework
 		private static readonly Color IgnoredColour = new Color(1f, .3f, .3f, .55f);
 		private static readonly Color RegionColour = new Color(1f, .2f, .2f, .12f);
 
-		// Labels only once there is room to read them.
 		private const float LabelZoom = .35f;
 
 		public readonly HashSet<int> Selection = new HashSet<int>();
@@ -51,7 +49,6 @@ namespace FynnsTools.UnityPetFramework
 			return Mathf.RoundToInt(_zoom * 100f) + "%";
 		}
 
-		// Returns the region the user just finished drawing, or null.
 		public PetSliceIgnoreRegion Draw(Rect area, PetAtlas atlas, PetSliceModel model)
 		{
 			if (_zoom <= 0f)
@@ -117,7 +114,6 @@ namespace FynnsTools.UnityPetFramework
 					continue;
 				}
 
-				// Primaries only set frame positions, so they are marked faintly.
 				Outline(box, component.primary ? PrimaryColour : EffectColour);
 			}
 		}
@@ -160,7 +156,7 @@ namespace FynnsTools.UnityPetFramework
 
 			if (e.type == EventType.ScrollWheel && inside)
 			{
-				// Zoomed around the cursor, so whatever is being looked at stays put.
+				// Keep the point under the cursor fixed while zooming.
 				float next = Mathf.Clamp(_zoom * Mathf.Pow(1.12f, -e.delta.y), .02f, 16f);
 				_pan = e.mousePosition - area.position - point * next;
 				_zoom = next;
@@ -205,7 +201,7 @@ namespace FynnsTools.UnityPetFramework
 			return null;
 		}
 
-		// Smallest component under the cursor, so a heart drawn over a sprite can still be picked.
+		// Pick the smallest overlapping component.
 		private static int ComponentAt(PetSliceModel model, Vector2 point)
 		{
 			Vector2Int pixel = Vector2Int.FloorToInt(point);

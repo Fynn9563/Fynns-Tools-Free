@@ -4,10 +4,8 @@ using UnityEngine;
 
 namespace FynnsTools.UnityPetFramework
 {
-	// Plays a pet's clips, one at a time, with a queue behind them.
 	internal sealed class PetAnimator
 	{
-		// A clip cannot advance more than this many frames in one step.
 		private const int MaxFramesPerStep = 240;
 
 		private readonly Queue<string> _queue = new Queue<string>();
@@ -19,10 +17,8 @@ namespace FynnsTools.UnityPetFramework
 		private float _time;
 		private bool _held;
 
-		// Plays the frames back to front.
 		private bool _reverse;
 
-		// Raised when a clip reaches its end, which for a looping clip means the end of one cycle.
 		public event Action<string> ClipFinished;
 
 		public float Speed { get; set; } = 1f;
@@ -35,17 +31,14 @@ namespace FynnsTools.UnityPetFramework
 
 		public IEnumerable<string> QueuedNames => _queue;
 
-		// Where we are within the clip, counting from 0.
 		public int CurrentFrameIndex => _clip == null ? -1 : _frame;
 
 		public int CurrentFrameCount => _clip?.FrameCount ?? 0;
 
 		public float CurrentFps => _clip?.fps ?? 0f;
 
-		// The animation playing right now.
 		public PetClipDefinition CurrentClip => _clip;
 
-		// The frame on screen right now: which cell, and whether the creator mirrored it by hand.
 		public PetFrameRef CurrentFrame
 		{
 			get
@@ -67,7 +60,6 @@ namespace FynnsTools.UnityPetFramework
 			Stop();
 		}
 
-		// Returns false when the pet has no clip by that name.
 		public bool Play(string clipName, bool restartIfSame = false, bool reverse = false)
 		{
 			PetClipDefinition clip = _definition?.FindClip(clipName);
@@ -96,7 +88,6 @@ namespace FynnsTools.UnityPetFramework
 				return;
 			}
 
-			// Queuing with nothing playing starts immediately.
 			if (_clip == null)
 			{
 				Play(clipName, true);
@@ -144,7 +135,6 @@ namespace FynnsTools.UnityPetFramework
 
 				if (!Advance())
 				{
-					// The clip ended and nothing replaced it, so there is no more time to spend.
 					_time = 0f;
 					break;
 				}
@@ -156,7 +146,6 @@ namespace FynnsTools.UnityPetFramework
 			}
 		}
 
-		// Moves on one frame.
 		private bool Advance()
 		{
 			_frame += _reverse ? -1 : 1;
@@ -168,10 +157,8 @@ namespace FynnsTools.UnityPetFramework
 
 			PetClipDefinition finished = _clip;
 
-			// Fired before deciding what comes next.
 			ClipFinished?.Invoke(finished.name);
 
-			// A listener is allowed to take over completely by calling Play or Stop.
 			if (!ReferenceEquals(finished, _clip))
 			{
 				return _clip != null && !_held;
@@ -179,7 +166,6 @@ namespace FynnsTools.UnityPetFramework
 
 			if (_queue.Count > 0)
 			{
-				// Play only fails if the pet was swapped mid-chain.
 				if (Play(_queue.Dequeue(), true))
 				{
 					return true;
@@ -195,7 +181,7 @@ namespace FynnsTools.UnityPetFramework
 				return true;
 			}
 
-			// A clip that plays once holds its last frame rather than blanking.
+			// Hold the last frame for one-shot clips.
 			_frame = _reverse ? 0 : finished.FrameCount - 1;
 			_held = true;
 			return false;

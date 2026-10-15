@@ -1,0 +1,16 @@
+{
+  "noEngineReferences": false,
+  "overrideReferences": false,
+  "includePlatforms": [
+    "Editor"
+  ],
+  "defineConstraints": [],
+  "autoReferenced": true,
+  "excludePlatforms": [],
+  "name": "FynnsTools.HierarchyPlus.Editor",
+  "precompiledReferences": [],
+  "allowUnsafeCode": false,
+  "rootNamespace": "HierarchyPlus",
+  "references": [],
+  "versionDefines": []
+}

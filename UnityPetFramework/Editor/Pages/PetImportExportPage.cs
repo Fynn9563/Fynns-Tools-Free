@@ -6,10 +6,8 @@ using UnityEngine.UIElements;
 
 namespace FynnsTools.UnityPetFramework
 {
-	// Sharing pets: writing a .fynnpet out, and taking one in.
 	internal sealed class PetImportExportPage
 	{
-		// Matches the pet selector, so a pet looks the same in both lists.
 		private const float IconSize = 32f;
 
 		private IMGUIContainer _container;
@@ -32,13 +30,11 @@ namespace FynnsTools.UnityPetFramework
 		{
 			DrawPage();
 
-			// Import and export both open a modal picker, which cannot happen inside a layout scope.
 			if (_deferred.Run()) _container?.MarkDirtyRepaint();
 		}
 
 		private void DrawPage()
 		{
-			// Re-listed whenever anything has written a pet to disk.
 			if (_pets == null || _listedVersion != PetLibrary.Version)
 			{
 				_pets = PetLibrary.Discover();

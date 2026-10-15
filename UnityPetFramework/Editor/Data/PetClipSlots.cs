@@ -1,6 +1,5 @@
 namespace FynnsTools.UnityPetFramework
 {
-	// Recognised animation names.
 	internal static class PetClipSlots
 	{
 		internal sealed class Slot
@@ -14,17 +13,14 @@ namespace FynnsTools.UnityPetFramework
 				MirrorByDefault = mirrorByDefault;
 			}
 
-			// Stored in pet.json and asked for by the runtime.
 			public string Name { get; }
 
 			public string Label { get; }
 
 			public string Description { get; }
 
-			// A pet without one of these cannot walk around, so it is not usable.
 			public bool Required { get; }
 
-			// What "Allow mirroring" starts as for a newly filled slot.
 			public bool MirrorByDefault { get; }
 		}
 
@@ -65,12 +61,10 @@ namespace FynnsTools.UnityPetFramework
 			new Slot(Love, Love, "Successful petting.", false, true),
 			new Slot(Hungry, Hungry, "Low-energy warning.", false, true),
 
-			// Optional, and not part of the Kino set.
 			new Slot(TurnStanding, "Turn Standing", "Optional standing turn. Played backwards for the other direction.", false, false),
 			new Slot(TurnSitting, "Turn Sitting", "Optional sitting turn, used when the pet rolls over in its sleep.", false, false)
 		};
 
-		// The animated pet icon.
 		public static readonly Slot Icon = new Slot(
 			PetIcon,
 			"Pet Icon",

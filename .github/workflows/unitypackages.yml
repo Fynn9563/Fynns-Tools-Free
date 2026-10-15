@@ -1,6 +1,6 @@
 name: Unity packages
 
-# Builds one .unitypackage per tool. Tools are discovered from the repository, so adding one needs no edit here.
+# Builds both installation formats and a VPM listing entry per tool.
 
 on:
   push:
@@ -27,6 +27,8 @@ jobs:
       tools: ${{ steps.tools.outputs.list }}
     steps:
       - uses: actions/checkout@v7
+        with:
+          lfs: true
 
       - uses: actions/setup-python@v7
         with:
@@ -39,6 +41,9 @@ jobs:
           echo "$list"
           echo "list=$list" >> "$GITHUB_OUTPUT"
 
+      - name: Test package builder
+        run: python -m unittest discover -s scripts/tests
+
   package:
     name: ${{ matrix.tool.name }} ${{ matrix.tool.version }}
     needs: discover
@@ -49,20 +54,29 @@ jobs:
         tool: ${{ fromJson(needs.discover.outputs.tools) }}
     steps:
       - uses: actions/checkout@v7
+        with:
+          lfs: true
 
       - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
 
-      - name: Build package
+      - name: Build unitypackage and VPM ZIP
         env:
           TOOL: ${{ matrix.tool.name }}
-        run: python scripts/build-unitypackage.py --tool "$TOOL"
+          RELEASE_TAG: ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name || '' }}
+        run: |
+          args=(--tool "$TOOL" --repository "$GITHUB_REPOSITORY")
+          if [[ -n "$RELEASE_TAG" ]]; then args+=(--release-tag "$RELEASE_TAG"); fi
+          python scripts/build-unitypackage.py "${args[@]}"
 
       - uses: actions/upload-artifact@v7
         with:
           name: ${{ matrix.tool.name }}-${{ matrix.tool.version }}
-          path: dist/*.unitypackage
+          path: |
+            dist/*.unitypackage
+            dist/*.zip
+            dist/*.package.json
           if-no-files-found: error
 
   release:
@@ -89,7 +103,9 @@ jobs:
             version="${BASH_REMATCH[2]}"
             expected="dist/${tool}-${version}.unitypackage"
 
-            if [[ ! -f "$expected" ]]; then
+            zip="dist/${tool}-${version}.zip"
+            manifest="dist/${tool}-${version}.package.json"
+            if [[ ! -f "$zip" || ! -f "$manifest" || ( "$tool" != "Complete" && ! -f "$expected" ) ]]; then
               echo "::error::Tag $TAG expects ${tool}-${version}.unitypackage, which was not built."
               echo "Built packages:"
               ls -1 dist
@@ -97,10 +113,11 @@ jobs:
               exit 1
             fi
 
-            files=("$expected")
+            files=("$zip" "$manifest")
+            if [[ "$tool" != "Complete" ]]; then files+=("$expected"); fi
             title="${tool} ${version}"
           elif [[ "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+ ]]; then
-            files=(dist/*.unitypackage)
+            files=(dist/*.unitypackage dist/*.zip dist/*.package.json)
             title="Fynn's Tools Free ${TAG#v}"
           else
             echo "::error::Tag $TAG matches no release scheme. Use <Tool>-v<x.y.z> or v<x.y.z>."

@@ -1,0 +1,146 @@
+{
+  "AnimationHierarchyEditor": {
+    "name": "com.fynn.tools.animationhierarchyeditor",
+    "displayName": "Animation Tools",
+    "description": "Edit animation paths, replace motions, automatically repath clips and repair broken bindings.",
+    "vpmDependencies": {}
+  },
+  "AssetOrganizer": {
+    "name": "com.fynn.tools.assetorganizer",
+    "displayName": "Asset Organizer",
+    "description": "Organize assets and their dependencies into folders by asset type.",
+    "vpmDependencies": {}
+  },
+  "BuildSizeViewer": {
+    "name": "com.fynn.tools.buildsizeviewer",
+    "displayName": "Build Size Viewer",
+    "description": "View Unity build size reports to see which assets contribute to avatar and world build sizes.",
+    "vpmDependencies": {}
+  },
+  "CameraUtility": {
+    "name": "com.fynn.tools.camerautility",
+    "displayName": "Camera Utility",
+    "description": "Match the position, rotation and lens of scene cameras and the Scene view.",
+    "vpmDependencies": {}
+  },
+  "ClientSimStorageCleaner": {
+    "name": "com.fynn.tools.clientsimstoragecleaner",
+    "displayName": "ClientSim Storage Cleaner",
+    "description": "Clear local ClientSim storage between play sessions.",
+    "vpmDependencies": {}
+  },
+  "ClippingTester": {
+    "name": "com.fynn.tools.clippingtester",
+    "displayName": "Clipping Tester",
+    "description": "Preview avatar animations on a temporary copy to check clothing and accessories for clipping.",
+    "vpmDependencies": {}
+  },
+  "ControllerCleaner": {
+    "name": "com.fynn.tools.controllercleaner",
+    "displayName": "Controller Cleaner",
+    "description": "Find and remove unused embedded objects from Animator Controllers.",
+    "vpmDependencies": {}
+  },
+  "ControllersPlus": {
+    "name": "com.fynn.tools.controllersplus",
+    "displayName": "Controllers+",
+    "description": "Edit Animator controllers, states, transitions, parameters and BlendTrees, with templates, searches, toggle creation and optional VRChat tools.",
+    "vpmDependencies": {}
+  },
+  "CopyCutPaste": {
+    "name": "com.fynn.tools.copycutpaste",
+    "displayName": "Copy/Cut/Paste",
+    "description": "Copy, cut and paste assets between folders in Unity's Project window.",
+    "vpmDependencies": {}
+  },
+  "DynamicsPlus": {
+    "name": "com.fynn.tools.dynamicsplus",
+    "displayName": "Dynamics+",
+    "description": "Edit, organize, remove and preview VRChat PhysBones, colliders and Contacts.",
+    "vpmDependencies": {
+      "com.vrchat.base": ">=3.10.5"
+    }
+  },
+  "FaceEmoPatches": {
+    "name": "com.fynn.tools.faceemopatches",
+    "displayName": "FaceEmo Patches",
+    "description": "Optional editor fixes for FaceEmo.",
+    "vpmDependencies": {
+      "com.vrchat.base": ">=3.5.0"
+    }
+  },
+  "GoGoLocoPoseChanger": {
+    "name": "com.fynn.tools.gogolocoposechanger",
+    "displayName": "GoGoLoco Pose Changer",
+    "description": "Customize GoGoLoco poses using an NDMF build plugin.",
+    "vpmDependencies": {
+      "com.vrchat.avatars": ">=3.5.0",
+      "nadena.dev.ndmf": ">=1.0.0"
+    }
+  },
+  "HierarchyPlus": {
+    "name": "com.fynn.tools.hierarchyplus",
+    "displayName": "Hierarchy+",
+    "description": "Customize the Unity Hierarchy with component icons, labels, colors and virtual collection folders.",
+    "vpmDependencies": {}
+  },
+  "MatCapMaker": {
+    "name": "com.fynn.tools.matcapmaker",
+    "displayName": "MatCap Maker",
+    "description": "Create and customize MatCap textures with editable presets, surface patterns, reflections, lighting and live previews.",
+    "vpmDependencies": {}
+  },
+  "NoAutoGame": {
+    "name": "com.fynn.tools.noautogame",
+    "displayName": "No Auto Game",
+    "description": "Control whether Unity switches to the Game view when entering Play Mode.",
+    "vpmDependencies": {}
+  },
+  "PackageImporter": {
+    "name": "com.fynn.tools.packageimporter",
+    "displayName": "Package Importer",
+    "description": "Queue and import Unity packages, review existing assets and skip unchanged packages.",
+    "vpmDependencies": {}
+  },
+  "QuickToggle": {
+    "name": "com.fynn.tools.quicktoggle",
+    "displayName": "Quick Toggle",
+    "description": "Create object, component and blendshape animations, with optional VRCFury or Modular Avatar toggle setup.",
+    "vpmDependencies": {}
+  },
+  "ResetHumanoidTPose": {
+    "name": "com.fynn.tools.resethumanoidtpose",
+    "displayName": "Reset Humanoid",
+    "description": "Restore a humanoid avatar to its T-pose.",
+    "vpmDependencies": {}
+  },
+  "TextureTools": {
+    "name": "com.fynn.tools.texturetools",
+    "displayName": "Texture Tools",
+    "description": "Create text textures, generate normal maps, edit colors, pack and unpack channels, automatically pack textures and process textures in batches.",
+    "vpmDependencies": {},
+    "dependencies": {
+      "com.unity.textmeshpro": "3.0.9"
+    }
+  },
+  "UnityPetFramework": {
+    "name": "com.fynn.tools.unitypetframework",
+    "displayName": "Unity Pet Framework",
+    "description": "Create, import and display animated desktop pets in the Unity Editor.",
+    "vpmDependencies": {}
+  },
+  "VRCSDKPlus": {
+    "name": "com.fynn.tools.vrcsdkplus",
+    "displayName": "VRCSDK+",
+    "description": "Enhanced VRChat expression menu and parameter editing, SDK panel layouts, Content Manager and scene capture tools, with optional SDK patches.",
+    "vpmDependencies": {
+      "com.vrchat.avatars": ">=3.10.5"
+    }
+  },
+  "Complete": {
+    "name": "com.fynn.tools.complete",
+    "displayName": "Fynn's Tools Free Complete",
+    "description": "Install all Fynn's Tools Free tools as individual packages.",
+    "vpmDependencies": {}
+  }
+}

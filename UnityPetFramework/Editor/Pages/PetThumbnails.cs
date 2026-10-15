@@ -5,10 +5,8 @@ using UnityEngine;
 
 namespace FynnsTools.UnityPetFramework
 {
-	// Loads and caches the little pictures shown beside each pet.
 	internal static class PetThumbnails
 	{
-		// Anything larger is a pet portrait rather than a list icon.
 		private const int MaxSize = 512;
 
 		private static readonly Dictionary<string, Texture2D> _cache = new Dictionary<string, Texture2D>();
@@ -25,7 +23,6 @@ namespace FynnsTools.UnityPetFramework
 
 			if (_cache.TryGetValue(absolutePath, out Texture2D cached))
 			{
-				// A null entry is a remembered failure.
 				return cached;
 			}
 

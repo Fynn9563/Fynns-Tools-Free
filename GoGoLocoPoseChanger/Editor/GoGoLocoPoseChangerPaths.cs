@@ -5,10 +5,6 @@ using UnityEngine;
 
 namespace FynnsTools.GoGoLocoPoseChanger
 {
-	// Resolves the tool's own folder by locating its assembly definition, so assets
-	// load from wherever the tool was installed. Paths are never hardcoded, and a
-	// name search is never used: an older copy of this tool in the same project
-	// would ship identically named assets, and a search could return that one.
 	internal static class GoGoLocoPoseChangerPaths
 	{
 		private const string AsmdefFileName = "FynnsTools.GoGoLocoPoseChanger.Editor.asmdef";
@@ -24,6 +20,13 @@ namespace FynnsTools.GoGoLocoPoseChanger
 					return _toolRoot;
 				}
 
+				var package = UnityEditor.PackageManager.PackageInfo.FindForAssembly(typeof(GoGoLocoPoseChangerPaths).Assembly);
+				if (package != null)
+				{
+					_toolRoot = package.assetPath;
+					return _toolRoot;
+				}
+
 				foreach (string guid in AssetDatabase.FindAssets("FynnsTools.GoGoLocoPoseChanger.Editor"))
 				{
 					string path = AssetDatabase.GUIDToAssetPath(guid);
@@ -32,7 +35,6 @@ namespace FynnsTools.GoGoLocoPoseChanger
 						continue;
 					}
 
-					// <root>/Editor/<asmdef>, so step up twice to reach the tool root.
 					string editorDir = path.Substring(0, path.LastIndexOf('/'));
 					_toolRoot = editorDir.Substring(0, editorDir.LastIndexOf('/'));
 					return _toolRoot;

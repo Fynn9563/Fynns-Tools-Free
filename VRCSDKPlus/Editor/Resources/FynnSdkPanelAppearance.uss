@@ -1,0 +1,149 @@
+.fynn-sdk-panel .fynn-content-host {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: 0;
+}
+.fynn-sdk-panel #root {
+    padding: 10px;
+    max-width: 840px;
+    min-width: 520px;
+}
+.fynn-sdk-panel.dark { background-color: #25282d; }
+.fynn-sdk-panel.light { background-color: #eeeeee; }
+.fynn-sdk-panel #root #toolbar {
+    height: auto;
+    min-height: 36px;
+    flex-shrink: 0;
+    border-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+    margin-bottom: 8px;
+}
+.fynn-sdk-panel #root #toolbar ToolbarButton {
+    min-width: 0;
+    min-height: 34px;
+    margin: 0 1px;
+    padding: 5px 4px;
+    border-width: 0;
+    border-bottom-width: 2px;
+    border-bottom-color: rgba(0, 0, 0, 0);
+    border-radius: 3px;
+    font-size: 12px;
+    -unity-font-style: bold;
+    white-space: nowrap;
+}
+.fynn-sdk-panel.dark #root #toolbar ToolbarButton { background-color: #30343a; color: #c4c8ce; }
+.fynn-sdk-panel.light #root #toolbar ToolbarButton { background-color: #dddddd; color: #34383e; }
+.fynn-sdk-panel.dark #root #toolbar ToolbarButton:hover { background-color: #3b4149; }
+.fynn-sdk-panel.light #root #toolbar ToolbarButton:hover { background-color: #cccccc; }
+.fynn-sdk-panel.dark #root #toolbar ToolbarButton.active { background-color: #203b46; color: #a4e5f1; border-bottom-color: #58c8de; }
+.fynn-sdk-panel.light #root #toolbar ToolbarButton.active { background-color: #c8e4eb; color: #164d5b; border-bottom-color: #18758a; }
+.fynn-sdk-panel #root #toolbar ToolbarButton:disabled { opacity: 0.45; }
+.fynn-sdk-panel #root #toolbar ToolbarButton:focus { border-top-width: 0; }
+.fynn-sdk-panel #banner {
+    height: 56px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+.fynn-sdk-panel .section-foldout { margin-top: 4px; margin-bottom: 6px; }
+.fynn-sdk-panel .section-foldout > Toggle {
+    border-radius: 4px;
+    padding: 8px 10px;
+    min-height: 26px;
+}
+.fynn-sdk-panel.dark .section-foldout > Toggle { background-color: #353c46; color: #d6dae0; }
+.fynn-sdk-panel.light .section-foldout > Toggle { background-color: #d7dce3; }
+.fynn-sdk-panel.dark .section-foldout > Toggle:hover { background-color: #414b58; }
+.fynn-sdk-panel.light .section-foldout > Toggle:hover { background-color: #c8cfd8; }
+.fynn-sdk-panel .section-foldout > Toggle Label { font-size: 14px; -unity-text-align: middle-left; }
+.fynn-sdk-panel .section-header { padding: 7px 8px; border-radius: 3px; }
+.fynn-sdk-panel.dark .section-header { background-color: #303740; border-bottom-color: #465361; }
+.fynn-sdk-panel.light .section-header { background-color: #c8e4eb; border-bottom-color: #8dbfcf; }
+.fynn-sdk-panel .block { padding: 8px; border-radius: 4px; }
+.fynn-sdk-panel.dark .block { background-color: rgba(220, 235, 255, 0.045); }
+.fynn-sdk-panel.light .block { background-color: rgba(30, 55, 85, 0.045); }
+.fynn-sdk-panel #build-panel-gui Button { border-radius: 4px; }
+.fynn-sdk-panel #content-info-block { padding: 0 3px; }
+.fynn-sdk-panel #fynn-capture-ignore { margin-top: 8px; margin-left: 0; width: 100%; }
+
+.fynn-sdk-panel.dark #select-new-thumbnail-btn,
+.fynn-sdk-panel.dark #capture-thumbnail-from-scene-btn,
+.fynn-sdk-panel.dark #thumbnail-capture-confirm-btn,
+.fynn-sdk-panel.dark #validations-block Button,
+.fynn-sdk-panel.dark #issues-list Button,
+.fynn-sdk-panel.dark .fynn-sdk-neutral-button,
+.fynn-sdk-panel.dark .unity-base-popup-field__input,
+.fynn-sdk-panel.dark .unity-base-text-field__input,
+.fynn-sdk-panel.dark .unity-object-field__input {
+    background-color: #20454c;
+    border-color: #36717c;
+}
+.fynn-sdk-panel.dark #select-new-thumbnail-btn:hover,
+.fynn-sdk-panel.dark #capture-thumbnail-from-scene-btn:hover,
+.fynn-sdk-panel.dark #thumbnail-capture-confirm-btn:hover,
+.fynn-sdk-panel.dark #validations-block Button:hover,
+.fynn-sdk-panel.dark #issues-list Button:hover,
+.fynn-sdk-panel.dark .fynn-sdk-neutral-button:hover { background-color: #275b67; }
+.fynn-sdk-panel.dark #select-new-thumbnail-btn:active,
+.fynn-sdk-panel.dark #capture-thumbnail-from-scene-btn:active,
+.fynn-sdk-panel.dark #thumbnail-capture-confirm-btn:active,
+.fynn-sdk-panel.dark #validations-block Button:active,
+.fynn-sdk-panel.dark #issues-list Button:active,
+.fynn-sdk-panel.dark .fynn-sdk-neutral-button:active { background-color: #18758a; }
+.fynn-sdk-panel.dark .unity-help-box, .fynn-sdk-panel.dark .help-box { background-color: #19363f; border-color: #295660; }
+.fynn-sdk-panel.light #select-new-thumbnail-btn,
+.fynn-sdk-panel.light #capture-thumbnail-from-scene-btn,
+.fynn-sdk-panel.light #thumbnail-capture-confirm-btn,
+.fynn-sdk-panel.light #validations-block Button,
+.fynn-sdk-panel.light #issues-list Button,
+.fynn-sdk-panel.light .fynn-sdk-neutral-button,
+.fynn-sdk-panel.light .unity-base-popup-field__input,
+.fynn-sdk-panel.light .unity-base-text-field__input,
+.fynn-sdk-panel.light .unity-object-field__input {
+    background-color: #bcdee6;
+    border-color: #81b2be;
+}
+.fynn-sdk-panel.light #select-new-thumbnail-btn:hover,
+.fynn-sdk-panel.light #capture-thumbnail-from-scene-btn:hover,
+.fynn-sdk-panel.light #thumbnail-capture-confirm-btn:hover,
+.fynn-sdk-panel.light #validations-block Button:hover,
+.fynn-sdk-panel.light #issues-list Button:hover,
+.fynn-sdk-panel.light .fynn-sdk-neutral-button:hover { background-color: #a3d0db; }
+.fynn-sdk-panel.light .unity-help-box, .fynn-sdk-panel.light .help-box { background-color: #daedf2; border-color: #a3c6cf; }
+
+.fynn-sdk-panel .unity-button,
+.fynn-sdk-panel .unity-base-popup-field__input,
+.fynn-sdk-panel .unity-base-text-field__input,
+.fynn-sdk-panel .unity-object-field__input { border-radius: 5px; }
+.fynn-sdk-panel .unity-help-box,
+.fynn-sdk-panel .help-box { border-radius: 6px; }
+
+.fynn-sdk-panel #root #avatar-selector-options,
+.fynn-sdk-panel #root #avatar-selector-options:hover,
+.fynn-sdk-panel #root #avatar-selector-options:active,
+.fynn-sdk-panel #root #avatar-selector-options:focus {
+    background-color: transparent;
+    border-width: 0;
+}
+.fynn-sdk-panel #modal-container { border-radius: 8px; }
+.fynn-sdk-panel #modal-header { border-top-left-radius: 8px; border-top-right-radius: 8px; }
+.fynn-sdk-panel.dark #modal-container { background-color: #19363f; }
+.fynn-sdk-panel.light #modal-container { background-color: #daedf2; }
+.fynn-sdk-panel #fynn-capture-ignore-label { -unity-font-style: bold; margin-bottom: 3px; }
+.fynn-sdk-panel.dark #modal-header { background-color: #20454c; }
+.fynn-sdk-panel.light #modal-header { background-color: #bcdee6; }
+.fynn-sdk-panel .fynn-capture-modal #modal-header {
+    height: 36px;
+    min-height: 36px;
+    flex-shrink: 0;
+    padding: 6px 10px;
+}
+.fynn-sdk-panel .fynn-capture-modal #modal-content-wrapper { flex-shrink: 1; min-height: 0; padding-top: 0; }
+.fynn-sdk-panel .fynn-capture-modal #modal-container { flex-shrink: 1; max-height: 95%; overflow: hidden; }
+
+.fynn-sdk-panel .fynn-capture-modal #thumbnail-capture-preview { align-self: flex-start; margin-top: 0; }
+.fynn-sdk-panel .fynn-capture-modal #thumbnail-capture-confirm-block { flex-shrink: 0; margin-top: 0; }
+.fynn-sdk-panel .fynn-capture-modal #modal-title { white-space: normal; }
+.fynn-sdk-panel .fynn-capture-modal #modal-container { margin-top: 160px; margin-bottom: auto; }
+.fynn-sdk-panel #fynn-capture-pose { margin-top: 4px; }
+

@@ -1,0 +1,8 @@
+{
+  "name": "FynnsTools.NoAutoGame.Editor",
+  "rootNamespace": "FynnsTools.NoAutoGame",
+  "includePlatforms": [
+    "Editor"
+  ],
+  "autoReferenced": true
+}

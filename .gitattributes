@@ -4,7 +4,6 @@
 # LF keeps the build reproducible everywhere and makes the result independent of
 # each contributor's core.autocrlf setting.
 * text=auto eol=lf
-
 *.cs      text diff=csharp
 *.asmdef  text
 *.meta    text
@@ -12,15 +11,14 @@
 *.md      text
 *.yml     text
 *.py      text
-
 # Managed plugins must never be line-ending converted.
 *.dll binary
-
 # Sprite sheets and pet sounds. text=auto already detects these as binary, so
 # this is a guard against the blanket rule above rather than a fix.
 *.png binary
 *.wav binary
-
 # Built packages are gitignored. This is a guard for the blanket rule above: if
 # one is ever force-added, it must not be line-ending converted.
 *.unitypackage binary
+ClippingTester/Animations/ClipTest2.anim filter=lfs diff=lfs merge=lfs -text
+ClippingTester/Animations/Kuda_Rig_Test_2.anim filter=lfs diff=lfs merge=lfs -text

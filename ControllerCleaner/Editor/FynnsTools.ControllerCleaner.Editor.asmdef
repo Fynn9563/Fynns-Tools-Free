@@ -1,0 +1,7 @@
+{
+  "name": "FynnsTools.ControllerCleaner.Editor",
+  "rootNamespace": "FynnsTools.Controllers",
+  "references": [],
+  "includePlatforms": ["Editor"],
+  "autoReferenced": true
+}

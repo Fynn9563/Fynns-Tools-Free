@@ -6,10 +6,8 @@ using UnityEngine.UIElements;
 
 namespace FynnsTools.UnityPetFramework
 {
-	// Switching the pet on, choosing which one, and saying why it is not there when it is not.
 	internal sealed class PetPage
 	{
-		// Big enough to recognise the pet.
 		private const float ThumbnailSize = 32f;
 
 		private IMGUIContainer _container;
@@ -37,13 +35,11 @@ namespace FynnsTools.UnityPetFramework
 		{
 			DrawPage();
 
-			// Deleting asks for confirmation.
 			if (_deferred.Run()) _container?.MarkDirtyRepaint();
 		}
 
 		private void DrawPage()
 		{
-			// Re-listed whenever anything has written a pet to disk.
 			if (_pets == null || _listedVersion != PetLibrary.Version)
 			{
 				_pets = PetLibrary.Discover();
@@ -63,7 +59,6 @@ namespace FynnsTools.UnityPetFramework
 				DrawPetList();
 			}
 
-			// Only while an icon on screen actually has more than one frame.
 			if (PetIconRenderer.AnyAnimated)
 			{
 				_container?.MarkDirtyRepaint();
@@ -99,7 +94,6 @@ namespace FynnsTools.UnityPetFramework
 						EditorStyles.miniLabel,
 						GUILayout.Width(90f));
 
-					// Energy only moves on the editor's update loop.
 					_container?.MarkDirtyRepaint();
 				}
 			}
@@ -114,7 +108,6 @@ namespace FynnsTools.UnityPetFramework
 				return;
 			}
 
-			// Not being on Windows is a fact rather than a fault, so it is not a warning.
 			MessageType type = PetOverlayFactory.IsSupportedPlatform && UnityPetFrameworkSettings.Enabled
 				? MessageType.Warning
 				: MessageType.Info;
@@ -167,7 +160,6 @@ namespace FynnsTools.UnityPetFramework
 					{
 						UnityPetFrameworkSettings.SelectedPetId = pet.Id;
 
-						// A different pet is a different frame size.
 						PetOverlayHost.Restart();
 					}
 
@@ -179,7 +171,6 @@ namespace FynnsTools.UnityPetFramework
 					EditorStyles.miniLabel,
 					GUILayout.Width(80f));
 
-				// Absent rather than disabled for the bundled pet.
 				if (pet.Bundled)
 				{
 					GUILayout.Space(56f);
@@ -219,7 +210,6 @@ namespace FynnsTools.UnityPetFramework
 			PetThumbnails.Clear();
 			PetIconRenderer.Clear();
 
-			// The pet on screen may be the one whose files have just gone.
 			if (UnityPetFrameworkSettings.SelectedPetId == pet.Id)
 			{
 				List<PetLibrary.Entry> remaining = PetLibrary.Discover();
@@ -236,10 +226,8 @@ namespace FynnsTools.UnityPetFramework
 			_statusType = type;
 		}
 
-		// A blank line inside a dialog, kept as a constant so the escape is not repeated in prose.
 		private static readonly string Break = "\n\n";
 
-		// The selected pet.
 		private void DrawSelectedIcon()
 		{
 			if (_pets == null || _pets.Count == 0)
@@ -261,7 +249,6 @@ namespace FynnsTools.UnityPetFramework
 			}
 		}
 
-		// The pet's own icon animation first.
 		private static void DrawThumbnail(PetLibrary.Entry pet)
 		{
 			Rect box = GUILayoutUtility.GetRect(ThumbnailSize, ThumbnailSize, GUILayout.Width(ThumbnailSize), GUILayout.Height(ThumbnailSize));

@@ -5,13 +5,10 @@ using UnityEngine;
 
 namespace FynnsTools.UnityPetFramework
 {
-	// Finds the pets available to show.
 	internal static class PetLibrary
 	{
-		// Bumped whenever the set of pets on disk changes.
 		public static int Version { get; private set; }
 
-		// Ids that came out of a package shipped with the tool.
 		private static readonly HashSet<string> _bundledIds = new HashSet<string>(StringComparer.Ordinal);
 
 		private static bool _bundledChecked;
@@ -43,25 +40,21 @@ namespace FynnsTools.UnityPetFramework
 
 			public bool Bundled { get; }
 
-			// Absolute path, or null when the pet has no picture.
 			public string ThumbnailPath { get; }
 		}
 
-		// Every pet that loads, bundled first.
 		public static List<Entry> Discover()
 		{
 			InstallBundled();
 
 			List<Entry> entries = new List<Entry>();
 
-			// The tool folder is still scanned for pets stored as a folder.
 			CollectFrom(UnityPetFrameworkPaths.ToAbsolute(UnityPetFrameworkPaths.BundledPetsFolder), true, entries);
 			CollectFrom(UnityPetFrameworkPaths.ImportedPetsFolder, false, entries);
 
 			return entries;
 		}
 
-		// Unpacks the packages that ship with the tool into the machine-local pet folder.
 		private static void InstallBundled()
 		{
 			if (_bundledChecked) return;
@@ -74,7 +67,6 @@ namespace FynnsTools.UnityPetFramework
 
 			foreach (string path in Directory.GetFiles(root, "*." + PetPackageFormat.Extension))
 			{
-				// Through the same hardened reader as any other package.
 				if (!PetPackageReader.TryRead(path, out PetPackage package, out string error))
 				{
 					Debug.LogWarning(UnityPetFrameworkInfo.LogPrefix +
@@ -97,7 +89,6 @@ namespace FynnsTools.UnityPetFramework
 			}
 		}
 
-		// Missing, or the shipped package is newer than what was unpacked from it.
 		private static bool NeedsInstall(string petId, string packagePath)
 		{
 			string definitionPath = Path.Combine(FolderForImport(petId), PetDefinitionSerializer.DefinitionFileName);
@@ -114,7 +105,6 @@ namespace FynnsTools.UnityPetFramework
 			}
 		}
 
-		// The file the overlay should load.
 		public static string ResolveSelectedDefinitionPath()
 		{
 			List<Entry> entries = Discover();
@@ -138,7 +128,6 @@ namespace FynnsTools.UnityPetFramework
 			return entries[0].DefinitionPath;
 		}
 
-		// Removes an imported pet from disk, folder and all.
 		public static bool Delete(Entry entry, out string error)
 		{
 			if (entry == null)
@@ -167,7 +156,6 @@ namespace FynnsTools.UnityPetFramework
 				return false;
 			}
 
-			// A separator on the end of the root.
 			string prefix = root.TrimEnd(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar;
 			if (folder.Length <= prefix.Length || !folder.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
 			{
@@ -192,12 +180,11 @@ namespace FynnsTools.UnityPetFramework
 
 		public static string FolderForImport(string petId)
 		{
-			// The id comes from a pet file, so it is not ours to trust as a path.
+			// Validate imported IDs before using them as paths.
 			string safe = SanitiseId(petId);
 			return Path.Combine(UnityPetFrameworkPaths.ImportedPetsFolder, safe);
 		}
 
-		// Anything that is not a plain identifier character becomes an underscore.
 		public static bool Install(PetPackage package, out string error)
 		{
 			string folder = FolderForImport(package.Definition.id);
@@ -277,7 +264,6 @@ namespace FynnsTools.UnityPetFramework
 					continue;
 				}
 
-				// Read without the sheet.
 				if (!PetDefinitionSerializer.TryReadDefinition(definitionPath, out PetDefinition definition, out string error))
 				{
 					Debug.LogWarning(UnityPetFrameworkInfo.LogPrefix +

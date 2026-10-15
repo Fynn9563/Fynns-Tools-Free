@@ -8,10 +8,8 @@ using Debug = UnityEngine.Debug;
 
 namespace FynnsTools.UnityPetFramework
 {
-	// A transparent, click-through-where-empty window that sits above Unity.
 	internal sealed class LayeredPetOverlay : IPetOverlay
 	{
-		// Shared by every instance in the process and never unregistered.
 		public const string WindowClassName = "FynnsToolsUnityPetOverlay";
 
 		private const int MaxMessagesPerPump = 64;
@@ -67,7 +65,6 @@ namespace FynnsTools.UnityPetFramework
 			}
 		}
 
-		// Returns null rather than throwing when the window cannot be made.
 		public static LayeredPetOverlay TryCreate(IntPtr owner, Vector2Int frameSize, out string error)
 		{
 			if (frameSize.x <= 0 || frameSize.y <= 0)
@@ -91,7 +88,6 @@ namespace FynnsTools.UnityPetFramework
 			return overlay;
 		}
 
-		// Destroys any window of our class left behind by a previous domain.
 		public static int SweepOrphans()
 		{
 			uint ourProcess = (uint)Process.GetCurrentProcess().Id;
@@ -109,13 +105,11 @@ namespace FynnsTools.UnityPetFramework
 				Win32.GetWindowThreadProcessId(found, out uint owningProcess);
 				if (owningProcess != ourProcess)
 				{
-					// Another Unity instance's pet.
 					continue;
 				}
 
 				IntPtr doomed = found;
 
-				// Step the search on before destroying.
 				found = Win32.FindWindowExW(IntPtr.Zero, doomed, WindowClassName, null);
 				if (Win32.DestroyWindow(doomed))
 				{
@@ -141,7 +135,6 @@ namespace FynnsTools.UnityPetFramework
 			Win32.POINT source = new Win32.POINT { x = 0, y = 0 };
 			Win32.SIZE size = new Win32.SIZE { cx = FrameSize.x, cy = FrameSize.y };
 
-			// AC_SRC_ALPHA means the colour channels are expected to be premultiplied by alpha already.
 			Win32.BLENDFUNCTION blend = new Win32.BLENDFUNCTION
 			{
 				BlendOp = Win32.AC_SRC_OVER,
@@ -150,7 +143,6 @@ namespace FynnsTools.UnityPetFramework
 				AlphaFormat = Win32.AC_SRC_ALPHA
 			};
 
-			// Position and pixels in one call, so moving the pet is not a second syscall per frame.
 			if (Win32.UpdateLayeredWindow(_hwnd, IntPtr.Zero, ref destination, ref size,
 					_memDc, ref source, 0, ref blend, Win32.ULW_ALPHA))
 			{
@@ -167,7 +159,7 @@ namespace FynnsTools.UnityPetFramework
 				return new PetPointerState(Vector2Int.zero, false, false);
 			}
 
-			// WindowFromPoint honours a layered window's per-pixel alpha.
+			// Hit testing respects the overlay's per-pixel alpha.
 			bool overPet = !_clickThrough && _visible && Win32.WindowFromPoint(cursor) == _hwnd;
 			bool leftDown = (Win32.GetAsyncKeyState(Win32.VK_LBUTTON) & 0x8000) != 0;
 
@@ -193,7 +185,6 @@ namespace FynnsTools.UnityPetFramework
 			Win32.SetWindowLongW(_hwnd, Win32.GWL_EXSTYLE, style);
 		}
 
-		// Bounded, and every message goes straight to DefWindowProcW, which is native.
 		public void Pump()
 		{
 			if (!IsAvailable)
@@ -220,7 +211,6 @@ namespace FynnsTools.UnityPetFramework
 
 			_disposed = true;
 
-			// The window goes first.
 			try
 			{
 				if (_hwnd != IntPtr.Zero)
@@ -237,7 +227,6 @@ namespace FynnsTools.UnityPetFramework
 				_hwnd = IntPtr.Zero;
 			}
 
-			// Reselecting the original bitmap before deleting ours is not optional.
 			try
 			{
 				if (_memDc != IntPtr.Zero && _oldBitmap != IntPtr.Zero)
@@ -298,7 +287,6 @@ namespace FynnsTools.UnityPetFramework
 				cbSize = (uint)Marshal.SizeOf(typeof(Win32.WNDCLASSEX)),
 				style = Win32.CS_HREDRAW | Win32.CS_VREDRAW,
 
-				// The whole point.
 				lpfnWndProc = defWindowProc,
 				hInstance = Win32.GetModuleHandleW(null),
 				lpszClassName = WindowClassName
@@ -308,7 +296,6 @@ namespace FynnsTools.UnityPetFramework
 			{
 				int lastError = Marshal.GetLastWin32Error();
 
-				// Already registered by a previous domain in this same process.
 				if (lastError != Win32.ERROR_CLASS_ALREADY_EXISTS)
 				{
 					error = "The pet's window could not be registered with Windows (error " + lastError + ").";
@@ -322,7 +309,6 @@ namespace FynnsTools.UnityPetFramework
 
 		private bool CreateWindowAndSurface(out string error)
 		{
-			// WS_EX_LAYERED gives per-pixel alpha.
 			uint exStyle = Win32.WS_EX_LAYERED | Win32.WS_EX_NOACTIVATE | Win32.WS_EX_TOOLWINDOW;
 
 			_hwnd = Win32.CreateWindowExW(
@@ -354,7 +340,7 @@ namespace FynnsTools.UnityPetFramework
 					biSize = (uint)Marshal.SizeOf(typeof(Win32.BITMAPINFOHEADER)),
 					biWidth = FrameSize.x,
 
-					// Positive height means bottom-up rows.
+					// Positive DIB height means bottom-up rows.
 					biHeight = FrameSize.y,
 					biPlanes = 1,
 					biBitCount = 32,
@@ -376,7 +362,6 @@ namespace FynnsTools.UnityPetFramework
 			return true;
 		}
 
-		// UpdateLayeredWindow failing usually means the window is gone.
 		private void HandlePresentFailure()
 		{
 			if (Win32.IsWindow(_hwnd))
@@ -411,7 +396,6 @@ namespace FynnsTools.UnityPetFramework
 				return;
 			}
 
-			// Not an exception.
 			Debug.LogError(UnityPetFrameworkInfo.LogPrefix +
 				"The pet's window was touched from a background thread, which Windows does not allow. The call was ignored.");
 		}

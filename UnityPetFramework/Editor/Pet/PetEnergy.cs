@@ -2,20 +2,17 @@ using UnityEngine;
 
 namespace FynnsTools.UnityPetFramework
 {
-	// The one thing the pet keeps track of about itself.
 	internal sealed class PetEnergy
 	{
-		// Asleep restores much faster than awake drains.
 		private const float SleepRecoveryMultiplier = 4f;
 
-		// Standing about is restful but not restorative.
 		private const float IdleDrainMultiplier = 0.25f;
 
 		private float _value = 1f;
 
 		public float Value => _value;
 
-		// Two thresholds rather than one, and this matters.
+		// Separate sleep/wake thresholds prevent rapid state changes.
 		public bool WantsSleep { get; private set; }
 
 		public void Load(float value)
@@ -40,7 +37,6 @@ namespace FynnsTools.UnityPetFramework
 
 			float sleepAt = UnityPetFrameworkSettings.SleepThreshold;
 
-			// The gap is a quarter of the scale.
 			float wakeAt = Mathf.Min(1f, sleepAt + 0.25f);
 
 			if (!WantsSleep && _value <= sleepAt)
@@ -53,7 +49,6 @@ namespace FynnsTools.UnityPetFramework
 			}
 		}
 
-		// Petting and a successful compile both perk the pet up a little.
 		public void Add(float amount)
 		{
 			_value = Mathf.Clamp01(_value + amount);

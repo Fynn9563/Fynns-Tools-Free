@@ -7,13 +7,13 @@ namespace FynnsTools.ClientSimStorageCleaner
 	{
 		private const string ToolsMenu = "Tools/Fynn's Tools/ClientSim Storage Cleaner/";
 
-		[MenuItem(ToolsMenu + "Settings", false, 20)]
+		[MenuItem(ToolsMenu + "Settings", false, 93)]
 		private static void OpenSettings()
 		{
 			ClientSimStorageCleanerWindow.Open();
 		}
 
-		[MenuItem(ToolsMenu + "Clear Now", false, 40)]
+		[MenuItem(ToolsMenu + "Clear Now", false, 94)]
 		private static void ClearNow()
 		{
 			if (!ClientSimStorage.Clear(out string error))
@@ -22,8 +22,7 @@ namespace FynnsTools.ClientSimStorageCleaner
 			}
 		}
 
-		// Not while playing.
-		[MenuItem(ToolsMenu + "Clear Now", true)]
+		[MenuItem(ToolsMenu + "Clear Now", true, 94)]
 		private static bool CanClearNow()
 		{
 			return !EditorApplication.isPlayingOrWillChangePlaymode;

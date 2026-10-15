@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace FynnsTools.UnityPetFramework
 {
-	// Finds the Scene and Game views, and is the only place in the tool that touches Unity internals.
 	internal static class EditorViewLocator
 	{
 		private static bool _probed;
@@ -14,7 +13,6 @@ namespace FynnsTools.UnityPetFramework
 		private static PropertyInfo _actualViewProperty;
 		private static bool _warned;
 
-		// False when Unity has moved something.
 		public static bool IsAvailable
 		{
 			get
@@ -24,7 +22,6 @@ namespace FynnsTools.UnityPetFramework
 			}
 		}
 
-		// Every Scene and Game view currently on screen, in Unity's point space.
 		public static void CollectVisibleViews(List<Rect> results)
 		{
 			results.Clear();
@@ -52,7 +49,7 @@ namespace FynnsTools.UnityPetFramework
 			}
 		}
 
-		// A docked window that is not the tab on top still reports a perfectly good position.
+		// Ignore docked tabs that are not visible.
 		private static bool IsShowing(EditorWindow window)
 		{
 			if (window == null)
@@ -62,7 +59,6 @@ namespace FynnsTools.UnityPetFramework
 
 			if (_parentField == null || _actualViewProperty == null)
 			{
-				// Cannot tell, so assume showing.
 				return true;
 			}
 
@@ -84,7 +80,7 @@ namespace FynnsTools.UnityPetFramework
 
 			_probed = true;
 
-			// Present under this exact name in both 2022.3 and Unity 6, which is why one lookup covers both.
+			// This internal member exists in Unity 2022.3 and Unity 6.
 			_gameViewType = typeof(EditorWindow).Assembly.GetType("UnityEditor.GameView");
 
 			_parentField = typeof(EditorWindow).GetField("m_Parent", BindingFlags.Instance | BindingFlags.NonPublic);

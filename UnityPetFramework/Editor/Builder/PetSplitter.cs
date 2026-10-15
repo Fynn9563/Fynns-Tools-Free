@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace FynnsTools.UnityPetFramework
 {
-	// A draggable divider between two columns, with the position remembered.
 	internal sealed class PetSplitter
 	{
 		public const float HandleWidth = 6f;
@@ -28,12 +27,10 @@ namespace FynnsTools.UnityPetFramework
 			_upperBound = minLeft;
 		}
 
-		// Below this there is no room for both columns.
 		public float MinimumForSplit => _minLeft + _minRight + HandleWidth;
 
 		public bool IsDragging => _hot >= 0 && GUIUtility.hotControl == _hot;
 
-		// The left column's width for this frame.
 		public float Resolve(float available)
 		{
 			if (_left < 0f)
@@ -46,14 +43,12 @@ namespace FynnsTools.UnityPetFramework
 			return Mathf.Clamp(_left, _lowerBound, _upperBound);
 		}
 
-		// Call between the two columns, inside the horizontal scope.
 		public void DrawHandle()
 		{
 			Rect area = GUILayoutUtility.GetRect(
 				HandleWidth, HandleWidth, 0f, float.MaxValue,
 				GUILayout.Width(HandleWidth), GUILayout.ExpandHeight(true));
 
-			// The whole strip is grabbable.
 			EditorGUI.DrawRect(new Rect(Mathf.Round(area.center.x), area.y, 1f, area.height), SeparatorColour);
 			EditorGUIUtility.AddCursorRect(area, MouseCursor.ResizeHorizontal);
 
@@ -75,7 +70,6 @@ namespace FynnsTools.UnityPetFramework
 				case EventType.MouseDrag:
 					if (GUIUtility.hotControl == id)
 					{
-						// Clamped as it moves, not only when read.
 						_left = Mathf.Clamp(_left + e.delta.x, _lowerBound, _upperBound);
 						e.Use();
 					}
@@ -88,7 +82,7 @@ namespace FynnsTools.UnityPetFramework
 						GUIUtility.hotControl = 0;
 						_hot = -1;
 
-						// Written on release rather than per drag event.
+						// Persist on release, not every drag event.
 						EditorPrefs.SetFloat(_key, _left);
 						e.Use();
 					}

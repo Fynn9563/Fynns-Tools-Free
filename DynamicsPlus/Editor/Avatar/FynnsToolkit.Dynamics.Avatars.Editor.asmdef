@@ -1,0 +1,11 @@
+{
+  "name": "FynnsToolkit.Dynamics.Avatars.Editor",
+  "rootNamespace": "FynnsToolkit.Dynamics",
+  "references": ["FynnsToolkit.Dynamics.Editor", "VRC.SDK3A"],
+  "includePlatforms": ["Editor"],
+  "autoReferenced": true,
+  "defineConstraints": ["FYNNS_ADO_AVATARS"],
+  "versionDefines": [
+    { "name": "com.vrchat.avatars", "expression": "3.10.5", "define": "FYNNS_ADO_AVATARS" }
+  ]
+}

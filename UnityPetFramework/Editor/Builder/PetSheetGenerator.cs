@@ -4,14 +4,12 @@ using UnityEngine;
 
 namespace FynnsTools.UnityPetFramework
 {
-	// Turns a reviewed slice model into an ordinary uniform sprite sheet.
 	internal static class PetSheetGenerator
 	{
-		// Generous, and only here to turn an absurd model into a message instead of an out of memory.
+		// Bound allocations for malformed models.
 		private const int MaxAxis = 8192;
 		private const long MaxPixels = 32L * 1024 * 1024;
 
-		// What a generated frame was made from.
 		internal sealed class FrameNote
 		{
 			public int Row;
@@ -118,7 +116,6 @@ namespace FynnsTools.UnityPetFramework
 					int index = r * columns + f;
 					RectInt cellRect = result.Grid.CellRect(index);
 
-					// Centred across, sat on the floor.
 					int offsetX = (cellRect.width - bounds.width) / 2;
 					int offsetY = cellRect.height - bounds.height;
 
@@ -140,7 +137,6 @@ namespace FynnsTools.UnityPetFramework
 			}
 		}
 
-		// Copies one frame's pixels.
 		private static void CopyFrame(
 			PetSliceModel model, Color32[] source, Result result,
 			RectInt bounds, HashSet<int> wanted, int destLeft, int destTop)
@@ -162,7 +158,6 @@ namespace FynnsTools.UnityPetFramework
 					int sourceX = bounds.x + x;
 					if (sourceX < 0 || sourceX >= model.width) continue;
 
-					// The one line this whole class exists for.
 					if (!wanted.Contains(model.labels[labelRow + sourceX])) continue;
 
 					int destX = destLeft + x;
@@ -173,7 +168,6 @@ namespace FynnsTools.UnityPetFramework
 			}
 		}
 
-		// PNG bytes for the generated sheet.
 		public static byte[] EncodePng(Result result)
 		{
 			Texture2D texture = new Texture2D(result.Width, result.Height, TextureFormat.RGBA32, false, false)

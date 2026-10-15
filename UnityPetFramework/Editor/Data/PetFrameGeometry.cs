@@ -5,7 +5,6 @@ namespace FynnsTools.UnityPetFramework
 {
 	internal static class PetFrameGeometry
 	{
-		// Symmetric horizontal envelope keeps the same desktop anchor when flipped.
 		public static RectInt Canvas(PetDefinition definition, PetClipDefinition only = null)
 		{
 			float half = 1, above = 1, below = 0;

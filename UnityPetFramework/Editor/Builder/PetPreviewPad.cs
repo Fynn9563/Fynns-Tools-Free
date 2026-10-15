@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace FynnsTools.UnityPetFramework
 {
-	// Plays one of a pet's animations.
 	internal sealed class PetPreviewPad
 	{
 		private enum Backdrop
@@ -15,7 +14,6 @@ namespace FynnsTools.UnityPetFramework
 
 		private const float CheckerSize = 8f;
 
-		// Wide enough for the longest slot label with the playing marker in front of it.
 		private const float ButtonWidth = 128f;
 		private const float ButtonSpacing = 4f;
 
@@ -31,12 +29,10 @@ namespace FynnsTools.UnityPetFramework
 		private Backdrop _backdrop = Backdrop.Transparent;
 		private bool _showAnchor = true;
 
-		// Which way the pet is pretending to face.
 		private PetFacing _facing = PetFacing.Right;
 
 		private PetDefinition _definition;
 
-		// True while something is on screen.
 		private PetClipDefinition _pinnedClip;
 		private int _pinnedPosition;
 
@@ -57,7 +53,6 @@ namespace FynnsTools.UnityPetFramework
 
 		public bool ShowOnionSkin { get; set; }
 
-		// True while something is moving, so the owning window knows whether to keep repainting.
 		public bool NeedsRepaint => !IsPinned && _animator.IsPlaying;
 
 		public void SetDefinition(PetDefinition definition)
@@ -66,7 +61,6 @@ namespace FynnsTools.UnityPetFramework
 			_animator.SetDefinition(definition);
 		}
 
-		// Playing anything leaves the pinned view.
 		public void Play(string name)
 		{
 			_pinnedClip = null;
@@ -107,7 +101,6 @@ namespace FynnsTools.UnityPetFramework
 				var canvas = PetFrameGeometry.Canvas(_definition, ActiveClipName == PetClipSlots.PetIcon ? _definition.icon : null);
 				bool flip = MirrorFor(current);
 
-				// Behind the real frame, so the one being aligned stays readable.
 				if (ShowOnionSkin) DrawOnionSkin(area, atlas, canvas);
 
 				Rect draw = PetFrameGeometry.DrawRect(area, canvas, f, flip);
@@ -131,7 +124,6 @@ namespace FynnsTools.UnityPetFramework
 			}
 		}
 
-		// A mirrored frame is drawn by running its texture coordinates backwards across the cell.
 		private void DrawOnionSkin(Rect area, PetAtlas atlas, RectInt canvas)
 		{
 			if (!TryPreviousFrame(out PetFrameRef previous) || !atlas.IsValidCell(previous.cell)) return;
@@ -153,7 +145,6 @@ namespace FynnsTools.UnityPetFramework
 			}
 		}
 
-		// The frame immediately before the one on screen.
 		private bool TryPreviousFrame(out PetFrameRef frame)
 		{
 			frame = default;
@@ -198,7 +189,6 @@ namespace FynnsTools.UnityPetFramework
 			return PetMirror.ShouldMirror(_definition, ActiveClip, frame, _facing);
 		}
 
-		// availableWidth is the width of the area the pad was actually given.
 		public void DrawControls(PetAtlas atlas, float availableWidth)
 		{
 			using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
@@ -211,7 +201,6 @@ namespace FynnsTools.UnityPetFramework
 			}
 		}
 
-		// Every slot gets a button whether the pet fills it or not, disabled when it has no frames.
 		private void DrawClipButtons(float availableWidth)
 		{
 			if (_definition == null)
@@ -247,7 +236,6 @@ namespace FynnsTools.UnityPetFramework
 
 				if (GUILayout.Button(new GUIContent(playing ? "> " + slot.Label : slot.Label, tooltip), style, GUILayout.Width(ButtonWidth)))
 				{
-					// Plays straight away, replacing whatever was on screen.
 					_animator.Play(slot.Name, true);
 				}
 			}
@@ -313,7 +301,6 @@ namespace FynnsTools.UnityPetFramework
 					return;
 			}
 
-			// A checkerboard rather than a flat colour.
 			EditorGUI.DrawRect(area, CheckerA);
 			int columns = Mathf.CeilToInt(area.width / CheckerSize);
 			int rows = Mathf.CeilToInt(area.height / CheckerSize);
@@ -327,7 +314,6 @@ namespace FynnsTools.UnityPetFramework
 						CheckerSize,
 						CheckerSize);
 
-					// Clipped by hand: the last row and column hang over the edge.
 					square.width = Mathf.Min(square.width, area.xMax - square.x);
 					square.height = Mathf.Min(square.height, area.yMax - square.y);
 					if (square.width > 0f && square.height > 0f)
@@ -353,7 +339,6 @@ namespace FynnsTools.UnityPetFramework
 				height);
 		}
 
-		// The box the art actually occupies, and the line the pet stands on.
 		private void DrawAnchorGuides(Rect frame, PetAtlas atlas)
 		{
 			if (_definition.contentWidth <= 0 || _definition.contentHeight <= 0)

@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace FynnsTools.UnityPetFramework
 {
-	// Rebuilds a pet's sheet with only what it actually uses.
 	internal static class PetAtlasRepacker
 	{
 		internal sealed class Result
@@ -16,7 +15,6 @@ namespace FynnsTools.UnityPetFramework
 			public long PixelsAfter;
 		}
 
-		// Keeps the sheet within what any GPU will accept.
 		private const int MaxSheetDimension = 4096;
 
 		public static bool TryRepack(PetAtlas atlas, PetDefinition definition, out Result result, out string error)
@@ -38,7 +36,7 @@ namespace FynnsTools.UnityPetFramework
 				return false;
 			}
 
-			// Across the referenced cells only.
+			// Repack referenced cells only.
 			RectInt content = atlas.ComputeContentBounds(used);
 			if (content.width <= 0 || content.height <= 0)
 			{
@@ -82,7 +80,7 @@ namespace FynnsTools.UnityPetFramework
 			return true;
 		}
 
-		// In first-use order, so frames that play together stay near each other on the sheet.
+		// Pack frames in first-use order for playback locality.
 		private static List<int> CollectUsedCells(PetDefinition definition, PetAtlas atlas)
 		{
 			List<int> used = new List<int>();
@@ -117,7 +115,6 @@ namespace FynnsTools.UnityPetFramework
 				float width = columns * cellWidth;
 				float height = rows * cellHeight;
 
-				// Penalise both lopsidedness and the empty tail of the last row.
 				float aspect = Mathf.Max(width, height) / Mathf.Min(width, height);
 				float waste = (columns * rows - count) / (float)count;
 				float score = aspect + waste * 2f;
@@ -158,7 +155,7 @@ namespace FynnsTools.UnityPetFramework
 						{
 							Color32 source = atlas.GetPixel(used[slot], content.x + x, content.y + y);
 
-							// The destination is bottom-up like every Unity texture.
+							// Unity texture buffers are bottom-up.
 							int destinationX = destinationColumn * content.width + x;
 							int destinationY = height - 1 - (destinationRow * content.height + y);
 							pixels[destinationY * width + destinationX] = source;
@@ -183,7 +180,6 @@ namespace FynnsTools.UnityPetFramework
 			}
 		}
 
-		// A copy with the new grid and every frame index rewritten.
 		private static PetDefinition Rewrite(PetDefinition source, Dictionary<int, int> remap, int columns, int rows, RectInt content)
 		{
 			PetDefinition packed = JsonUtility.FromJson<PetDefinition>(JsonUtility.ToJson(source)).Normalise();
@@ -193,7 +189,6 @@ namespace FynnsTools.UnityPetFramework
 			packed.cellWidth = content.width;
 			packed.cellHeight = content.height;
 
-			// The cells are now cropped to exactly the drawn area.
 			packed.contentLeft = 0;
 			packed.contentTop = 0;
 			packed.contentWidth = content.width;

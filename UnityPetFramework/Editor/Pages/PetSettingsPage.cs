@@ -4,20 +4,17 @@ using UnityEngine.UIElements;
 
 namespace FynnsTools.UnityPetFramework
 {
-	// Everything the user can change about the pet.
 	internal sealed class PetSettingsPage
 	{
 		private readonly PetDeferredActions _deferred = new PetDeferredActions();
 		private IMGUIContainer _container;
 		private Vector2 _scroll;
 
-		// How long the size has to stop changing before the pet is rebuilt at it.
 		private const double ScaleSettleSeconds = .2;
 
 		private bool _scaleDirty;
 		private double _scaleChangedAt;
 
-		// A blank line inside a dialog message.
 		public static readonly string Break = "\n\n";
 
 		public VisualElement Build()
@@ -100,7 +97,6 @@ namespace FynnsTools.UnityPetFramework
 
 				if (EditorGUI.EndChangeCheck())
 				{
-					// Where the pet may walk has just changed completely.
 					PetOverlayHost.RefreshMovementArea();
 				}
 
@@ -148,7 +144,6 @@ namespace FynnsTools.UnityPetFramework
 			}
 		}
 
-		// Size decides how big the pet's window and every baked frame are.
 		private void MarkScaleDirty()
 		{
 			_scaleChangedAt = EditorApplication.timeSinceStartup;
@@ -166,7 +161,6 @@ namespace FynnsTools.UnityPetFramework
 				return;
 			}
 
-			// The window closed part way through a change.
 			if (_container == null || _container.panel == null)
 			{
 				_scaleDirty = false;
@@ -174,10 +168,8 @@ namespace FynnsTools.UnityPetFramework
 				return;
 			}
 
-			// Non-zero for as long as the slider owns the drag.
 			if (GUIUtility.hotControl != 0) return;
 
-			// The settle is what stops a typed value rebuilding the window once per keystroke.
 			if (EditorApplication.timeSinceStartup - _scaleChangedAt < ScaleSettleSeconds) return;
 
 			_scaleDirty = false;

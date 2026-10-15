@@ -22,7 +22,6 @@ namespace FynnsTools.UnityPetFramework
 		Right
 	}
 
-	// Decides what the pet does next.
 	internal sealed class PetBrain
 	{
 		private const float MinIdleSeconds = 1.5f;
@@ -32,13 +31,11 @@ namespace FynnsTools.UnityPetFramework
 		private const float JumpChance = 0.12f;
 		private const float ThinkChance = 0.25f;
 
-		// How often a pause is spent sitting, and how much longer a sit lasts than a stand.
 		private const string RestBehaviour = "Rest";
 		private const float RestChance = 0.18f;
 		private const float AlternateIdleChance = 0.25f;
 		private const float RestLengthening = 2.5f;
 
-		// How often a sleeping pet rolls over.
 		private const float MinSleepTurnSeconds = 12f;
 		private const float MaxSleepTurnSeconds = 40f;
 
@@ -46,12 +43,10 @@ namespace FynnsTools.UnityPetFramework
 		private PetDefinition _definition;
 		private string _reactionBehaviour;
 
-		// Whether the current reaction is being held open by something still going on.
 		private bool _sustained;
 		private string _idleBehaviour = "Idle";
 		public bool Suspended { get; set; }
 		public void SetDefinition(PetDefinition definition) { _definition = definition; Suspended = false; }
-		// Starts a reaction and keeps it running until released.
 		public bool SustainReaction(string behaviour)
 		{
 			if (Suspended || !CanInterrupt(_state)) return false;
@@ -68,13 +63,12 @@ namespace FynnsTools.UnityPetFramework
 			return true;
 		}
 
-		// Lets the current cycle finish rather than cutting it off part way.
+		// Finish the current animation cycle before changing state.
 		public void ReleaseReaction()
 		{
 			_sustained = false;
 		}
 
-		// Starts a reaction, unless the pet is already in the middle of that same one.
 		public bool TryReactBehaviour(string behaviour)
 		{
 			if (Suspended || !CanInterrupt(_state)) return false;
@@ -88,16 +82,13 @@ namespace FynnsTools.UnityPetFramework
 		private PetState _state = PetState.Idle;
 		private PetFacing _facing = PetFacing.Right;
 
-		// Where the turn currently playing is taking us.
 		private PetFacing _turnTarget = PetFacing.Right;
 
-		// Posture, not state.
 		private bool _sitting;
 
 		private float _stateTimer;
 		private float _sleepTurnTimer;
 
-		// Whether this pet filled in the sitting turn slot.
 		private bool _hasSittingTurn;
 
 		public PetBrain(PetAnimator animator)
@@ -118,10 +109,8 @@ namespace FynnsTools.UnityPetFramework
 
 		public bool IsJumping => _state == PetState.Jump;
 
-		// Walking and jumping cost energy; standing about does not.
 		public bool IsActive => _state == PetState.Walk || _state == PetState.Jump || _state == PetState.Celebrate;
 
-		// True while the pet is doing something that movement must not cut across.
 		public bool IsBusy => !CanInterrupt(_state);
 
 		public void Detach()
@@ -161,7 +150,6 @@ namespace FynnsTools.UnityPetFramework
 				return;
 			}
 
-			// A one-shot state ends when its animation ends.
 			if (_stateTimer > 0f || !CanInterrupt(_state))
 			{
 				return;
@@ -170,7 +158,6 @@ namespace FynnsTools.UnityPetFramework
 			ChooseIdleBehaviour();
 		}
 
-		// Asks to face the other way.
 		public bool RequestFacing(PetFacing facing)
 		{
 			if (_facing == facing || _state == PetState.Turn)
@@ -183,7 +170,6 @@ namespace FynnsTools.UnityPetFramework
 				return false;
 			}
 
-			// A pet with no turn animation simply faces the other way.
 			if (!_definition.HasClip(TurnAnimation()))
 			{
 				_facing = facing;
@@ -194,7 +180,6 @@ namespace FynnsTools.UnityPetFramework
 			return true;
 		}
 
-		// Used by clicks and editor events.
 		public bool TryReact(PetState reaction)
 		{
 			if (Suspended || !CanInterrupt(_state))
@@ -202,7 +187,6 @@ namespace FynnsTools.UnityPetFramework
 				return false;
 			}
 
-			// Already doing it.
 			if (_state == reaction)
 			{
 				return false;
@@ -212,7 +196,6 @@ namespace FynnsTools.UnityPetFramework
 			return true;
 		}
 
-		// The animation for the state the pet is in, and whether it plays backwards.
 		public string ClipForCurrentState(out bool reverse)
 		{
 			reverse = false;
@@ -220,7 +203,6 @@ namespace FynnsTools.UnityPetFramework
 			switch (_state)
 			{
 				case PetState.Turn:
-					// Forwards turns left to right, backwards turns right to left.
 					reverse = _turnTarget == PetFacing.Left;
 					return TurnAnimation();
 
@@ -235,13 +217,11 @@ namespace FynnsTools.UnityPetFramework
 			}
 		}
 
-		// Whichever turn suits the posture the pet is currently in.
 		private string TurnAnimation()
 		{
 			return _definition.ResolveBehaviour(_sitting ? "Turn sitting" : "Turn");
 		}
 
-		// A sleeping pet turns over now and again.
 		private void StepSleep(float deltaTime)
 		{
 			if (!_hasSittingTurn)
@@ -259,7 +239,6 @@ namespace FynnsTools.UnityPetFramework
 			RequestFacing(_facing == PetFacing.Left ? PetFacing.Right : PetFacing.Left);
 		}
 
-		// Turn and Jump run to completion.
 		private static bool CanInterrupt(PetState state)
 		{
 			return state != PetState.Turn && state != PetState.Jump;
@@ -268,7 +247,6 @@ namespace FynnsTools.UnityPetFramework
 		private void ChooseIdleBehaviour()
 		{
 			float idleBias = UnityPetFrameworkSettings.IdleFrequency;
-			// Optional reactions are reachable without requiring them on every pet.
 			float rare = Random.value;
 			string optional = rare < .01f ? "Special" : rare < .02f ? "Joke" : rare < .05f ? "Eat" : rare < .10f ? "Playful" : null;
 			if (optional != null && _definition.HasClip(_definition.ResolveBehaviour(optional))) { TryReactBehaviour(optional); return; }
@@ -288,7 +266,6 @@ namespace FynnsTools.UnityPetFramework
 			Enter(_definition.HasClip(_definition.ResolveBehaviour("Move")) ? PetState.Walk : PetState.Idle);
 		}
 
-		// Which pose a pause is spent in.
 		private string ChooseIdlePose()
 		{
 			float roll = Random.value;
@@ -316,7 +293,6 @@ namespace FynnsTools.UnityPetFramework
 				_idleBehaviour = ChooseIdlePose();
 			}
 
-			// Posture changes here and nowhere else.
 			switch (state)
 			{
 				case PetState.Sleep:
@@ -328,7 +304,6 @@ namespace FynnsTools.UnityPetFramework
 					break;
 
 				case PetState.Idle:
-					// Resting is a sitting idle rather than a state of its own.
 					_sitting = _idleBehaviour == RestBehaviour;
 					break;
 
@@ -345,13 +320,11 @@ namespace FynnsTools.UnityPetFramework
 
 				case PetState.Idle:
 				case PetState.Think:
-					// A rest lasts longer than a pause.
 					_stateTimer = Random.Range(MinIdleSeconds, MaxIdleSeconds) *
 						(_idleBehaviour == RestBehaviour ? RestLengthening : 1f);
 					break;
 
 				default:
-					// One-shot, or ended by something other than a clock.
 					_stateTimer = float.MaxValue;
 					break;
 			}
@@ -363,32 +336,27 @@ namespace FynnsTools.UnityPetFramework
 			switch (_state)
 			{
 				case PetState.Turn:
-					// The one place facing actually changes, and only once the sprite has finished turning.
+					// Change facing after the turn animation finishes.
 					_facing = _turnTarget;
 
-					// Back to whatever the pet was doing before it turned.
 					Enter(_sitting ? PetState.Sleep : PetState.Idle);
 					_stateTimer = 0f;
 					break;
 
 				case PetState.Jump:
-					// Never held.
 					Enter(PetState.Idle);
 					break;
 
 				case PetState.Celebrate:
 				case PetState.Alert:
 				case PetState.Happy:
-					// Still being petted, so round again.
 					if (_sustained && _reactionBehaviour != null &&
 						_animator.Play(_definition.ResolveBehaviour(_reactionBehaviour), true)) return;
 
 					PetClipDefinition finished = _definition.FindClip(clipName);
 
-					// A looping clip fires this every cycle.
 					if (finished != null && !finished.loop && finished.holdSeconds > 0f)
 					{
-						// Stays in this state with the animator resting on its last frame.
 						_stateTimer = finished.holdSeconds;
 						return;
 					}

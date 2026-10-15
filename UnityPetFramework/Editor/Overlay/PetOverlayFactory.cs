@@ -2,7 +2,6 @@ using UnityEngine;
 
 namespace FynnsTools.UnityPetFramework
 {
-	// The only place that knows the overlay has more than one implementation.
 	internal static class PetOverlayFactory
 	{
 		public const string NotWindowsReason =
@@ -29,7 +28,6 @@ namespace FynnsTools.UnityPetFramework
 #endif
 		}
 
-		// Returns something usable either way.
 		public static IPetOverlay CreateOverlay(IPetHost host, Vector2Int frameSize)
 		{
 #if UNITY_EDITOR_WIN
@@ -45,7 +43,6 @@ namespace FynnsTools.UnityPetFramework
 #endif
 		}
 
-		// Destroys any pet window left behind by a previous domain.
 		public static int SweepOrphans()
 		{
 #if UNITY_EDITOR_WIN

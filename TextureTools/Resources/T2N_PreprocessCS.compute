@@ -1,0 +1,40 @@
+#pragma kernel CSMain
+
+RWTexture2D<float> Result;
+Texture2D<float> Input;
+SamplerState samplerState;
+
+uint width;
+uint height;
+int kernelSize;
+float sigma;
+
+[numthreads(8,8,1)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+    if (id.x >= width || id.y >= height)
+        return;
+
+    int x = id.x;
+    int y = id.y;
+    float sum = 0.0;
+    float weightSum = 0.0;
+    int halfKernel = kernelSize / 2;
+
+    for (int j = -halfKernel; j <= halfKernel; j++)
+    {
+        for (int i = -halfKernel; i <= halfKernel; i++)
+        {
+            int sampleX = clamp(x + i, 0, int(width) - 1);
+            int sampleY = clamp(y + j, 0, int(height) - 1);
+            float sample = Input.Load(int3(sampleX, sampleY, 0), 0);
+            float distSq = (i * i + j * j);
+            float weight = exp(-distSq / (2.0 * sigma * sigma));
+            sum += sample * weight;
+            weightSum += weight;
+        }
+    }
+
+    float blurredVal = sum / weightSum;
+    Result[id.xy] = blurredVal;
+}

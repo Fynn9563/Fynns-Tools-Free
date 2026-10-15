@@ -3,16 +3,12 @@ using UnityEngine;
 
 namespace FynnsTools.UnityPetFramework
 {
-	// Where the pet is allowed to be, in desktop pixels.
 	internal sealed class PetSafeArea
 	{
-		// Enough to clear a tab strip, so the pet stands inside a view rather than on the tabs above it.
 		private const int TopInsetPixels = 22;
 
-		// A region narrower than this cannot be walked across meaningfully.
 		private const int MinUsableWidth = 64;
 
-		// How often the views are re-measured when nothing else has prompted it.
 		private const double RefreshIntervalSeconds = 0.35d;
 
 		private readonly List<Rect> _viewPoints = new List<Rect>();
@@ -25,13 +21,10 @@ namespace FynnsTools.UnityPetFramework
 
 		public IReadOnlyList<RectInt> Regions => _regions;
 
-		// True on the tick the regions actually changed.
 		public bool ChangedThisTick { get; private set; }
 
-		// True when there is nowhere valid.
 		public bool IsEmpty => _regions.Count == 0;
 
-		// Re-measures when something has probably moved, and on a slow poll otherwise.
 		public void Tick(IPetHost host, PetMovementMode mode, double now, bool force)
 		{
 			bool modeChanged = !_hasMode || mode != _lastMode;
@@ -89,7 +82,6 @@ namespace FynnsTools.UnityPetFramework
 					continue;
 				}
 
-				// A floating view is a separate top-level window of its own.
 				if (!Encloses(hostBounds, pixels))
 				{
 					continue;
@@ -117,7 +109,6 @@ namespace FynnsTools.UnityPetFramework
 			return true;
 		}
 
-		// Keeps the pet's feet inside a region.
 		public Vector2Int ClampFeet(Vector2Int feet, Vector2Int frameSize)
 		{
 			if (_regions.Count == 0)
@@ -132,11 +123,9 @@ namespace FynnsTools.UnityPetFramework
 			int maxX = Mathf.Max(minX, region.xMax - halfWidth);
 			int x = Mathf.Clamp(feet.x, minX, maxX);
 
-			// The feet go on the bottom edge of the region, always.
 			return new Vector2Int(x, region.yMax);
 		}
 
-		// Dropping keeps both coordinates.
 		public Vector2Int ClampPlacement(Vector2Int feet, Vector2Int frameSize)
 		{
 			if (_regions.Count == 0) return feet;
@@ -146,7 +135,6 @@ namespace FynnsTools.UnityPetFramework
 			return new Vector2Int(Mathf.Clamp(feet.x, region.x + half, region.xMax - half), Mathf.Clamp(feet.y, top, region.yMax));
 		}
 
-		// Somewhere else to stand that the pet can actually reach.
 		public bool TryPickDestination(Vector2Int from, Vector2Int frameSize, out PetDestination destination)
 		{
 			destination = default;
@@ -158,7 +146,6 @@ namespace FynnsTools.UnityPetFramework
 
 			RectInt current = RegionFor(from);
 
-			// Somewhere the pet is not already, preferably.
 			List<RectInt> elsewhere = new List<RectInt>();
 			foreach (RectInt region in _regions)
 			{
@@ -177,7 +164,6 @@ namespace FynnsTools.UnityPetFramework
 			int maxX = Mathf.Max(minX, target.xMax - halfWidth);
 			int x = Random.Range(minX, maxX + 1);
 
-			// Staying in the same region.
 			if (elsewhere.Count == 0 && maxX - minX > frameSize.x)
 			{
 				int minimumTravel = (maxX - minX) / 3;
@@ -192,7 +178,6 @@ namespace FynnsTools.UnityPetFramework
 			return true;
 		}
 
-		// Whether a destination still makes sense.
 		public bool IsDestinationValid(PetDestination destination, Vector2Int frameSize)
 		{
 			if (!destination.IsSet)
@@ -211,7 +196,6 @@ namespace FynnsTools.UnityPetFramework
 			return false;
 		}
 
-		// A destination in the direction the pet is being pushed, for Run From Mouse.
 		public bool TryPickAwayFrom(Vector2Int from, int awayFromX, Vector2Int frameSize, out PetDestination destination)
 		{
 			destination = default;
@@ -230,7 +214,6 @@ namespace FynnsTools.UnityPetFramework
 			int wanted = from.x + direction * frameSize.x * 2;
 			int x = Mathf.Clamp(wanted, minX, maxX);
 
-			// Already as far away as this region goes.
 			if (Mathf.Abs(x - from.x) < 4)
 			{
 				return false;

@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace FynnsTools.UnityPetFramework
 {
-	// Nudging individual frames until an animation stops jittering.
 	internal sealed partial class PetCreatorPage
 	{
 		private const int NudgeStep = 1;
@@ -11,7 +10,7 @@ namespace FynnsTools.UnityPetFramework
 
 		private bool _aligning;
 
-		// Position within the clip rather than a cell index.
+		// Clip position, not sheet cell index.
 		private int _alignPosition;
 
 		private void DrawAlignment(PetClipDefinition clip)
@@ -37,7 +36,6 @@ namespace FynnsTools.UnityPetFramework
 
 			_alignPosition = Mathf.Clamp(_alignPosition, 0, clip.FrameCount - 1);
 
-			// Re-pinned every pass rather than only when something changes.
 			_preview.Pin(clip.name, _alignPosition);
 
 			DrawAlignFramePicker(clip);
@@ -45,7 +43,6 @@ namespace FynnsTools.UnityPetFramework
 			HandleNudgeKeys(clip);
 		}
 
-		// Entering stops playback and pins the pad to one frame.
 		private void SetAligning(bool aligning, PetClipDefinition clip)
 		{
 			_aligning = aligning;
@@ -60,7 +57,7 @@ namespace FynnsTools.UnityPetFramework
 			_alignPosition = 0;
 			_preview.SetDefinition(_definition);
 
-			// So a text field elsewhere on the page does not swallow the arrow keys.
+			// Keep arrow-key nudges out of other text fields.
 			GUIUtility.keyboardControl = 0;
 		}
 		private void DrawAlignFramePicker(PetClipDefinition clip)
@@ -89,7 +86,6 @@ namespace FynnsTools.UnityPetFramework
 			PetSpriteFrame frame = AlignedFrame(clip);
 			if (frame == null) return;
 
-			// Shown as how far the artwork has moved.
 			float restX = frame.width * .5f;
 			float restY = frame.height;
 
@@ -145,7 +141,6 @@ namespace FynnsTools.UnityPetFramework
 			e.Use();
 		}
 
-		// dx and dy are which way the artwork should move on screen.
 		private void Nudge(PetClipDefinition clip, int dx, int dy, int step)
 		{
 			PetSpriteFrame frame = AlignedFrame(clip);
@@ -166,7 +161,6 @@ namespace FynnsTools.UnityPetFramework
 
 		private void AlignmentChanged()
 		{
-			// The preview measures its canvas from the anchors.
 			_preview.SetDefinition(_definition);
 			SaveWorkingPet();
 			_container?.MarkDirtyRepaint();

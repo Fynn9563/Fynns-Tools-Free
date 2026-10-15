@@ -7,18 +7,7 @@ using UnityEngine;
 
 namespace FynnsTools.FaceEmoPatches
 {
-	// FaceEmo renders every thumbnail through DrawingUtility.GetRenderedTexture, which
-	// reads the camera into a TextureFormat.RGB24 texture. RGB24 has no alpha channel,
-	// and the camera is left on its default Skybox clear, so the result is opaque twice
-	// over. The generated expression menu icons are those same textures, which is why
-	// they arrive with a solid backdrop behind the face.
-	//
-	// The replacement below is the original method with two changes: an RGBA32
-	// destination, and a solid colour clear with zero alpha. Nothing downstream needed
-	// patching, because FaceEmo already treats these textures as alpha capable. Its
-	// gamma shader returns col with only col.rgb touched, and the menu icon padding step
-	// builds an ARGB32 texture and copies pixels through GetPixel. Both carry alpha
-	// through untouched, they were simply never handed any.
+	// RGBA32 and transparent clearing preserve thumbnail alpha.
 	internal sealed class TransparentThumbnailPatch : FaceEmoPatch
 	{
 		private const string DrawingUtilityTypeName = "Suzuryg.FaceEmo.Detail.Drawing.DrawingUtility";
@@ -54,9 +43,6 @@ namespace FynnsTools.FaceEmoPatches
 				: AccessTools.Method(drawingUtility, RenderMethodName, new[] { typeof(int), typeof(int), typeof(Camera) });
 		}
 
-		// Returning false skips the original entirely and makes __result its return value.
-		// The original is short and self contained, so replacing it outright is easier to
-		// follow than rewriting its instructions to swap a texture format and a clear mode.
 		private static bool Prefix(int width, int height, Camera camera, ref Texture2D __result)
 		{
 			__result = RenderWithAlpha(width, height, camera);
@@ -69,8 +55,7 @@ namespace FynnsTools.FaceEmoPatches
 			RenderTexture renderTexture = RenderTexture.GetTemporary(width, height,
 				format: RenderTextureFormat.ARGB32, readWrite: RenderTextureReadWrite.sRGB, depthBuffer: 24, antiAliasing: 8);
 
-			// The camera belongs to FaceEmo's preview scene and is reused for every
-			// thumbnail in a batch, so each of these has to go back the way it was found.
+			// Restore the shared preview camera after each thumbnail.
 			CameraClearFlags clearFlagsCache = camera.clearFlags;
 			Color backgroundCache = camera.backgroundColor;
 			RenderTexture targetTextureCache = camera.targetTexture;

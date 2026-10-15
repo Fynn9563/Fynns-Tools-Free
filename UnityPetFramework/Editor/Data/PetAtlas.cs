@@ -5,10 +5,8 @@ using UnityEngine;
 
 namespace FynnsTools.UnityPetFramework
 {
-	// A loaded sprite sheet.
 	internal sealed class PetAtlas : IDisposable
 	{
-		// A cell counts as empty when no pixel in it is more opaque than this.
 		private const byte EmptyAlphaThreshold = 8;
 
 		private Texture2D _sheet;
@@ -18,7 +16,6 @@ namespace FynnsTools.UnityPetFramework
 		public bool HasRectangles => _frames != null;
 		public Color32[] Pixels => _pixels;
 
-		// Explicit per-frame rectangles, laid over the sheet.
 		public void SetFrames(IList<PetSpriteFrame> frames)
 		{
 			_frames = frames;
@@ -44,7 +41,6 @@ namespace FynnsTools.UnityPetFramework
 		{
 		}
 
-		// The decoded sheet.
 		public Texture2D Sheet => _sheet;
 
 		public int Columns { get; private set; }
@@ -106,11 +102,9 @@ namespace FynnsTools.UnityPetFramework
 				return null;
 			}
 
-			// Read before any DestroyImmediate below.
 			int sheetWidth = sheet.width;
 			int sheetHeight = sheet.height;
 
-			// Exact division or nothing.
 			if (sheetWidth % columns != 0 || sheetHeight % rows != 0)
 			{
 				UnityEngine.Object.DestroyImmediate(sheet);
@@ -141,7 +135,7 @@ namespace FynnsTools.UnityPetFramework
 			return cellIndex >= 0 && cellIndex < CellCount;
 		}
 
-		// Where a cell sits in the texture, in Unity's bottom-up pixel space.
+		// Texture cell coordinates are bottom-up.
 		public RectInt CellPixelRect(int cellIndex)
 		{
 			if (_frames != null)
@@ -158,7 +152,6 @@ namespace FynnsTools.UnityPetFramework
 				CellHeight);
 		}
 
-		// The same rect as 0..1 coordinates, for GUI.DrawTextureWithTexCoords.
 		public Rect CellUvRect(int cellIndex)
 		{
 			RectInt pixels = CellPixelRect(cellIndex);
@@ -169,7 +162,6 @@ namespace FynnsTools.UnityPetFramework
 				pixels.height / (float)_sheet.height);
 		}
 
-		// Cells with nothing drawn in them.
 		public bool IsCellEmpty(int cellIndex)
 		{
 			if (!IsValidCell(cellIndex))
@@ -189,7 +181,6 @@ namespace FynnsTools.UnityPetFramework
 			return _cellEmpty[cellIndex];
 		}
 
-		// The union of what is drawn across the given cells.
 		public RectInt ComputeContentBounds(IEnumerable<int> cellIndices)
 		{
 			int left = int.MaxValue;
@@ -215,7 +206,7 @@ namespace FynnsTools.UnityPetFramework
 							continue;
 						}
 
-						// Flip to top-down so the result reads the way the sheet looks.
+						// Convert texture coordinates to top-down sheet coordinates.
 						int localY = cell.height - 1 - y;
 						if (x < left) { left = x; }
 						if (x > right) { right = x; }
@@ -233,7 +224,7 @@ namespace FynnsTools.UnityPetFramework
 			return new RectInt(left, top, right - left + 1, bottom - top + 1);
 		}
 
-		// Cell-local top-down pixels to a pixel index into the sheet's bottom-up buffer.
+		// Convert cell-local top-down coordinates to the bottom-up buffer.
 		public int PixelIndex(int cellIndex, int localX, int localY)
 		{
 			RectInt cell = CellPixelRect(cellIndex);

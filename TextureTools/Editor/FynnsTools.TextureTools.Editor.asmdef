@@ -1,0 +1,10 @@
+{
+  "name": "FynnsTools.TextureTools.Editor",
+  "includePlatforms": [
+    "Editor"
+  ],
+  "autoReferenced": true,
+  "references": [
+    "Unity.TextMeshPro"
+  ]
+}

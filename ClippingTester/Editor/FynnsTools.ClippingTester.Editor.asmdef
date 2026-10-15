@@ -1,0 +1,7 @@
+{
+  "name": "FynnsTools.ClippingTester.Editor",
+  "rootNamespace": "FynnsTools.Clipping",
+  "references": [],
+  "includePlatforms": ["Editor"],
+  "autoReferenced": true
+}

@@ -2,7 +2,6 @@ using UnityEngine;
 
 namespace FynnsTools.UnityPetFramework
 {
-	// The editor's geometry on a platform with no overlay.
 	internal sealed class NullPetHost : IPetHost
 	{
 		public bool IsReady => false;

@@ -6,10 +6,8 @@ using UnityEngine;
 
 namespace FynnsTools.UnityPetFramework
 {
-	// Draws a pet's icon wherever the framework lists pets.
 	internal static class PetIconRenderer
 	{
-		// Icons are small.
 		private const int MaxAtlasPixels = 16 * 1024 * 1024;
 
 		private sealed class Entry
@@ -24,7 +22,6 @@ namespace FynnsTools.UnityPetFramework
 		private static readonly Dictionary<string, Entry> _cache = new Dictionary<string, Entry>();
 		private static bool _hooked;
 
-		// True when at least one icon on screen has more than one frame.
 		public static bool AnyAnimated { get; private set; }
 
 		public static void BeginFrame()
@@ -32,7 +29,6 @@ namespace FynnsTools.UnityPetFramework
 			AnyAnimated = false;
 		}
 
-		// Returns false when this pet has no icon sequence.
 		public static bool Draw(Rect area, PetLibrary.Entry pet)
 		{
 			Entry entry = Resolve(pet);
@@ -64,7 +60,6 @@ namespace FynnsTools.UnityPetFramework
 			_cache.Clear();
 		}
 
-		// Which frame is showing, from the wall clock rather than a per-icon timer.
 		private static int FrameIndex(Entry entry)
 		{
 			if (entry.Frames.Count <= 1)
@@ -75,11 +70,10 @@ namespace FynnsTools.UnityPetFramework
 			double elapsed = EditorApplication.timeSinceStartup * Mathf.Clamp(entry.Fps, 1f, 60f);
 			int index = (int)(elapsed % entry.Frames.Count);
 
-			// A sequence that plays once holds its last frame rather than looping.
+			// Hold the last frame for one-shot clips.
 			return entry.Loop ? index : Mathf.Min(entry.Frames.Count - 1, index);
 		}
 
-		// Fitted inside the box with its aspect kept.
 		private static void DrawFrame(Rect area, Texture2D atlas, PetSpriteFrame frame)
 		{
 			float scale = Mathf.Min(area.width / frame.width, area.height / frame.height);
@@ -92,7 +86,7 @@ namespace FynnsTools.UnityPetFramework
 				width,
 				height);
 
-			// The atlas is bottom-up and a frame rectangle is measured from the top.
+			// Atlas pixels are bottom-up; frame rectangles are top-down.
 			Rect uv = new Rect(
 				frame.x / (float)atlas.width,
 				1f - (frame.y + frame.height) / (float)atlas.height,
@@ -125,7 +119,6 @@ namespace FynnsTools.UnityPetFramework
 		{
 			Entry entry = new Entry { Failed = true };
 
-			// Read and validated exactly like any other pet.
 			if (!PetDefinitionSerializer.TryReadDefinition(definitionPath, out PetDefinition definition, out _))
 			{
 				return entry;
@@ -188,7 +181,7 @@ namespace FynnsTools.UnityPetFramework
 
 			_hooked = true;
 
-			// The textures are native objects, so they go before the domain does.
+			// Destroy owned textures before domain reload.
 			AssemblyReloadEvents.beforeAssemblyReload += Clear;
 		}
 	}

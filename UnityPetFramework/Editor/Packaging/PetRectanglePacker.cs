@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace FynnsTools.UnityPetFramework
 {
-	// Best-short-side-fit MaxRects without rotation or resampling.
 	internal static class PetRectanglePacker
 	{
 		public static bool TryPack(PetAtlas atlas, PetDefinition definition, out PetAtlasRepacker.Result result, out string error)
@@ -13,7 +12,6 @@ namespace FynnsTools.UnityPetFramework
 			if (!PetDefinitionValidator.Validate(definition, atlas.Sheet.width, atlas.Sheet.height, out error)) return false;
 			var used = definition.UsedCells();
 
-			// Frames that are all one size go out as a plain grid rather than through the packer.
 			if (TryPackUniform(atlas, definition, used, out result, out error)) return true;
 			if (error != null) return false;
 			used.Sort((a, b) => (definition.spriteFrames[b].width * definition.spriteFrames[b].height).CompareTo(definition.spriteFrames[a].width * definition.spriteFrames[a].height));
@@ -78,7 +76,6 @@ namespace FynnsTools.UnityPetFramework
 			finally { if (texture != null) UnityEngine.Object.DestroyImmediate(texture); }
 		}
 
-		// Lays every frame on an even grid, near square and within 4096 on each side.
 		private static bool TryPackUniform(PetAtlas atlas, PetDefinition definition, List<int> used, out PetAtlasRepacker.Result result, out string error)
 		{
 			result = null;
@@ -127,7 +124,7 @@ namespace FynnsTools.UnityPetFramework
 					remap[id] = packed.spriteFrames.Count;
 					packed.spriteFrames.Add(frame);
 
-					// Both buffers are bottom-up; the loop counts top-down.
+					// Both buffers are bottom-up; iteration is top-down.
 					for (int y = 0; y < cellHeight; y++)
 					for (int x = 0; x < cellWidth; x++)
 					{

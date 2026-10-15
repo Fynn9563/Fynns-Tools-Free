@@ -3,14 +3,12 @@ using UnityEngine;
 
 namespace FynnsTools.UnityPetFramework
 {
-	// A small energy readout in the corner of the Unity window.
 	internal sealed class PetEnergyBar : IDisposable
 	{
 		private const int BarWidth = 96;
 		private const int BarHeight = 10;
 		private const int MarginPixels = 12;
 
-		// Redrawn only when the reading actually changes by something visible.
 		private const float RedrawThreshold = 0.01f;
 
 		private static readonly Color32 Background = new Color32(20, 20, 20, 200);
@@ -34,7 +32,6 @@ namespace FynnsTools.UnityPetFramework
 
 			_overlay = PetOverlayFactory.CreateOverlay(host, new Vector2Int(BarWidth, BarHeight));
 
-			// Never in the way.
 			_overlay.SetClickThrough(true);
 		}
 
@@ -72,7 +69,7 @@ namespace FynnsTools.UnityPetFramework
 			_overlay = null;
 		}
 
-		// Premultiplied BGRA, bottom-up, same as every other frame the overlay is given.
+		// Overlay pixels are premultiplied BGRA, bottom-up.
 		private void Fill(float energy)
 		{
 			int filled = Mathf.RoundToInt(Mathf.Clamp01(energy) * (BarWidth - 2));

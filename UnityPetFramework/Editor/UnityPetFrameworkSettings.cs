@@ -9,7 +9,6 @@ namespace FynnsTools.UnityPetFramework
 		SafeUi
 	}
 
-	// Everything the user can change, stored per machine.
 	internal static class UnityPetFrameworkSettings
 	{
 		private const string Prefix = "FynnsTools.UnityPetFramework.";
@@ -20,21 +19,18 @@ namespace FynnsTools.UnityPetFramework
 			set => EditorPrefs.SetBool(Prefix + "Enabled", value);
 		}
 
-		// The pet folder's id.
 		public static string SelectedPetId
 		{
 			get => EditorPrefs.GetString(Prefix + "SelectedPetId", "");
 			set => EditorPrefs.SetString(Prefix + "SelectedPetId", value);
 		}
 
-		// Which pet the Scale below was last set up for.
 		public static string ScaleInitialisedFor
 		{
 			get => EditorPrefs.GetString(Prefix + "ScaleInitialisedFor", "");
 			set => EditorPrefs.SetString(Prefix + "ScaleInitialisedFor", value);
 		}
 
-		// Continuous rather than a few fixed steps, so the pet can be sized to taste.
 		public static float Scale
 		{
 			get => Mathf.Clamp(EditorPrefs.GetFloat(Prefix + "Scale", 0.5f), 0.15f, 2f);
@@ -65,21 +61,18 @@ namespace FynnsTools.UnityPetFramework
 			set => EditorPrefs.SetBool(Prefix + "ShowEnergyBar", value);
 		}
 
-		// Full to empty in roughly this many minutes of walking about.
 		public static float EnergyDrainMinutes
 		{
 			get => Mathf.Clamp(EditorPrefs.GetFloat(Prefix + "EnergyDrainMinutes", 25f), 2f, 240f);
 			set => EditorPrefs.SetFloat(Prefix + "EnergyDrainMinutes", Mathf.Clamp(value, 2f, 240f));
 		}
 
-		// How much of the time the pet stands about rather than walking.
 		public static float IdleFrequency
 		{
 			get => Mathf.Clamp01(EditorPrefs.GetFloat(Prefix + "IdleFrequency", 0.45f));
 			set => EditorPrefs.SetFloat(Prefix + "IdleFrequency", Mathf.Clamp01(value));
 		}
 
-		// Energy below which the pet starts looking for a nap.
 		public static float SleepThreshold
 		{
 			get => Mathf.Clamp(EditorPrefs.GetFloat(Prefix + "SleepThreshold", 0.1f), 0f, 0.6f);
@@ -110,14 +103,12 @@ namespace FynnsTools.UnityPetFramework
 			set => EditorPrefs.SetFloat(Prefix + "SoundVolume", Mathf.Clamp01(value));
 		}
 
-		// Kept across restarts.
 		public static float Energy
 		{
 			get => Mathf.Clamp01(EditorPrefs.GetFloat(Prefix + "Energy", 1f));
 			set => EditorPrefs.SetFloat(Prefix + "Energy", Mathf.Clamp01(value));
 		}
 
-		// Puts every setting back to its default.
 		public static void ResetAll()
 		{
 			EditorPrefs.DeleteKey(Prefix + "ScaleInitialisedFor");

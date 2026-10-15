@@ -42,7 +42,6 @@ namespace FynnsTools.UnityPetFramework
 			var names = new HashSet<string>(StringComparer.Ordinal);
 			foreach (var clip in d.AllSequences())
 			{
-				// Named, and with the reason.
 			if (string.IsNullOrWhiteSpace(clip.name)) errors.Add("An animation has no name.");
 			else if (clip.name.Length > 80) errors.Add("The animation name '" + clip.name.Substring(0, 40) + "...' is longer than 80 characters.");
 			else if (!names.Add(clip.name)) errors.Add("There is more than one animation called '" + clip.name + "'.");

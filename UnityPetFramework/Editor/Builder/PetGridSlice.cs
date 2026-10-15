@@ -4,11 +4,9 @@ using UnityEngine;
 
 namespace FynnsTools.UnityPetFramework
 {
-	// A uniform grid laid over a sprite sheet.
 	[Serializable]
 	internal sealed class PetGridSlice
 	{
-		// Matches the per-pet limit in PetDefinitionValidator.
 		public const int MaxCells = 4096;
 
 		public int cellWidth = 64;
@@ -22,12 +20,10 @@ namespace FynnsTools.UnityPetFramework
 
 		public int CellCount => columns * rows;
 
-		// The smallest sheet this grid fits on.
 		public int RequiredWidth => offsetX + columns * cellWidth + Mathf.Max(0, columns - 1) * spacingX;
 
 		public int RequiredHeight => offsetY + rows * cellHeight + Mathf.Max(0, rows - 1) * spacingY;
 
-		// No padding anywhere.
 		public bool IsTight => offsetX == 0 && offsetY == 0 && spacingX == 0 && spacingY == 0;
 
 		public PetGridSlice Copy()
@@ -42,7 +38,7 @@ namespace FynnsTools.UnityPetFramework
 				other.offsetY == offsetY && other.spacingX == spacingX && other.spacingY == spacingY;
 		}
 
-		// Top-left pixel rectangle of one cell.
+		// Cell rectangle in top-left pixel coordinates.
 		public RectInt CellRect(int index)
 		{
 			int column = index % Mathf.Max(1, columns);
@@ -54,7 +50,6 @@ namespace FynnsTools.UnityPetFramework
 				cellHeight);
 		}
 
-		// Every cell as a frame, anchored bottom centre.
 		public List<PetSpriteFrame> BuildFrames()
 		{
 			List<PetSpriteFrame> frames = new List<PetSpriteFrame>(CellCount);
@@ -75,7 +70,6 @@ namespace FynnsTools.UnityPetFramework
 			return frames;
 		}
 
-		// Everything the rest of the creator assumes about a grid, checked in one place.
 		public bool Validate(int sheetWidth, int sheetHeight, out string error)
 		{
 			if (cellWidth < 1 || cellHeight < 1)
@@ -126,7 +120,6 @@ namespace FynnsTools.UnityPetFramework
 			return true;
 		}
 
-		// How much of the sheet the grid does not cover.
 		public string Leftover(int sheetWidth, int sheetHeight)
 		{
 			int across = sheetWidth - RequiredWidth;
@@ -139,7 +132,6 @@ namespace FynnsTools.UnityPetFramework
 			return string.Format("{0} pixels across and {1} down are outside the grid.", Mathf.Max(0, across), Mathf.Max(0, down));
 		}
 
-		// Recovers the grid a set of frames came from, for reopening a pet that was saved earlier.
 		public static bool TryInfer(IList<PetSpriteFrame> frames, out PetGridSlice grid)
 		{
 			grid = null;
@@ -157,7 +149,6 @@ namespace FynnsTools.UnityPetFramework
 				top = Mathf.Min(top, frame.y);
 			}
 
-			// Distinct column and row positions, which give the counts and the pitch.
 			SortedSet<int> columnsAt = new SortedSet<int>();
 			SortedSet<int> rowsAt = new SortedSet<int>();
 			foreach (PetSpriteFrame frame in frames)
@@ -184,7 +175,6 @@ namespace FynnsTools.UnityPetFramework
 			return true;
 		}
 
-		// Even steps or nothing.
 		private static bool TryPitch(SortedSet<int> positions, int cell, out int spacing)
 		{
 			spacing = 0;
@@ -204,7 +194,6 @@ namespace FynnsTools.UnityPetFramework
 			return true;
 		}
 
-		// The most cells of this size that fit in the space, given the padding.
 		public static int FitCount(int available, int cell, int offset, int spacing)
 		{
 			if (cell < 1 || available - offset < cell)
@@ -215,7 +204,6 @@ namespace FynnsTools.UnityPetFramework
 			return (available - offset + spacing) / (cell + spacing);
 		}
 
-		// The largest cell size that fits this many cells in the space.
 		public static int FitCell(int available, int count, int offset, int spacing)
 		{
 			if (count < 1)

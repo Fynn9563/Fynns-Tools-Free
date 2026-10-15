@@ -4,15 +4,12 @@ using UnityEngine;
 
 namespace FynnsTools.UnityPetFramework
 {
-	// Reads and writes pet.json, and refuses anything that would not work.
 	internal static class PetDefinitionSerializer
 	{
 		public const string DefinitionFileName = "pet.json";
 
-		// Big enough for any sane pet.
 		private const long MaxDefinitionBytes = 4 * 1024 * 1024;
 
-		// Loads a pet folder: its definition, and the sheet named by it.
 		public static bool TryLoad(string definitionPath, out PetDefinition definition, out PetAtlas atlas, out string error)
 		{
 			definition = null;
@@ -51,7 +48,6 @@ namespace FynnsTools.UnityPetFramework
 			return true;
 		}
 
-		// Reads and validates the definition without touching the sheet.
 		public static bool TryReadDefinition(string definitionPath, out PetDefinition definition, out string error)
 		{
 			definition = null;
@@ -73,7 +69,6 @@ namespace FynnsTools.UnityPetFramework
 
 				string json = File.ReadAllText(definitionPath);
 
-				// JsonUtility is monomorphic.
 				definition = JsonUtility.FromJson<PetDefinition>(json)?.Normalise();
 			}
 			catch (Exception exception)
@@ -88,7 +83,7 @@ namespace FynnsTools.UnityPetFramework
 				return false;
 			}
 
-			// Sheet size is unknown here, so the grid is checked for sanity but not against the image.
+			// Validate grid sanity before the image size is known.
 			if (!PetDefinitionValidator.Validate(definition, 0, 0, out error))
 			{
 				definition = null;
@@ -100,7 +95,6 @@ namespace FynnsTools.UnityPetFramework
 
 		public static bool TrySave(string definitionPath, PetDefinition definition, out string error)
 		{
-			// Validated on the way out as well as on the way in.
 			if (!PetDefinitionValidator.Validate(definition, 0, 0, out error))
 			{
 				return false;
@@ -129,7 +123,6 @@ namespace FynnsTools.UnityPetFramework
 			return true;
 		}
 
-		// Like SafeCombine, but for a path with folders in it such as "sounds/step.wav".
 		public static string SafeCombineRelative(string folder, string relativePath)
 		{
 			if (string.IsNullOrEmpty(folder) || !PetPackageFormat.IsSafeEntryName(relativePath))
@@ -155,7 +148,6 @@ namespace FynnsTools.UnityPetFramework
 			return combined.StartsWith(rootWithSeparator, StringComparison.OrdinalIgnoreCase) ? combined : null;
 		}
 
-		// Joins a file name onto a folder and returns null if the result escapes it.
 		public static string SafeCombine(string folder, string fileName)
 		{
 			if (string.IsNullOrEmpty(folder) || string.IsNullOrEmpty(fileName))

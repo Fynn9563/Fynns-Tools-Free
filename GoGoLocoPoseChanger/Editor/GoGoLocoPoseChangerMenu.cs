@@ -11,7 +11,7 @@ namespace FynnsTools.GoGoLocoPoseChanger
 		private const string ToolsMenu = "Tools/Fynn's Tools/GoGoLoco Pose Changer/Add Prefab";
 
 		[MenuItem(GameObjectMenu, false, 20)]
-		[MenuItem(ToolsMenu, false, 20)]
+		[MenuItem(ToolsMenu, false, 13)]
 		private static void AddPrefab()
 		{
 			VRCAvatarDescriptor avatar = Selection.activeGameObject.GetComponentInParent<VRCAvatarDescriptor>();
@@ -21,10 +21,7 @@ namespace FynnsTools.GoGoLocoPoseChanger
 				return;
 			}
 
-			// Only the first component on an avatar is read at build time, so a second
-			// would be silently ignored. Reveal the existing one instead of adding it.
-			// GameObject menu commands run once per selected object, so this also keeps
-			// a multi-object selection from creating a pile of instances.
+			// Reuse the existing component; the build reads only the first.
 			GoGoLocoPoseChangerComponent existing = avatar.GetComponentInChildren<GoGoLocoPoseChangerComponent>(true);
 			if (existing != null)
 			{
@@ -46,8 +43,7 @@ namespace FynnsTools.GoGoLocoPoseChanger
 				return;
 			}
 
-			// The prefab only carries the component with default values, so a bare
-			// GameObject holding that component is an equivalent starting point.
+			// Use a bare component when the default-only prefab is unavailable.
 			GameObject fallback = new GameObject("GoGoLoco Pose Changer");
 			fallback.transform.SetParent(avatar.transform, false);
 			fallback.AddComponent<GoGoLocoPoseChangerComponent>();
@@ -56,7 +52,7 @@ namespace FynnsTools.GoGoLocoPoseChanger
 		}
 
 		[MenuItem(GameObjectMenu, true)]
-		[MenuItem(ToolsMenu, true)]
+		[MenuItem(ToolsMenu, true, 13)]
 		private static bool Validate()
 		{
 			return Selection.activeGameObject != null;

@@ -1,0 +1,9 @@
+{
+  "name": "FynnsTools.CopyCutPaste.Editor",
+  "rootNamespace": "FynnsTools.Assets",
+  "references": [],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "autoReferenced": true
+}

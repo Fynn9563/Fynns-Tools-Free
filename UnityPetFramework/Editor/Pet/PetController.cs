@@ -3,21 +3,16 @@ using UnityEngine;
 
 namespace FynnsTools.UnityPetFramework
 {
-	// The pet itself: everything above the overlay boundary, assembled.
 	internal sealed class PetController : IDisposable
 	{
-		// Petting is worth a real top-up, a successful build a small one.
 		private const float PettingEnergyPerSecond = 0.12f;
 
-		// Clicks this close together count as one run of prodding.
 		private const double AnnoyanceMemorySeconds = 2d;
 		private const int AnnoyanceClicks = 4;
 
-		// How long the pet stays cross once it gets there.
 		private const double AnnoyedLockSeconds = 3d;
 		private const float CelebrationEnergy = 0.05f;
 
-		// Close enough to a destination to call it arrived.
 		private const int ArrivalSlopPixels = 4;
 
 		private readonly PetAnimator _animator = new PetAnimator();
@@ -33,13 +28,10 @@ namespace FynnsTools.UnityPetFramework
 		private string _currentClip;
 		private bool _currentReverse;
 
-		// Somewhere the pet has been told to go.
 		private PetDestination _destination;
 
-		// Set by a double click and promoted to a real destination once the Alert animation has finished.
 		private bool _moveAfterReaction;
 
-		// How far through the current jump the pet is.
 		private float _jumpProgress;
 		private bool _jumpBlocked;
 		private int _jumpLift;
@@ -83,7 +75,6 @@ namespace FynnsTools.UnityPetFramework
 			_atlas = null;
 		}
 
-		// Takes ownership of the atlas and disposes the previous one.
 		public void SetPet(PetAtlas atlas, PetDefinition definition, float scale)
 		{
 			if (!ReferenceEquals(_atlas, atlas))
@@ -127,14 +118,12 @@ namespace FynnsTools.UnityPetFramework
 			if (pointer.LeftDown && !_interaction.IsPressOnPet && pointer.IsOverPet) _grabOffset = _motor.Feet - pointer.DesktopPosition;
 			_interaction.Sample(pointer, now, doubleClickSeconds);
 
-			// Re-measured on a slow poll as well as when the window moves.
 			_safeArea.Tick(host, UnityPetFrameworkSettings.MovementMode, now, host.BoundsChangedThisTick);
 
 			if (_safeArea.ChangedThisTick)
 			{
 				_motor.Settle(_safeArea, _baker.FrameSize);
 
-				// The place the pet was walking to may have just stopped existing.
 				if (!_safeArea.IsDestinationValid(_destination, _baker.FrameSize))
 				{
 					_destination = default;
@@ -174,7 +163,6 @@ namespace FynnsTools.UnityPetFramework
 				if (_energy.Value > .4f) _lowEnergyNotified = false;
 			}
 
-			// Nowhere valid to stand means stop, not teleport.
 			if (!_safeArea.IsEmpty && !_interaction.IsPressOnPet)
 			{
 				StepMovement(deltaTime);
@@ -186,7 +174,6 @@ namespace FynnsTools.UnityPetFramework
 			CurrentFrame = _baker.Bake(_animator.CurrentFrame, _animator.CurrentClip, _brain.Facing);
 		}
 
-		// Called when the pet is switched off and on again.
 		public void ResetInteraction()
 		{
 			_interaction.Reset();
@@ -207,14 +194,12 @@ namespace FynnsTools.UnityPetFramework
 				return;
 			}
 
-			// Anything the pet is part way through finishes first.
 			if (_brain.IsBusy || _brain.State == PetState.Alert || _brain.State == PetState.Happy ||
 				_brain.State == PetState.Celebrate || _brain.State == PetState.Sleep)
 			{
 				return;
 			}
 
-			// Alert has finished, so the move it was announcing can begin.
 			if (_moveAfterReaction)
 			{
 				_moveAfterReaction = false;
@@ -237,12 +222,10 @@ namespace FynnsTools.UnityPetFramework
 
 			if (_motor.Walk(deltaTime, _brain.Facing, UnityPetFrameworkSettings.Scale, _safeArea, _baker.FrameSize))
 			{
-				// Ran into the edge.
 				_brain.RequestFacing(_brain.Facing == PetFacing.Left ? PetFacing.Right : PetFacing.Left);
 			}
 		}
 
-		// Horizontal travel spread across the jump animation.
 		private void StepJump(float deltaTime)
 		{
 			int frames = Mathf.Max(1, _animator.CurrentFrameCount);
@@ -276,7 +259,6 @@ namespace FynnsTools.UnityPetFramework
 			PetFacing needed = distance < 0 ? PetFacing.Left : PetFacing.Right;
 			if (_brain.Facing != needed)
 			{
-				// Turn first.
 				_brain.RequestFacing(needed);
 				return;
 			}
@@ -286,14 +268,12 @@ namespace FynnsTools.UnityPetFramework
 				_brain.TryReact(PetState.Walk);
 			}
 
-			// Blocked on the way there means the destination cannot be reached from here.
 			if (_motor.Walk(deltaTime, needed, UnityPetFrameworkSettings.Scale, _safeArea, _baker.FrameSize))
 			{
 				_destination = default;
 			}
 		}
 
-		// Keeps playing whatever the current state calls for.
 		private void SyncAnimation()
 		{
 			string wanted = _brain.ClipForCurrentState(out bool reverse);
@@ -323,7 +303,6 @@ namespace FynnsTools.UnityPetFramework
 				_jumpBlocked = false;
 			}
 
-			// One sound per animation, played as it starts.
 			PetClipDefinition clip = _definition.FindClip(wanted);
 			if (clip != null && !string.IsNullOrEmpty(clip.sound))
 			{
@@ -338,26 +317,21 @@ namespace FynnsTools.UnityPetFramework
 				return;
 			}
 
-			// Picked through the safe area rather than by adding pixels to the pet's position.
 			if (_safeArea.TryPickAwayFrom(_motor.Feet, cursor.x, _baker.FrameSize, out PetDestination away))
 			{
 				_destination = away;
 			}
 		}
 
-		// Records a prod and reports whether the pet has had enough of them.
 		private bool Prodded()
 		{
-			// Clicks stop counting once there has been a gap.
 			_annoyance = _now - _lastClick < AnnoyanceMemorySeconds ? _annoyance + 1 : 1;
 			_lastClick = _now;
 
-			// Already cross, and staying that way for a moment.
 			if (_now < _annoyedUntil) return true;
 
 			if (_annoyance < AnnoyanceClicks) return false;
 
-			// Nothing to be annoyed with.
 			if (!_definition.HasClip(_definition.ResolveBehaviour("Annoyed"))) return false;
 
 			if (_brain.TryReactBehaviour("Annoyed")) _annoyedUntil = _now + AnnoyedLockSeconds;
@@ -376,7 +350,6 @@ namespace FynnsTools.UnityPetFramework
 		{
 			if (Prodded()) return;
 
-			// The "you are covering something, go away" interaction: startle first, then walk.
 			if (_brain.TryReact(PetState.Alert))
 			{
 				_destination = default;
@@ -384,7 +357,6 @@ namespace FynnsTools.UnityPetFramework
 			}
 		}
 
-		// Petting is read from the interaction's state every tick rather than from an event.
 		private void StepPetting(float deltaTime)
 		{
 			if (!_interaction.IsPetting)

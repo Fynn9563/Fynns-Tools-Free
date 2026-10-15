@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace FynnsTools.UnityPetFramework
 {
-	// Reads a WAV file into an AudioClip.
 	internal static class WavReader
 	{
 		private const int MaxChannels = 2;
@@ -42,7 +41,6 @@ namespace FynnsTools.UnityPetFramework
 			int dataStart = -1;
 			int dataLength = 0;
 
-			// Chunks start after the 12 byte RIFF header.
 			int position = 12;
 			while (position + 8 <= bytes.Length)
 			{
@@ -50,7 +48,6 @@ namespace FynnsTools.UnityPetFramework
 				long chunkSize = BitConverter.ToUInt32(bytes, position + 4);
 				int payload = position + 8;
 
-				// The file says how big this chunk is.
 				if (chunkSize < 0 || payload + chunkSize > bytes.Length)
 				{
 					error = "That sound file is damaged: it claims more data than it contains.";
@@ -119,7 +116,6 @@ namespace FynnsTools.UnityPetFramework
 		private static bool Validate(int format, int channels, int sampleRate, int bitsPerSample,
 			int dataStart, int dataLength, out string error)
 		{
-			// 1 is integer PCM, 3 is 32 bit float PCM. Anything else is compressed.
 			if (format != 1 && format != 3)
 			{
 				error = "That WAV is compressed. Pet sounds have to be plain PCM.";
@@ -165,7 +161,6 @@ namespace FynnsTools.UnityPetFramework
 			switch (bitsPerSample)
 			{
 				case 8:
-					// Eight bit WAV is unsigned, with 128 as silence.
 					return (bytes[offset] - 128) / 128f;
 
 				case 16:

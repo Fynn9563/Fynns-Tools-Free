@@ -1,0 +1,8 @@
+{
+  "name": "FynnsTools.PackageImporter.Editor",
+  "rootNamespace": "FynnsTools.PackageImporter",
+  "includePlatforms": [
+    "Editor"
+  ],
+  "autoReferenced": true
+}

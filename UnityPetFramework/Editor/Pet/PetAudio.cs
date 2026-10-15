@@ -6,7 +6,6 @@ using UnityEngine;
 
 namespace FynnsTools.UnityPetFramework
 {
-	// Plays a pet's sounds.
 	internal static class PetAudio
 	{
 		private sealed class Entry
@@ -34,7 +33,6 @@ namespace FynnsTools.UnityPetFramework
 			}
 		}
 
-		// Loaded from bytes.
 		public static void Register(string key, byte[] wavBytes)
 		{
 			if (string.IsNullOrEmpty(key) || wavBytes == null)
@@ -68,7 +66,6 @@ namespace FynnsTools.UnityPetFramework
 			float volume = UnityPetFrameworkSettings.SoundVolume;
 			if (volume <= 0f)
 			{
-				// Nought per cent means silent.
 				return;
 			}
 
@@ -83,7 +80,7 @@ namespace FynnsTools.UnityPetFramework
 
 			try
 			{
-				// Built from the signature that was actually found, rather than assuming one.
+				// Use the discovered audio API signature.
 				object[] arguments;
 				switch (_playArgumentCount)
 				{
@@ -96,7 +93,6 @@ namespace FynnsTools.UnityPetFramework
 			}
 			catch (Exception)
 			{
-				// A signature that no longer matches.
 				_play = null;
 			}
 		}
@@ -128,7 +124,6 @@ namespace FynnsTools.UnityPetFramework
 			_clips.Clear();
 		}
 
-		// Rewrites the clip's samples at the requested level.
 		private static void ApplyVolume(Entry entry, float volume)
 		{
 			if (Mathf.Approximately(entry.AppliedVolume, volume) || entry.Samples == null)
@@ -149,7 +144,6 @@ namespace FynnsTools.UnityPetFramework
 			}
 			catch (Exception)
 			{
-				// A clip Unity will not let us write to.
 				entry.AppliedVolume = volume;
 			}
 		}
@@ -181,7 +175,6 @@ namespace FynnsTools.UnityPetFramework
 
 			const BindingFlags flags = BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
 
-			// 2020 and later call it PlayPreviewClip and take an extra loop flag.
 			_play = audioUtil.GetMethod("PlayPreviewClip", flags, null,
 				new[] { typeof(AudioClip), typeof(int), typeof(bool) }, null);
 

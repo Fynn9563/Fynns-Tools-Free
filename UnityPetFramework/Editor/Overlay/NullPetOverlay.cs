@@ -2,7 +2,6 @@ using UnityEngine;
 
 namespace FynnsTools.UnityPetFramework
 {
-	// The overlay on a platform that does not have one.
 	internal sealed class NullPetOverlay : IPetOverlay
 	{
 		private readonly string _reason;

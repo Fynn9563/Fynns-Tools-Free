@@ -7,7 +7,7 @@ namespace FynnsTools.FaceEmoPatches
 	{
 		private const string ToolsMenu = "Tools/Fynn's Tools/FaceEmo Patches/Settings";
 
-		[MenuItem(ToolsMenu, false, 20)]
+		[MenuItem(ToolsMenu, false, 33)]
 		private static void OpenSettings()
 		{
 			FaceEmoPatchesWindow.Open();

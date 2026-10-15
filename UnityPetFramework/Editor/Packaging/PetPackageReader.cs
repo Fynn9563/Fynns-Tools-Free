@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace FynnsTools.UnityPetFramework
 {
-	// Opens a .fynnpet, and refuses anything it is not completely happy with.
 	internal static class PetPackageReader
 	{
 		public static bool TryRead(string packagePath, out PetPackage package, out string error)
@@ -54,7 +53,6 @@ namespace FynnsTools.UnityPetFramework
 				return false;
 			}
 
-			// Every name is inspected before a single byte is read out of any of them.
 			foreach (ZipArchiveEntry entry in archive.Entries)
 			{
 				if (entry.FullName.EndsWith("/", StringComparison.Ordinal))
@@ -105,7 +103,6 @@ namespace FynnsTools.UnityPetFramework
 			return true;
 		}
 
-		// Reads one entry, counting the bytes as they arrive.
 		private static bool TryReadEntry(ZipArchiveEntry entry, ref long total, out byte[] bytes, out string error)
 		{
 			bytes = null;
@@ -170,7 +167,6 @@ namespace FynnsTools.UnityPetFramework
 			}
 		}
 
-		// Everything that has to be true before the pet is usable.
 		private static bool Finish(PetPackage package, out string error)
 		{
 			if (package.Definition == null)
@@ -195,7 +191,6 @@ namespace FynnsTools.UnityPetFramework
 				return false;
 			}
 
-			// The same validator the bundled pet goes through.
 			if (!PetDefinitionValidator.Validate(
 					package.Definition,
 					package.Atlas.Sheet.width,

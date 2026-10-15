@@ -6,7 +6,7 @@ namespace FynnsTools.UnityPetFramework
 	{
 		private const string ToolsMenu = "Tools/Fynn's Tools/Unity Pet Framework";
 
-		[MenuItem(ToolsMenu, false, 20)]
+		[MenuItem(ToolsMenu, false, 99)]
 		private static void OpenWindow()
 		{
 			UnityPetFrameworkWindow.Open();

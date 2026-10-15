@@ -6,7 +6,6 @@ using UnityEngine;
 
 namespace FynnsTools.UnityPetFramework
 {
-	// Smart Slice: the review and correction stage.
 	internal sealed partial class PetCreatorPage
 	{
 		private const float MinCanvasWidth = 330f;
@@ -25,7 +24,6 @@ namespace FynnsTools.UnityPetFramework
 		private Vector2 _smartScroll;
 		private int _sliceRow;
 
-		// The generated sheet, kept until the model changes.
 		private PetSheetGenerator.Result _generated;
 		private Texture2D _generatedTexture;
 		private string _generateError;
@@ -82,7 +80,6 @@ namespace FynnsTools.UnityPetFramework
 			SliceChanged();
 		}
 
-		// Only the corrections are stored.
 		private void SaveSliceState()
 		{
 			if (_slice == null)
@@ -94,7 +91,6 @@ namespace FynnsTools.UnityPetFramework
 			SessionState.SetString(SliceStateKey, JsonUtility.ToJson(PetSliceSnapshot.Capture(_slice)));
 			SessionState.SetInt(SliceStateKey + ".Alpha", _alphaThreshold);
 		}
-		// Rebuilds the review state after an assembly reload.
 		private bool EnsureSliceModel()
 		{
 			if (_slice != null) return true;
@@ -111,7 +107,6 @@ namespace FynnsTools.UnityPetFramework
 				int alpha = SessionState.GetInt(SliceStateKey + ".Alpha", _alphaThreshold);
 				PetSliceModel model = PetSmartSlicer.Scan(_atlas.Pixels, _atlas.Sheet.width, _atlas.Sheet.height, (byte)alpha);
 
-				// The scan has to produce the same components it did before.
 				if (model.components.Count != snapshot.flags.Count)
 				{
 					SessionState.EraseString(SliceStateKey);
@@ -181,7 +176,6 @@ namespace FynnsTools.UnityPetFramework
 			}
 		}
 
-		// What detection found, and the one button that commits it.
 		private void DrawSliceOutcome()
 		{
 			if (!EnsureSliceModel()) return;
@@ -213,7 +207,6 @@ namespace FynnsTools.UnityPetFramework
 
 			try
 			{
-				// Regions the user drew survive a re-detect.
 				List<PetSliceIgnoreRegion> regions = _slice?.ignoreRegions;
 
 				_slice = PetSmartSlicer.Detect(
@@ -253,7 +246,6 @@ namespace FynnsTools.UnityPetFramework
 			_generatedTexture.SetPixels32(_generated.Pixels);
 			_generatedTexture.Apply(false, false);
 		}
-		// Writes the generated sheet to the draft folder.
 		private void AcceptSlice()
 		{
 			if (_slice == null || _atlas == null) return;
@@ -271,7 +263,6 @@ namespace FynnsTools.UnityPetFramework
 				string folder = WorkingFolder;
 				Directory.CreateDirectory(folder);
 
-				// A fresh name each time.
 				path = Path.Combine(folder, "sliced-" + Guid.NewGuid().ToString("N").Substring(0, 8) + ".png");
 				File.WriteAllBytes(path, PetSheetGenerator.EncodePng(_generated));
 			}
@@ -281,7 +272,6 @@ namespace FynnsTools.UnityPetFramework
 				return;
 			}
 
-			// Cell numbers come from the new sheet.
 			_definition.clips.Clear();
 			_definition.icon = null;
 			_definition.behaviours.Clear();
@@ -351,7 +341,6 @@ namespace FynnsTools.UnityPetFramework
 			}
 		}
 
-		// Left: the source with rows, sprites, effects and frames marked on it.
 		private void DrawSourceReview(float width)
 		{
 			GUILayoutOption[] options = width > 0f ? new[] { GUILayout.Width(width) } : new GUILayoutOption[0];
@@ -381,7 +370,6 @@ namespace FynnsTools.UnityPetFramework
 					EditorStyles.miniLabel);
 			}
 		}
-		// Right: the sheet this would generate, and everything that can be corrected before it is.
 		private void DrawCorrections()
 		{
 			using (EditorGUILayout.ScrollViewScope scroll = new EditorGUILayout.ScrollViewScope(
@@ -441,7 +429,6 @@ namespace FynnsTools.UnityPetFramework
 				EditorStyles.miniLabel);
 		}
 
-		// Which frames the current selection sits in.
 		private bool SelectedFrames(out int row, out List<int> frames)
 		{
 			row = -1;
@@ -474,7 +461,6 @@ namespace FynnsTools.UnityPetFramework
 
 			bool any = _sliceCanvas.Selection.Count > 0;
 
-			// A correction that spans rows has no single answer for which row the result belongs to.
 			bool sameRow = SelectedFrames(out int selectedRow, out List<int> selectedFrames);
 			if (!sameRow)
 			{
@@ -530,7 +516,6 @@ namespace FynnsTools.UnityPetFramework
 			{
 				using (new EditorGUI.DisabledScope(!any))
 				{
-					// The commonest correction by far.
 					if (GUILayout.Button(new GUIContent("Move Left", "Moves the selected pieces to the previous frame in the row.")))
 						Correct(() => NudgeSelection(-1));
 
@@ -559,7 +544,6 @@ namespace FynnsTools.UnityPetFramework
 			}
 		}
 
-		// The metadata the spec asks be kept for each generated frame.
 		private void DrawFrameDetail(int row, List<int> frames)
 		{
 			if (row < 0 || frames.Count != 1 || _generated == null) return;

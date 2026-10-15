@@ -1,0 +1,8 @@
+{
+  "name": "FynnsTools.ResetHumanoidTPose.Editor",
+  "includePlatforms": [
+    "Editor"
+  ],
+  "autoReferenced": true,
+  "references": []
+}

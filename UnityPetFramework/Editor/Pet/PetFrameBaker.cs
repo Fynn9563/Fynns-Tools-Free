@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace FynnsTools.UnityPetFramework
 {
-	// Turns a pet's frames into the exact bytes the overlay hands to Windows.
 	internal sealed class PetFrameBaker
 	{
 		private readonly Dictionary<long, byte[]> _cache = new Dictionary<long, byte[]>();
@@ -14,10 +13,8 @@ namespace FynnsTools.UnityPetFramework
 		private float _scale = 1f;
 		private bool _artFacesRight = true;
 
-		// The size every baked frame comes out at, and therefore the size of the overlay window.
 		public Vector2Int FrameSize { get; private set; }
 
-		// Where the pet's feet are within a baked frame, measured from its top.
 		public int GroundOffset { get; private set; }
 
 		public bool IsReady => _atlas != null && FrameSize.x > 0 && FrameSize.y > 0;
@@ -49,7 +46,7 @@ namespace FynnsTools.UnityPetFramework
 			GroundOffset = definition.HasRectangles ? Mathf.RoundToInt(-_trim.y * _scale) : FrameSize.y;
 		}
 
-		// Bottom-up premultiplied BGRA, FrameSize worth of it.
+		// Frame pixels are premultiplied BGRA, bottom-up.
 		public byte[] Bake(PetFrameRef frame, PetClipDefinition clip, PetFacing facing)
 		{
 			if (!IsReady || frame.cell < 0 || !_atlas.IsValidCell(frame.cell))
@@ -84,7 +81,7 @@ namespace FynnsTools.UnityPetFramework
 
 			for (int y = 0; y < height; y++)
 			{
-				// The DIB is bottom-up and the trim rect is top-down.
+				// DIB pixels are bottom-up; trim rectangles are top-down.
 				int sourceY = _trim.y + Mathf.Min(_trim.height - 1, (int)((height - 1 - y) / _scale));
 				int rowStart = y * width * 4;
 
@@ -92,13 +89,11 @@ namespace FynnsTools.UnityPetFramework
 				{
 					int localX = Mathf.Min(_trim.width - 1, (int)(x / _scale));
 
-					// Mirroring is a read backwards across the trimmed area.
 					int sourceX = _trim.x + (mirrored ? _trim.width - 1 - localX : localX);
 
 					Color32 source = _atlas.GetPixel(cell, sourceX, sourceY);
 					int offset = rowStart + x * 4;
 
-					// Premultiply, then write in BGRA order.
 					int alpha = source.a;
 					pixels[offset + 0] = (byte)(source.b * alpha / 255);
 					pixels[offset + 1] = (byte)(source.g * alpha / 255);

@@ -4,14 +4,12 @@ using UnityEngine;
 
 namespace FynnsTools.UnityPetFramework
 {
-	// A pet as it arrives in a .fynnpet, before anything has been written to disk.
 	internal sealed class PetPackage : IDisposable
 	{
 		public PetDefinition Definition;
 		public byte[] AtlasPng;
 		public byte[] ThumbnailPng;
 
-		// Keyed by the path inside the package, e.g.
 		public readonly Dictionary<string, byte[]> Sounds = new Dictionary<string, byte[]>();
 
 		public PetAtlas Atlas;
@@ -31,12 +29,10 @@ namespace FynnsTools.UnityPetFramework
 		public const string ThumbnailEntry = "thumbnail.png";
 		public const string SoundsFolder = "sounds/";
 
-		// Generous for a pet.
 		public const int MaxEntries = 64;
 		public const long MaxEntryBytes = 16L * 1024 * 1024;
 		public const long MaxTotalBytes = 64L * 1024 * 1024;
 
-		// Nothing else may be in a package.
 		public static bool IsAllowedExtension(string entryName)
 		{
 			string lower = entryName.ToLowerInvariant();
@@ -45,7 +41,6 @@ namespace FynnsTools.UnityPetFramework
 				|| lower.EndsWith(".wav", StringComparison.Ordinal);
 		}
 
-		// Checked on the name the archive carries, never on a path built from it.
 		public static bool IsSafeEntryName(string entryName)
 		{
 			if (string.IsNullOrEmpty(entryName) || entryName.Length > 200)

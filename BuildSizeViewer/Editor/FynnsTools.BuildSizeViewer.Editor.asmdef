@@ -1,0 +1,7 @@
+{
+  "name": "FynnsTools.BuildSizeViewer.Editor",
+  "rootNamespace": "FynnsTools.BuildSizes",
+  "references": [],
+  "includePlatforms": ["Editor"],
+  "autoReferenced": true
+}

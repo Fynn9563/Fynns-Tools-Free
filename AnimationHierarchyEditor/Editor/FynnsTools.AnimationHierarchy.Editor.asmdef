@@ -1,0 +1,6 @@
+{
+  "name": "FynnsTools.AnimationHierarchy.Editor",
+  "rootNamespace": "FynnsTools.AnimationHierarchy",
+  "includePlatforms": ["Editor"],
+  "autoReferenced": true
+}

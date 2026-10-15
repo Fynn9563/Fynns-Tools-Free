@@ -13,7 +13,6 @@ using UnityEngine;
 
 namespace FynnsTools.GoGoLocoPoseChanger
 {
-	// State class to persist enabled flag across build phases
 	internal class GoGoLocoPoseChangerState
 	{
 		public bool Enabled;
@@ -47,7 +46,6 @@ namespace FynnsTools.GoGoLocoPoseChanger
 					GoGoLocoPoseChangerComponent componentInChildren = ctx.AvatarRootObject.GetComponentInChildren<GoGoLocoPoseChangerComponent>();
 					if (componentInChildren != null)
 					{
-						// Check for GoGoLoco in Assets or Packages
 						bool gogoLocoFound = AssetDatabase.IsValidFolder("Assets/GoGo") ||
 							AssetDatabase.IsValidFolder("Packages/gogoloco");
 
@@ -249,7 +247,6 @@ namespace FynnsTools.GoGoLocoPoseChanger
 
 		private void TraverseBlendTree(AnimatorStateMachine stateMachine, BlendTree blendTree, Dictionary<string, Motion> replacements)
 		{
-			// Check for exact match or suffix match (for VRCFury/NDMF copied assets with "Copied from X/" prefix)
 			Motion value = null;
 			string matchedKey = null;
 			if (replacements.TryGetValue(blendTree.name, out value))

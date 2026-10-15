@@ -6,17 +6,15 @@ using UnityEngine;
 
 namespace FynnsTools.UnityPetFramework
 {
-	// Unity's own window.
 	internal sealed class EditorHostWindow : IPetHost
 	{
-		// Unity's main window class on Windows.
 		private const string UnityContainerClass = "UnityContainerWndClass";
 
 		private IntPtr _owner;
 		private RectInt _bounds;
 		private bool _boundsChanged;
 
-		// Points to pixels, fitted from the main window rather than assumed.
+		// Derive pixel scaling from the actual editor window.
 		private float _scaleX = 1f;
 		private float _scaleY = 1f;
 		private Rect _mainWindowPoints;
@@ -51,7 +49,6 @@ namespace FynnsTools.UnityPetFramework
 				return;
 			}
 
-			// GA_ROOTOWNER walks up to the window that owns the foreground one.
 			IntPtr foregroundRoot = Win32.GetAncestor(Win32.GetForegroundWindow(), Win32.GA_ROOTOWNER);
 			ShouldShowPet = foregroundRoot == _owner;
 
@@ -70,7 +67,6 @@ namespace FynnsTools.UnityPetFramework
 			}
 		}
 
-		// Re-asserts the pet above any Unity window created since the last check.
 		public void RaiseAbove(IntPtr petWindow)
 		{
 			if (petWindow == IntPtr.Zero || !IsReady)
@@ -96,7 +92,6 @@ namespace FynnsTools.UnityPetFramework
 			return new RectInt(min.x, min.y, Mathf.Max(0, max.x - min.x), Mathf.Max(0, max.y - min.y));
 		}
 
-		// Fits points to pixels from the one rectangle known in both.
 		private void Recalibrate()
 		{
 			_mainWindowPoints = EditorGUIUtility.GetMainWindowPosition();
@@ -112,7 +107,6 @@ namespace FynnsTools.UnityPetFramework
 			_scaleY = 1f;
 		}
 
-		// The frame bounds rather than GetWindowRect.
 		private static RectInt ReadBounds(IntPtr window)
 		{
 			if (Win32.DwmGetWindowAttribute(window, Win32.DWMWA_EXTENDED_FRAME_BOUNDS,
@@ -127,7 +121,6 @@ namespace FynnsTools.UnityPetFramework
 			return new RectInt(frame.left, frame.top, frame.right - frame.left, frame.bottom - frame.top);
 		}
 
-		// FindWindowEx rather than EnumWindows.
 		private static IntPtr Resolve()
 		{
 			uint ourProcess = (uint)Process.GetCurrentProcess().Id;
@@ -172,7 +165,6 @@ namespace FynnsTools.UnityPetFramework
 					continue;
 				}
 
-				// Largest wins.
 				RectInt bounds = ReadBounds(found);
 				int area = bounds.width * bounds.height;
 				if (area > bestArea)

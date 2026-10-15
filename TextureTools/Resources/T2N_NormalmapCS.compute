@@ -1,0 +1,465 @@
+#pragma kernel CSMain
+
+RWTexture2D<float4> Result;
+
+Texture2D<float>    HeightTex;
+SamplerState        samplerState;
+
+uint width;
+uint height;
+int   conversionAlgorithm;
+float heightScale;
+bool  invertX;
+bool  invertY;
+
+float sobelInnerWeight;
+float sobelOuterWeight;
+float prewittWeight;
+float scharrLowWeight;
+float scharrHighWeight;
+float laplacianCenterWeight;
+float laplacianNeighborWeight;
+float robertsScale;
+float kirschScale;
+float freiChenScale;
+
+float multiScaleWeight1;
+float multiScaleWeight2;
+float contrastEnhancementFactor;
+float cannyLowThreshold;
+float cannyHighThreshold;
+float bilateralSigmaSpatial;
+float bilateralSigmaRange;
+float nlmH;
+
+static const float kirschKernels[8][9] = {
+    {  5,  5,  5,  -3,  0, -3,  -3, -3, -3 },
+    {  5,  5, -3,   5,  0, -3,  -3, -3, -3 },
+    {  5, -3, -3,   5,  0, -3,   5, -3, -3 },
+    { -3, -3, -3,   5,  0, -3,   5,  5, -3 },
+    { -3, -3, -3,  -3,  0, -3,   5,  5,  5 },
+    { -3, -3, -3,  -3,  0,  5,  -3,  5,  5 },
+    { -3, -3,  5,  -3,  0,  5,  -3, -3,  5 },
+    { -3,  5,  5,  -3,  0,  5,  -3, -3, -3 }
+};
+static const float2 kirschDirs[8] = {
+    float2( 0, 1),
+    float2(-0.70710678,  0.70710678),
+    float2(-1, 0),
+    float2(-0.70710678, -0.70710678),
+    float2( 0, -1),
+    float2( 0.70710678, -0.70710678),
+    float2( 1, 0),
+    float2( 0.70710678,  0.70710678)
+};
+
+float getH(int x, int y)
+{
+    x = clamp(x, 0, width  - 1);
+    y = clamp(y, 0, height - 1);
+    return HeightTex.Load(int3(x, y, 0), 0);
+}
+
+float getGradientMagnitude(int x, int y)
+{
+    float s_lu = getH(x - 1, y + 1);
+    float s_l  = getH(x - 1, y);
+    float s_ld = getH(x - 1, y - 1);
+    float s_ru = getH(x + 1, y + 1);
+    float s_r  = getH(x + 1, y);
+    float s_rd = getH(x + 1, y - 1);
+    float gx = (-s_lu - 2.0 * s_l - s_ld + s_ru + 2.0 * s_r + s_rd);
+    float gy = (-getH(x, y - 1)*2.0 - s_ld - s_rd + getH(x, y + 1)*2.0 + s_lu + s_ru);
+    return sqrt(gx * gx + gy * gy);
+}
+
+float linearInterpolate(float a, float b, float t)
+{
+    return a + t * (b - a);
+}
+
+float bilateralFilter(int x, int y, int radius, float sigmaSpatial, float sigmaRange)
+{
+    float centerVal = getH(x, y);
+    float sum = 0.0;
+    float normFactor = 0.0;
+    for (int j = -radius; j <= radius; j++)
+    {
+        for (int i = -radius; i <= radius; i++)
+        {
+            float neighbor = getH(x + i, y + j);
+            float spatialDist2 = float(i * i + j * j);
+            float spatialWeight = exp(-spatialDist2 / (2.0 * sigmaSpatial * sigmaSpatial));
+            float rangeWeight = exp(-((neighbor - centerVal) * (neighbor - centerVal)) / (2.0 * sigmaRange * sigmaRange));
+            float weight = spatialWeight * rangeWeight;
+            sum += neighbor * weight;
+            normFactor += weight;
+        }
+    }
+    return sum / normFactor;
+}
+
+float nonLocalMeansFilter(int x, int y, int patchRadius, int searchWindow, float h)
+{
+    float weightedSum = 0.0;
+    float sumWeights = 0.0;
+    for (int dj = -searchWindow; dj <= searchWindow; dj++)
+    {
+        for (int di = -searchWindow; di <= searchWindow; di++)
+        {
+            float patchDiff = 0.0;
+            for (int pj = -patchRadius; pj <= patchRadius; pj++)
+            {
+                for (int pi = -patchRadius; pi <= patchRadius; pi++)
+                {
+                    float centerVal = getH(x + pi, y + pj);
+                    float neighborVal = getH(x + di + pi, y + dj + pj);
+                    float diff = centerVal - neighborVal;
+                    patchDiff += diff * diff;
+                }
+            }
+            float weight = exp(-patchDiff / (h * h));
+            float candidate = getH(x + di, y + dj);
+            weightedSum += candidate * weight;
+            sumWeights += weight;
+        }
+    }
+    return weightedSum / sumWeights;
+}
+
+[numthreads(8,8,1)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+    if (id.x >= width || id.y >= height) return;
+    int2 coord = id.xy;
+
+    float dx = 0;
+    float dy = 0;
+
+    if (conversionAlgorithm == 0)
+    {
+        float l = getH(coord.x - 1, coord.y);
+        float r = getH(coord.x + 1, coord.y);
+        float t = getH(coord.x, coord.y + 1);
+        float b = getH(coord.x, coord.y - 1);
+        dx = (r - l) * heightScale;
+        dy = (t - b) * heightScale;
+    }
+    else if (conversionAlgorithm == 1)
+    {
+        dx = (
+            -getH(coord.x - 1, coord.y + 1)
+            - sobelInnerWeight * getH(coord.x - 1, coord.y)
+            - getH(coord.x - 1, coord.y - 1)
+            + getH(coord.x + 1, coord.y + 1)
+            + sobelInnerWeight * getH(coord.x + 1, coord.y)
+            + getH(coord.x + 1, coord.y - 1)
+        ) * heightScale;
+        dy = (
+            -getH(coord.x - 1, coord.y - 1)
+            - sobelInnerWeight * getH(coord.x, coord.y - 1)
+            - getH(coord.x + 1, coord.y - 1)
+            + getH(coord.x - 1, coord.y + 1)
+            + sobelInnerWeight * getH(coord.x, coord.y + 1)
+            + getH(coord.x + 1, coord.y + 1)
+        ) * heightScale;
+    }
+    else if (conversionAlgorithm == 2)
+    {
+        dx = (
+            -getH(coord.x - 1, coord.y + 1)
+            - prewittWeight * getH(coord.x - 1, coord.y)
+            - getH(coord.x - 1, coord.y - 1)
+            + getH(coord.x + 1, coord.y + 1)
+            + prewittWeight * getH(coord.x + 1, coord.y)
+            + getH(coord.x + 1, coord.y - 1)
+        ) * heightScale;
+        dy = (
+            -getH(coord.x - 1, coord.y - 1)
+            - prewittWeight * getH(coord.x, coord.y - 1)
+            - getH(coord.x + 1, coord.y - 1)
+            + getH(coord.x - 1, coord.y + 1)
+            + prewittWeight * getH(coord.x, coord.y + 1)
+            + getH(coord.x + 1, coord.y + 1)
+        ) * heightScale;
+    }
+    else if (conversionAlgorithm == 3)
+    {
+        float lu = getH(coord.x - 1, coord.y + 1);
+        float l  = getH(coord.x - 1, coord.y);
+        float ld = getH(coord.x - 1, coord.y - 1);
+        float ru = getH(coord.x + 1, coord.y + 1);
+        float r  = getH(coord.x + 1, coord.y);
+        float rd = getH(coord.x + 1, coord.y - 1);
+        dx = ((lu * scharrLowWeight) + (l * scharrHighWeight) + (ld * scharrLowWeight)
+             - (ru * scharrLowWeight) - (r * scharrHighWeight) - (rd * scharrLowWeight)) * heightScale;
+        float u = getH(coord.x, coord.y + 1);
+        float d = getH(coord.x, coord.y - 1);
+        dy = ((lu * scharrLowWeight) + (u * scharrHighWeight) + (ru * scharrLowWeight)
+             - (ld * scharrLowWeight) - (d * scharrHighWeight) - (rd * scharrLowWeight)) * heightScale;
+    }
+    else if (conversionAlgorithm == 4)
+    {
+        float ll = getH(coord.x - 2, coord.y);
+        float rr = getH(coord.x + 2, coord.y);
+        float tt = getH(coord.x, coord.y + 2);
+        float bb = getH(coord.x, coord.y - 2);
+        float l  = getH(coord.x - 1, coord.y);
+        float r  = getH(coord.x + 1, coord.y);
+        float t  = getH(coord.x, coord.y + 1);
+        float b  = getH(coord.x, coord.y - 1);
+        float L_left   = -laplacianCenterWeight * l   + laplacianNeighborWeight * (ll + getH(coord.x, coord.y) + getH(coord.x - 1, coord.y - 1) + getH(coord.x - 1, coord.y + 1));
+        float L_right  = -laplacianCenterWeight * r   + laplacianNeighborWeight * (getH(coord.x, coord.y) + rr + getH(coord.x + 1, coord.y - 1) + getH(coord.x + 1, coord.y + 1));
+        float L_top    = -laplacianCenterWeight * t   + laplacianNeighborWeight * (getH(coord.x - 1, coord.y + 1) + getH(coord.x + 1, coord.y + 1) + tt + getH(coord.x, coord.y));
+        float L_bottom = -laplacianCenterWeight * b   + laplacianNeighborWeight * (getH(coord.x - 1, coord.y - 1) + getH(coord.x + 1, coord.y - 1) + bb + getH(coord.x, coord.y));
+        dx = (L_right - L_left) * heightScale;
+        dy = (L_top   - L_bottom) * heightScale;
+    }
+    else if (conversionAlgorithm == 5)
+    {
+        float h00 = getH(coord.x,     coord.y);
+        float h11 = getH(coord.x + 1, coord.y + 1);
+        float h10 = getH(coord.x + 1, coord.y);
+        float h01 = getH(coord.x,     coord.y + 1);
+        dx = (h00 - h11) * heightScale * robertsScale;
+        dy = (h10 - h01) * heightScale * robertsScale;
+    }
+    else if (conversionAlgorithm == 6)
+    {
+        float maxR = 0;
+        int   best = 0;
+        for (int k = 0; k < 8; k++)
+        {
+            float resp = 0;
+            int   idx  = 0;
+            for (int oy = -1; oy <= 1; oy++)
+            for (int ox = -1; ox <= 1; ox++)
+                resp += kirschKernels[k][idx++] * getH(coord.x + ox, coord.y + oy);
+
+            if (abs(resp) > abs(maxR))
+            {
+                maxR = resp;
+                best = k;
+            }
+        }
+        dx = kirschDirs[best].x * maxR * heightScale * kirschScale;
+        dy = kirschDirs[best].y * maxR * heightScale * kirschScale;
+    }
+    else if (conversionAlgorithm == 7)
+    {
+        float sqrt2 = 1.41421356;
+        float lu = getH(coord.x - 1, coord.y + 1);
+        float l  = getH(coord.x - 1, coord.y);
+        float ld = getH(coord.x - 1, coord.y - 1);
+        float ru = getH(coord.x + 1, coord.y + 1);
+        float r  = getH(coord.x + 1, coord.y);
+        float rd = getH(coord.x + 1, coord.y - 1);
+        float denom = 2 + sqrt2;
+        dx = (
+            -lu
+            - sqrt2 * l
+            - ld
+            + ru
+            + sqrt2 * r
+            + rd
+        ) * heightScale / denom * freiChenScale;
+        float u = getH(coord.x, coord.y + 1);
+        float d = getH(coord.x, coord.y - 1);
+        dy = (
+            -getH(coord.x - 1, coord.y - 1)
+            - sqrt2 * getH(coord.x, coord.y - 1)
+            - getH(coord.x + 1, coord.y - 1)
+            + getH(coord.x - 1, coord.y + 1)
+            + sqrt2 * getH(coord.x, coord.y + 1)
+            + getH(coord.x + 1, coord.y + 1)
+        ) * heightScale / denom * freiChenScale;
+    }
+    else if (conversionAlgorithm == 8)
+    {
+        float s_lu = getH(coord.x - 1, coord.y + 1);
+        float s_l  = getH(coord.x - 1, coord.y);
+        float s_ld = getH(coord.x - 1, coord.y - 1);
+        float s_ru = getH(coord.x + 1, coord.y + 1);
+        float s_r  = getH(coord.x + 1, coord.y);
+        float s_rd = getH(coord.x + 1, coord.y - 1);
+
+        float dx1 = (-s_lu - 2.0 * s_l - s_ld + s_ru + 2.0 * s_r + s_rd);
+        float dy1 = (-getH(coord.x, coord.y - 1) * 2.0 - s_ld - s_rd + getH(coord.x, coord.y + 1) * 2.0 + s_lu + s_ru);
+
+        float l_lu = getH(coord.x - 2, coord.y + 2);
+        float l_l  = getH(coord.x - 2, coord.y);
+        float l_ld = getH(coord.x - 2, coord.y - 2);
+        float l_ru = getH(coord.x + 2, coord.y + 2);
+        float l_r  = getH(coord.x + 2, coord.y);
+        float l_rd = getH(coord.x + 2, coord.y - 2);
+
+        float dx2 = (-l_lu - 2.0 * l_l - l_ld + l_ru + 2.0 * l_r + l_rd);
+        float dy2 = (-getH(coord.x, coord.y - 2) * 2.0 - l_ld - l_rd + getH(coord.x, coord.y + 2) * 2.0 + l_lu + l_ru);
+
+        dx = (multiScaleWeight1 * dx1 + multiScaleWeight2 * dx2) * heightScale;
+        dy = (multiScaleWeight1 * dy1 + multiScaleWeight2 * dy2) * heightScale;
+    }
+    else if (conversionAlgorithm == 9)
+    {
+        float sum = 0.0;
+        int count = 0;
+        for (int oy = -1; oy <= 1; oy++)
+        {
+            for (int ox = -1; ox <= 1; ox++)
+            {
+                sum += getH(coord.x + ox, coord.y + oy);
+                count++;
+            }
+        }
+        float localAvg = sum / count;
+        float contrast = (getH(coord.x, coord.y) - localAvg) * contrastEnhancementFactor;
+
+        float l = getH(coord.x - 1, coord.y);
+        float r = getH(coord.x + 1, coord.y);
+        float t = getH(coord.x, coord.y + 1);
+        float b = getH(coord.x, coord.y - 1);
+        dx = (r - l + contrast) * heightScale;
+        dy = (t - b + contrast) * heightScale;
+    }
+    else if (conversionAlgorithm == 10)
+    {
+        float s_lu = getH(coord.x - 1, coord.y + 1);
+        float s_l  = getH(coord.x - 1, coord.y);
+        float s_ld = getH(coord.x - 1, coord.y - 1);
+        float s_ru = getH(coord.x + 1, coord.y + 1);
+        float s_r  = getH(coord.x + 1, coord.y);
+        float s_rd = getH(coord.x + 1, coord.y - 1);
+        float gx = (-s_lu - 2.0 * s_l - s_ld + s_ru + 2.0 * s_r + s_rd);
+        float gy = (-getH(coord.x, coord.y - 1)*2.0 - s_ld - s_rd + getH(coord.x, coord.y + 1)*2.0 + s_lu + s_ru);
+        float gradMag = sqrt(gx * gx + gy * gy);
+        float theta = atan2(gy, gx);
+        float dx_offset = cos(theta);
+        float dy_offset = sin(theta);
+        float gradPos = linearInterpolate(getGradientMagnitude(coord.x + int(floor(dx_offset)), coord.y + int(floor(dy_offset))),
+                                          getGradientMagnitude(coord.x + int(ceil(dx_offset)), coord.y + int(ceil(dy_offset))),
+                                          abs(frac(dx_offset)));
+        float gradNeg = linearInterpolate(getGradientMagnitude(coord.x - int(floor(dx_offset)), coord.y - int(floor(dy_offset))),
+                                          getGradientMagnitude(coord.x - int(ceil(dx_offset)), coord.y - int(ceil(dy_offset))),
+                                          abs(frac(dx_offset)));
+        if (gradMag < gradPos || gradMag < gradNeg)
+            gradMag = 0.0;
+
+        if (gradMag >= cannyLowThreshold && gradMag < cannyHighThreshold)
+        {
+            bool adjacentStrong = false;
+            for (int j = -1; j <= 1; j++)
+            {
+                for (int i = -1; i <= 1; i++)
+                {
+                    if (getGradientMagnitude(coord.x + i, coord.y + j) > cannyHighThreshold)
+                        adjacentStrong = true;
+                }
+            }
+            if (!adjacentStrong)
+                gradMag = 0.0;
+            else
+                gradMag = 1.0;
+        }
+        else if (gradMag >= cannyHighThreshold)
+            gradMag = 1.0;
+        else
+            gradMag = 0.0;
+
+        dx = gx * gradMag * heightScale;
+        dy = gy * gradMag * heightScale;
+    }
+    else if (conversionAlgorithm == 11)
+    {
+        int radius = 5;
+        float centerVal = getH(coord.x, coord.y);
+        float sum = 0.0;
+        float normFactor = 0.0;
+        for (int j = -radius; j <= radius; j++)
+        {
+            for (int i = -radius; i <= radius; i++)
+            {
+                float neighbor = getH(coord.x + i, coord.y + j);
+                float spatialDist2 = float(i * i + j * j);
+                float spatialWeight = exp(-spatialDist2 / (2.0 * bilateralSigmaSpatial * bilateralSigmaSpatial));
+                float rangeWeight = exp(-((neighbor - centerVal) * (neighbor - centerVal)) / (2.0 * bilateralSigmaRange * bilateralSigmaRange));
+                float weight = spatialWeight * rangeWeight;
+                sum += neighbor * weight;
+                normFactor += weight;
+            }
+        }
+        float filteredVal = sum / normFactor;
+        float sumL = 0.0, normL = 0.0;
+        for (int j = -radius; j <= radius; j++)
+        {
+            for (int i = -radius; i <= radius; i++)
+            {
+                float neighbor = getH(coord.x - 1 + i, coord.y + j);
+                float spatialDist2 = float(i * i + j * j);
+                float spatialWeight = exp(-spatialDist2 / (2.0 * bilateralSigmaSpatial * bilateralSigmaSpatial));
+                float rangeWeight = exp(-((neighbor - getH(coord.x - 1, coord.y)) * (neighbor - getH(coord.x - 1, coord.y))) / (2.0 * bilateralSigmaRange * bilateralSigmaRange));
+                float weight = spatialWeight * rangeWeight;
+                sumL += neighbor * weight;
+                normL += weight;
+            }
+        }
+        float filteredLeft = sumL / normL;
+
+        float sumB = 0.0, normB = 0.0;
+        for (int j = -radius; j <= radius; j++)
+        {
+            for (int i = -radius; i <= radius; i++)
+            {
+                float neighbor = getH(coord.x + i, coord.y - 1 + j);
+                float spatialDist2 = float(i * i + j * j);
+                float spatialWeight = exp(-spatialDist2 / (2.0 * bilateralSigmaSpatial * bilateralSigmaSpatial));
+                float rangeWeight = exp(-((neighbor - getH(coord.x, coord.y - 1)) * (neighbor - getH(coord.x, coord.y - 1))) / (2.0 * bilateralSigmaRange * bilateralSigmaRange));
+                float weight = spatialWeight * rangeWeight;
+                sumB += neighbor * weight;
+                normB += weight;
+            }
+        }
+        float filteredBottom = sumB / normB;
+
+        dx = (filteredVal - filteredLeft) * heightScale;
+        dy = (filteredVal - filteredBottom) * heightScale;
+    }
+    else if (conversionAlgorithm == 12)
+    {
+        int patchRadius = 1;
+        int searchWindow = 3;
+        float weightedSum = 0.0;
+        float sumWeights = 0.0;
+        for (int dj = -searchWindow; dj <= searchWindow; dj++)
+        {
+            for (int di = -searchWindow; di <= searchWindow; di++)
+            {
+                float patchDiff = 0.0;
+                for (int pj = -patchRadius; pj <= patchRadius; pj++)
+                {
+                    for (int pi = -patchRadius; pi <= patchRadius; pi++)
+                    {
+                        float centerVal = getH(coord.x + pi, coord.y + pj);
+                        float neighborVal = getH(coord.x + di + pi, coord.y + dj + pj);
+                        float diff = centerVal - neighborVal;
+                        patchDiff += diff * diff;
+                    }
+                }
+                float weight = exp(-patchDiff / (nlmH * nlmH));
+                float candidate = getH(coord.x + di, coord.y + dj);
+                weightedSum += candidate * weight;
+                sumWeights += weight;
+            }
+        }
+
+        float nlmResult = weightedSum / sumWeights;
+
+        dx = (nlmResult - getH(coord.x - 1, coord.y)) * heightScale;
+        dy = (nlmResult - getH(coord.x, coord.y - 1)) * heightScale;
+    }
+
+    if (invertX) dx = -dx;
+    if (invertY) dy = -dy;
+
+    float3 n = normalize(float3(-dx, -dy, 1));
+    Result[coord] = float4(n * 0.5 + 0.5, 1);
+}

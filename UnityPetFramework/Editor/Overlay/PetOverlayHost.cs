@@ -5,14 +5,11 @@ using UnityEngine;
 
 namespace FynnsTools.UnityPetFramework
 {
-	// Owns the pet's whole life.
 	[InitializeOnLoad]
 	internal static class PetOverlayHost
 	{
-		// Live state, so it survives a reload but is forgotten when the editor closes.
 		private const string SessionFeetKey = "FynnsTools.UnityPetFramework.Session.Feet";
 
-		// The main window may not exist yet during InitializeOnLoad.
 		private const int MaxStartupAttempts = 60;
 
 		private const float MaxDeltaSeconds = 0.25f;
@@ -27,12 +24,10 @@ namespace FynnsTools.UnityPetFramework
 		private static bool _running;
 		private static string _lastError;
 
-		// Set only while a reset is in progress.
 		private static bool _suppressPersist;
 
 		static PetOverlayHost()
 		{
-			// Anything left by a previous domain that failed to tear down.
 			int swept = PetOverlayFactory.SweepOrphans();
 			if (swept > 0)
 			{
@@ -43,13 +38,11 @@ namespace FynnsTools.UnityPetFramework
 			AssemblyReloadEvents.beforeAssemblyReload += Shutdown;
 			EditorApplication.quitting += Shutdown;
 
-			// Never create the window in the static constructor.
 			EditorApplication.delayCall += StartIfEnabled;
 		}
 
 		public static bool IsRunning => _running;
 
-		// Why the pet is not on screen, in words for the settings page.
 		public static string StatusMessage
 		{
 			get
@@ -84,7 +77,6 @@ namespace FynnsTools.UnityPetFramework
 			}
 		}
 
-		// Rebuilds everything from the current settings.
 		public static void Restart()
 		{
 			if (!UnityPetFrameworkSettings.Enabled)
@@ -96,7 +88,6 @@ namespace FynnsTools.UnityPetFramework
 			Start();
 		}
 
-		// Everything the Reset button promises, in the order that makes it stick.
 		public static void ResetEverything()
 		{
 			bool wasEnabled = UnityPetFrameworkSettings.Enabled;
@@ -121,7 +112,6 @@ namespace FynnsTools.UnityPetFramework
 			}
 		}
 
-		// Re-measures where the pet may walk.
 		public static void RefreshMovementArea()
 		{
 			if (_running && _controller != null && _host != null)
@@ -163,7 +153,6 @@ namespace FynnsTools.UnityPetFramework
 
 			if (!_host.IsReady)
 			{
-				// Unity's window is not up yet.
 				if (++_startupAttempts <= MaxStartupAttempts)
 				{
 					EditorApplication.delayCall += Start;
@@ -183,7 +172,6 @@ namespace FynnsTools.UnityPetFramework
 				return;
 			}
 
-			// A pet brings its own sensible size.
 			if (UnityPetFrameworkSettings.ScaleInitialisedFor != definition.id)
 			{
 				UnityPetFrameworkSettings.Scale = definition.defaultScale > 0f ? definition.defaultScale : 1f;
@@ -241,7 +229,6 @@ namespace FynnsTools.UnityPetFramework
 				Debug.LogWarning(UnityPetFrameworkInfo.LogPrefix + "Detaching the pet's editor hooks failed: " + exception.Message);
 			}
 
-			// The last safe moment to write anything down.
 			try
 			{
 				if (_controller != null && !_suppressPersist)
@@ -255,7 +242,6 @@ namespace FynnsTools.UnityPetFramework
 				Debug.LogWarning(UnityPetFrameworkInfo.LogPrefix + "Saving the pet's state failed: " + exception.Message);
 			}
 
-			// The windows before anything they draw with.
 			try
 			{
 				_energyBar?.Dispose();
@@ -306,7 +292,7 @@ namespace FynnsTools.UnityPetFramework
 
 			double now = EditorApplication.timeSinceStartup;
 
-			// Clamped, because these ticks stop entirely during an import or a compile.
+			// Clamp elapsed time after imports and compilation.
 			float delta = Mathf.Clamp((float)(now - _lastTick), 0f, MaxDeltaSeconds);
 			_lastTick = now;
 
@@ -337,14 +323,13 @@ namespace FynnsTools.UnityPetFramework
 			}
 			catch (Exception exception)
 			{
-				// One bad tick must not leave an exception throwing every frame for the rest of the session.
+				// Stop a failed tick from throwing every frame.
 				_lastError = "The pet hit a problem and has been switched off: " + exception.Message;
 				Debug.LogError(UnityPetFrameworkInfo.LogPrefix + _lastError + "\n" + exception);
 				Shutdown();
 			}
 		}
 
-		// Read straight off disk.
 		private static void LoadSounds(PetDefinition definition, string petFolder)
 		{
 			PetAudio.ReleaseAll();
@@ -383,7 +368,6 @@ namespace FynnsTools.UnityPetFramework
 			return PetDefinitionSerializer.TryLoad(path, out definition, out atlas, out error);
 		}
 
-		// Position survives a reload but not a restart.
 		private static Vector2Int RestorePosition(IPetHost host, Vector2Int frameSize)
 		{
 			string stored = SessionState.GetString(SessionFeetKey, "");

@@ -1,0 +1,15 @@
+{
+  "name": "FynnsTools.VRCSDKPlus.Editor",
+  "rootNamespace": "FynnsTools.VRCSDKPlus",
+  "includePlatforms": [
+    "Editor"
+  ],
+  "autoReferenced": true,
+  "versionDefines": [
+    {
+      "define": "VRC_SDK_VRCSDK3",
+      "name": "com.vrchat.avatars",
+      "expression": ""
+    }
+  ]
+}

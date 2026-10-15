@@ -1,0 +1,14 @@
+{
+  "name": "FynnsToolkit.Dynamics.Editor",
+  "rootNamespace": "FynnsToolkit.Dynamics",
+  "includePlatforms": ["Editor"],
+  "autoReferenced": true,
+  "defineConstraints": ["FYNNS_VRC_DYNAMICS"],
+  "versionDefines": [
+    {
+      "name": "com.vrchat.base",
+      "expression": "3.10.5",
+      "define": "FYNNS_VRC_DYNAMICS"
+    }
+  ]
+}

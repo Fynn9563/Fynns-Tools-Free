@@ -1,6 +1,5 @@
 namespace FynnsTools.UnityPetFramework
 {
-	// What the pet does, mapped onto whatever this pet calls the animation for it.
 	internal static class PetBehaviours
 	{
 		public static readonly string[] Names = { "Idle", "Alternate idle", "Move", "Jump", "Pickup", "Click", "Petting", "Startled", "Confused", "Compile", "Success", "Failure", "Annoyed", "Sleep", "Rest", "Low energy", "Eat", "Playful", "Joke", "Special", "Turn", "Turn sitting" };

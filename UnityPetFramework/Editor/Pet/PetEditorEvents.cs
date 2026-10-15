@@ -5,10 +5,8 @@ using UnityEngine;
 
 namespace FynnsTools.UnityPetFramework
 {
-	// Turns things happening in the editor into things the pet does.
 	internal static class PetEditorEvents
 	{
-		// An error loop can produce hundreds of messages a second.
 		private const double ErrorReactionCooldownSeconds = 5d;
 
 		private const string CompileFailedKey = "FynnsTools.UnityPetFramework.Session.CompileFailed";
@@ -17,7 +15,6 @@ namespace FynnsTools.UnityPetFramework
 		private static bool _subscribed;
 		private static double _lastErrorReaction;
 
-		// Raised with the state the pet should move to.
 		public static event Action<PetState> Reaction;
 
 		public static void Subscribe()
@@ -52,7 +49,6 @@ namespace FynnsTools.UnityPetFramework
 			Application.logMessageReceived -= OnLogMessage;
 		}
 
-		// Whatever the pet was supposed to react to but could not.
 		public static bool TryTakePendingReaction(out PetState state)
 		{
 			state = PetState.Idle;
@@ -67,7 +63,6 @@ namespace FynnsTools.UnityPetFramework
 			return Enum.TryParse(stored, out state);
 		}
 
-		// Replays a reaction that was stored before a reload.
 		public static void RaisePending(PetState state)
 		{
 			Raise(state);
@@ -89,7 +84,7 @@ namespace FynnsTools.UnityPetFramework
 			Reaction?.Invoke(state);
 		}
 
-		// Stored rather than raised, for a reaction that belongs to the pet on the far side of a reload.
+		// Carry pending reactions across domain reload.
 		private static void Defer(PetState state)
 		{
 			if (UnityPetFrameworkSettings.ReactToEditorEvents)
@@ -104,7 +99,6 @@ namespace FynnsTools.UnityPetFramework
 			Raise(PetState.Think);
 		}
 
-		// Fired per assembly.
 		private static void OnAssemblyCompiled(string assemblyPath, CompilerMessage[] messages)
 		{
 			foreach (CompilerMessage message in messages)
@@ -124,7 +118,7 @@ namespace FynnsTools.UnityPetFramework
 
 			PetState outcome = failed ? PetState.Failure : PetState.Happy;
 
-			// A failed compile leaves the domain alone, so the pet is still here and can react now.
+			// Handle failed compilation without expecting a domain reload.
 			if (failed)
 			{
 				Raise(outcome);
@@ -155,7 +149,6 @@ namespace FynnsTools.UnityPetFramework
 				return;
 			}
 
-			// Compiler errors arrive through the Console too.
 			if (EditorApplication.isCompiling)
 			{
 				return;

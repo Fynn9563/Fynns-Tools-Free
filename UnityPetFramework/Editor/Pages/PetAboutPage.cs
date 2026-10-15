@@ -4,7 +4,6 @@ using UnityEngine.UIElements;
 
 namespace FynnsTools.UnityPetFramework
 {
-	// What the pet responds to, in one place the user can read.
 	internal sealed class PetAboutPage
 	{
 		private static readonly string[][] Mouse =
@@ -80,7 +79,6 @@ namespace FynnsTools.UnityPetFramework
 
 		private static void DrawRows(string[][] rows)
 		{
-			// The label column is wide enough for the longest entry.
 			float previous = EditorGUIUtility.labelWidth;
 			EditorGUIUtility.labelWidth = 170f;
 
