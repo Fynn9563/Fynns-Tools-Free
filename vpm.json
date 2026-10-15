@@ -2,6 +2,436 @@
   "author": "Fynn9563",
   "id": "com.fynn.tools.free",
   "name": "Fynn's Tools Free",
-  "packages": {},
+  "packages": {
+    "com.fynn.tools.animationhierarchyeditor": {
+      "versions": {
+        "1.1.0": {
+          "author": {
+            "name": "Fynn9563"
+          },
+          "dependencies": {},
+          "description": "Edit animation paths, replace motions, automatically repath clips and repair broken bindings.",
+          "displayName": "Animation Tools",
+          "name": "com.fynn.tools.animationhierarchyeditor",
+          "unity": "2022.3",
+          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.0/AnimationHierarchyEditor-1.1.0.zip",
+          "version": "1.1.0",
+          "vpmDependencies": {},
+          "zipSHA256": "d0f55a661af21851676dc0f2bd3fa382f7418d9b301a5dcb5d0b2100e9886a77"
+        }
+      }
+    },
+    "com.fynn.tools.assetorganizer": {
+      "versions": {
+        "1.0.3": {
+          "author": {
+            "name": "Fynn9563"
+          },
+          "dependencies": {},
+          "description": "Organize assets and their dependencies into folders by asset type.",
+          "displayName": "Asset Organizer",
+          "name": "com.fynn.tools.assetorganizer",
+          "unity": "2022.3",
+          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.0/AssetOrganizer-1.0.3.zip",
+          "version": "1.0.3",
+          "vpmDependencies": {},
+          "zipSHA256": "70222ff3615558fbb0fcc224d4b7583595720f01fe1a9352481795c2152cbfc1"
+        }
+      }
+    },
+    "com.fynn.tools.buildsizeviewer": {
+      "versions": {
+        "1.0.0": {
+          "author": {
+            "name": "Fynn9563"
+          },
+          "dependencies": {},
+          "description": "View Unity build size reports to see which assets contribute to avatar and world build sizes.",
+          "displayName": "Build Size Viewer",
+          "name": "com.fynn.tools.buildsizeviewer",
+          "unity": "2022.3",
+          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.0/BuildSizeViewer-1.0.0.zip",
+          "version": "1.0.0",
+          "vpmDependencies": {},
+          "zipSHA256": "1381e53985f6de8ecfe560fbecc6d22916e5d9a56b1eecd46d6247af34a923fb"
+        }
+      }
+    },
+    "com.fynn.tools.camerautility": {
+      "versions": {
+        "1.0.0": {
+          "author": {
+            "name": "Fynn9563"
+          },
+          "dependencies": {},
+          "description": "Match the position, rotation and lens of scene cameras and the Scene view.",
+          "displayName": "Camera Utility",
+          "name": "com.fynn.tools.camerautility",
+          "unity": "2022.3",
+          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.0/CameraUtility-1.0.0.zip",
+          "version": "1.0.0",
+          "vpmDependencies": {},
+          "zipSHA256": "e2c5f25c5ff7350a0a2e6df5992db1d0d8f320e96855f1d3c1d6a4ef6cab8e55"
+        }
+      }
+    },
+    "com.fynn.tools.clientsimstoragecleaner": {
+      "versions": {
+        "1.0.0": {
+          "author": {
+            "name": "Fynn9563"
+          },
+          "dependencies": {},
+          "description": "Clear local ClientSim storage between play sessions.",
+          "displayName": "ClientSim Storage Cleaner",
+          "name": "com.fynn.tools.clientsimstoragecleaner",
+          "unity": "2022.3",
+          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.0/ClientSimStorageCleaner-1.0.0.zip",
+          "version": "1.0.0",
+          "vpmDependencies": {},
+          "zipSHA256": "30074013ff9b739db9e55a007e2a46bc9fc6b55c9f50fd55e297f93d0dfd3642"
+        }
+      }
+    },
+    "com.fynn.tools.clippingtester": {
+      "versions": {
+        "1.0.0": {
+          "author": {
+            "name": "Fynn9563"
+          },
+          "dependencies": {},
+          "description": "Preview avatar animations on a temporary copy to check clothing and accessories for clipping.",
+          "displayName": "Clipping Tester",
+          "name": "com.fynn.tools.clippingtester",
+          "unity": "2022.3",
+          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.0/ClippingTester-1.0.0.zip",
+          "version": "1.0.0",
+          "vpmDependencies": {},
+          "zipSHA256": "746981fff3a846cd40aca3958194e340a4cedf30a9413f114a98988657689bec"
+        }
+      }
+    },
+    "com.fynn.tools.complete": {
+      "versions": {
+        "1.0.0": {
+          "author": {
+            "name": "Fynn9563"
+          },
+          "dependencies": {},
+          "description": "Install all Fynn's Tools Free tools as individual packages.",
+          "displayName": "Fynn's Tools Free Complete",
+          "name": "com.fynn.tools.complete",
+          "unity": "2022.3",
+          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.0/Complete-1.0.0.zip",
+          "version": "1.0.0",
+          "vpmDependencies": {
+            "com.fynn.tools.animationhierarchyeditor": ">=1.1.0",
+            "com.fynn.tools.assetorganizer": ">=1.0.3",
+            "com.fynn.tools.buildsizeviewer": ">=1.0.0",
+            "com.fynn.tools.camerautility": ">=1.0.0",
+            "com.fynn.tools.clientsimstoragecleaner": ">=1.0.0",
+            "com.fynn.tools.clippingtester": ">=1.0.0",
+            "com.fynn.tools.controllercleaner": ">=1.0.0",
+            "com.fynn.tools.controllersplus": ">=1.0.0",
+            "com.fynn.tools.copycutpaste": ">=1.0.0",
+            "com.fynn.tools.dynamicsplus": ">=1.1.0",
+            "com.fynn.tools.faceemopatches": ">=1.0.0",
+            "com.fynn.tools.gogolocoposechanger": ">=1.0.0",
+            "com.fynn.tools.hierarchyplus": ">=1.0.1",
+            "com.fynn.tools.matcapmaker": ">=1.0.0",
+            "com.fynn.tools.noautogame": ">=1.0.0",
+            "com.fynn.tools.packageimporter": ">=1.0.0",
+            "com.fynn.tools.quicktoggle": ">=1.0.0",
+            "com.fynn.tools.resethumanoidtpose": ">=1.0.0",
+            "com.fynn.tools.texturetools": ">=1.0.0",
+            "com.fynn.tools.unitypetframework": ">=1.0.0",
+            "com.fynn.tools.vrcsdkplus": ">=1.0.0"
+          },
+          "zipSHA256": "e72d9cb7651324a3589d914a7a9d2fc03429a31ea3d057f4f05e76c7ec845dc3"
+        }
+      }
+    },
+    "com.fynn.tools.controllercleaner": {
+      "versions": {
+        "1.0.0": {
+          "author": {
+            "name": "Fynn9563"
+          },
+          "dependencies": {},
+          "description": "Find and remove unused embedded objects from Animator Controllers.",
+          "displayName": "Controller Cleaner",
+          "name": "com.fynn.tools.controllercleaner",
+          "unity": "2022.3",
+          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.0/ControllerCleaner-1.0.0.zip",
+          "version": "1.0.0",
+          "vpmDependencies": {},
+          "zipSHA256": "13b12fd1151a7b7c9cc47c18418ac6f222eead78ce94d66c256ba40bd60140f3"
+        }
+      }
+    },
+    "com.fynn.tools.controllersplus": {
+      "versions": {
+        "1.0.0": {
+          "author": {
+            "name": "Fynn9563"
+          },
+          "dependencies": {},
+          "description": "Edit Animator controllers, states, transitions, parameters and BlendTrees, with templates, searches, toggle creation and optional VRChat tools.",
+          "displayName": "Controllers+",
+          "name": "com.fynn.tools.controllersplus",
+          "unity": "2022.3",
+          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.0/ControllersPlus-1.0.0.zip",
+          "version": "1.0.0",
+          "vpmDependencies": {},
+          "zipSHA256": "5f938a2e58889f2f78b362fd740bae6918489fbd46439101983e5a4bca751f8b"
+        }
+      }
+    },
+    "com.fynn.tools.copycutpaste": {
+      "versions": {
+        "1.0.0": {
+          "author": {
+            "name": "Fynn9563"
+          },
+          "dependencies": {},
+          "description": "Copy, cut and paste assets between folders in Unity's Project window.",
+          "displayName": "Copy/Cut/Paste",
+          "name": "com.fynn.tools.copycutpaste",
+          "unity": "2022.3",
+          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.0/CopyCutPaste-1.0.0.zip",
+          "version": "1.0.0",
+          "vpmDependencies": {},
+          "zipSHA256": "4c30dfa6e84034c6526fa10620818b572902f7c283040cc9c4f86358c5107a2c"
+        }
+      }
+    },
+    "com.fynn.tools.dynamicsplus": {
+      "versions": {
+        "1.1.0": {
+          "author": {
+            "name": "Fynn9563"
+          },
+          "dependencies": {},
+          "description": "Edit, organize, remove and preview VRChat PhysBones, colliders and Contacts.",
+          "displayName": "Dynamics+",
+          "name": "com.fynn.tools.dynamicsplus",
+          "unity": "2022.3",
+          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.0/DynamicsPlus-1.1.0.zip",
+          "version": "1.1.0",
+          "vpmDependencies": {
+            "com.vrchat.base": ">=3.10.5"
+          },
+          "zipSHA256": "725568a6e18e474acff0321aeee48732e52d2dede2e41aef07b4ea7f5583dbab"
+        }
+      }
+    },
+    "com.fynn.tools.faceemopatches": {
+      "versions": {
+        "1.0.0": {
+          "author": {
+            "name": "Fynn9563"
+          },
+          "dependencies": {},
+          "description": "Optional editor fixes for FaceEmo.",
+          "displayName": "FaceEmo Patches",
+          "name": "com.fynn.tools.faceemopatches",
+          "unity": "2022.3",
+          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.0/FaceEmoPatches-1.0.0.zip",
+          "version": "1.0.0",
+          "vpmDependencies": {
+            "com.vrchat.base": ">=3.5.0"
+          },
+          "zipSHA256": "f37eb60a47d9fd91d30edcd6e908167f8ab3e0b4ce7e226fd1469e64084939f4"
+        }
+      }
+    },
+    "com.fynn.tools.gogolocoposechanger": {
+      "versions": {
+        "1.0.0": {
+          "author": {
+            "name": "Fynn9563"
+          },
+          "dependencies": {},
+          "description": "Customize GoGoLoco poses using an NDMF build plugin.",
+          "displayName": "GoGoLoco Pose Changer",
+          "name": "com.fynn.tools.gogolocoposechanger",
+          "unity": "2022.3",
+          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.0/GoGoLocoPoseChanger-1.0.0.zip",
+          "version": "1.0.0",
+          "vpmDependencies": {
+            "com.vrchat.avatars": ">=3.5.0",
+            "nadena.dev.ndmf": ">=1.0.0"
+          },
+          "zipSHA256": "a855b40be6234f304370c052a3d27c62bef33a7fdafc5f08b12645f6dd44c8ef"
+        }
+      }
+    },
+    "com.fynn.tools.hierarchyplus": {
+      "versions": {
+        "1.0.1": {
+          "author": {
+            "name": "Fynn9563"
+          },
+          "dependencies": {},
+          "description": "Customize the Unity Hierarchy with component icons, labels, colors and virtual collection folders.",
+          "displayName": "Hierarchy+",
+          "name": "com.fynn.tools.hierarchyplus",
+          "unity": "2022.3",
+          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.0/HierarchyPlus-1.0.1.zip",
+          "version": "1.0.1",
+          "vpmDependencies": {},
+          "zipSHA256": "eadd7a8acb4db44d9fa2adc5e5f94451af41819a61e82a2d8527a179ff3a92f1"
+        }
+      }
+    },
+    "com.fynn.tools.matcapmaker": {
+      "versions": {
+        "1.0.0": {
+          "author": {
+            "name": "Fynn9563"
+          },
+          "dependencies": {},
+          "description": "Create and customize MatCap textures with editable presets, surface patterns, reflections, lighting and live previews.",
+          "displayName": "MatCap Maker",
+          "name": "com.fynn.tools.matcapmaker",
+          "unity": "2022.3",
+          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.0/MatCapMaker-1.0.0.zip",
+          "version": "1.0.0",
+          "vpmDependencies": {},
+          "zipSHA256": "c5f058abcfdcaeb2655d7f0ffd9d6ab1aa94b1e07b12a3432bfafddfe6e99622"
+        }
+      }
+    },
+    "com.fynn.tools.noautogame": {
+      "versions": {
+        "1.0.0": {
+          "author": {
+            "name": "Fynn9563"
+          },
+          "dependencies": {},
+          "description": "Control whether Unity switches to the Game view when entering Play Mode.",
+          "displayName": "No Auto Game",
+          "name": "com.fynn.tools.noautogame",
+          "unity": "2022.3",
+          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.0/NoAutoGame-1.0.0.zip",
+          "version": "1.0.0",
+          "vpmDependencies": {},
+          "zipSHA256": "73fced819ded56676e85e920cf46bc546227fb941db569b01c8b4d69f283a24e"
+        }
+      }
+    },
+    "com.fynn.tools.packageimporter": {
+      "versions": {
+        "1.0.0": {
+          "author": {
+            "name": "Fynn9563"
+          },
+          "dependencies": {},
+          "description": "Queue and import Unity packages, review existing assets and skip unchanged packages.",
+          "displayName": "Package Importer",
+          "name": "com.fynn.tools.packageimporter",
+          "unity": "2022.3",
+          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.0/PackageImporter-1.0.0.zip",
+          "version": "1.0.0",
+          "vpmDependencies": {},
+          "zipSHA256": "e633f1d3180b0d1b2490a1f856f86326226b6390a8f0c055e787593e8215c07f"
+        }
+      }
+    },
+    "com.fynn.tools.quicktoggle": {
+      "versions": {
+        "1.0.0": {
+          "author": {
+            "name": "Fynn9563"
+          },
+          "dependencies": {},
+          "description": "Create object, component and blendshape animations, with optional VRCFury or Modular Avatar toggle setup.",
+          "displayName": "Quick Toggle",
+          "name": "com.fynn.tools.quicktoggle",
+          "unity": "2022.3",
+          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.0/QuickToggle-1.0.0.zip",
+          "version": "1.0.0",
+          "vpmDependencies": {},
+          "zipSHA256": "7b6e610138822442f831841f4cf22421cf64ac9b2a32bf2021da881676081609"
+        }
+      }
+    },
+    "com.fynn.tools.resethumanoidtpose": {
+      "versions": {
+        "1.0.0": {
+          "author": {
+            "name": "Fynn9563"
+          },
+          "dependencies": {},
+          "description": "Restore a humanoid avatar to its T-pose.",
+          "displayName": "Reset Humanoid",
+          "name": "com.fynn.tools.resethumanoidtpose",
+          "unity": "2022.3",
+          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.0/ResetHumanoidTPose-1.0.0.zip",
+          "version": "1.0.0",
+          "vpmDependencies": {},
+          "zipSHA256": "f13615cee7ce9c8fb4f0c29b44fac4969e9d372f3f4d133ab24733617312fa89"
+        }
+      }
+    },
+    "com.fynn.tools.texturetools": {
+      "versions": {
+        "1.0.0": {
+          "author": {
+            "name": "Fynn9563"
+          },
+          "dependencies": {
+            "com.unity.textmeshpro": "3.0.9"
+          },
+          "description": "Create text textures, generate normal maps, edit colors, pack and unpack channels, automatically pack textures and process textures in batches.",
+          "displayName": "Texture Tools",
+          "name": "com.fynn.tools.texturetools",
+          "unity": "2022.3",
+          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.0/TextureTools-1.0.0.zip",
+          "version": "1.0.0",
+          "vpmDependencies": {},
+          "zipSHA256": "08f87efd91caa77732d1f2a8f414a8ce5c42c3165103de8f5d407c3d4897ddfc"
+        }
+      }
+    },
+    "com.fynn.tools.unitypetframework": {
+      "versions": {
+        "1.0.0": {
+          "author": {
+            "name": "Fynn9563"
+          },
+          "dependencies": {},
+          "description": "Create, import and display animated desktop pets in the Unity Editor.",
+          "displayName": "Unity Pet Framework",
+          "name": "com.fynn.tools.unitypetframework",
+          "unity": "2022.3",
+          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.0/UnityPetFramework-1.0.0.zip",
+          "version": "1.0.0",
+          "vpmDependencies": {},
+          "zipSHA256": "d980275b1073a391195898170aa870be85daa9bb319725f0a7de0f13278dc756"
+        }
+      }
+    },
+    "com.fynn.tools.vrcsdkplus": {
+      "versions": {
+        "1.0.0": {
+          "author": {
+            "name": "Fynn9563"
+          },
+          "dependencies": {},
+          "description": "Enhanced VRChat expression menu and parameter editing, SDK panel layouts, Content Manager and scene capture tools, with optional SDK patches.",
+          "displayName": "VRCSDK+",
+          "name": "com.fynn.tools.vrcsdkplus",
+          "unity": "2022.3",
+          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.0/VRCSDKPlus-1.0.0.zip",
+          "version": "1.0.0",
+          "vpmDependencies": {
+            "com.vrchat.avatars": ">=3.10.5"
+          },
+          "zipSHA256": "61b60620faf8903a9445dadb9b1460cf987b44616b1026a6c5b434686986c867"
+        }
+      }
+    }
+  },
   "url": "https://raw.githubusercontent.com/Fynn9563/Fynns-Tools-Free/main/vpm.json"
 }
