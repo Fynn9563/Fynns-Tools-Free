@@ -75,24 +75,6 @@
         }
       }
     },
-    "com.fynn.tools.clientsimstoragecleaner": {
-      "versions": {
-        "1.0.0": {
-          "author": {
-            "name": "Fynn9563"
-          },
-          "dependencies": {},
-          "description": "Clear local ClientSim storage between play sessions.",
-          "displayName": "ClientSim Storage Cleaner",
-          "name": "com.fynn.tools.clientsimstoragecleaner",
-          "unity": "2022.3",
-          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.0/ClientSimStorageCleaner-1.0.0.zip",
-          "version": "1.0.0",
-          "vpmDependencies": {},
-          "zipSHA256": "30074013ff9b739db9e55a007e2a46bc9fc6b55c9f50fd55e297f93d0dfd3642"
-        }
-      }
-    },
     "com.fynn.tools.clippingtester": {
       "versions": {
         "1.0.0": {
@@ -108,46 +90,6 @@
           "version": "1.0.0",
           "vpmDependencies": {},
           "zipSHA256": "746981fff3a846cd40aca3958194e340a4cedf30a9413f114a98988657689bec"
-        }
-      }
-    },
-    "com.fynn.tools.complete": {
-      "versions": {
-        "1.0.0": {
-          "author": {
-            "name": "Fynn9563"
-          },
-          "dependencies": {},
-          "description": "Install all Fynn's Tools Free tools as individual packages.",
-          "displayName": "Fynn's Tools Free Complete",
-          "name": "com.fynn.tools.complete",
-          "unity": "2022.3",
-          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/v1.0.0/Complete-1.0.0.zip",
-          "version": "1.0.0",
-          "vpmDependencies": {
-            "com.fynn.tools.animationhierarchyeditor": ">=1.1.0",
-            "com.fynn.tools.assetorganizer": ">=1.0.3",
-            "com.fynn.tools.buildsizeviewer": ">=1.0.0",
-            "com.fynn.tools.camerautility": ">=1.0.0",
-            "com.fynn.tools.clientsimstoragecleaner": ">=1.0.0",
-            "com.fynn.tools.clippingtester": ">=1.0.0",
-            "com.fynn.tools.controllercleaner": ">=1.0.0",
-            "com.fynn.tools.controllersplus": ">=1.0.0",
-            "com.fynn.tools.copycutpaste": ">=1.0.0",
-            "com.fynn.tools.dynamicsplus": ">=1.1.0",
-            "com.fynn.tools.faceemopatches": ">=1.0.0",
-            "com.fynn.tools.gogolocoposechanger": ">=1.0.0",
-            "com.fynn.tools.hierarchyplus": ">=1.0.1",
-            "com.fynn.tools.matcapmaker": ">=1.0.0",
-            "com.fynn.tools.noautogame": ">=1.0.0",
-            "com.fynn.tools.packageimporter": ">=1.0.0",
-            "com.fynn.tools.quicktoggle": ">=1.0.0",
-            "com.fynn.tools.resethumanoidtpose": ">=1.0.0",
-            "com.fynn.tools.texturetools": ">=1.0.0",
-            "com.fynn.tools.unitypetframework": ">=1.0.0",
-            "com.fynn.tools.vrcsdkplus": ">=1.0.0"
-          },
-          "zipSHA256": "e72d9cb7651324a3589d914a7a9d2fc03429a31ea3d057f4f05e76c7ec845dc3"
         }
       }
     },
