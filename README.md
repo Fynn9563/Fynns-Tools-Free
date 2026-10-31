@@ -10,7 +10,7 @@ Free tools for the Unity Editor.
 | [Asset Organizer](AssetOrganizer/README.md) | Organize assets and their dependencies into folders by asset type. |
 | [Build Size Viewer](BuildSizeViewer/README.md) | View Unity build size reports to see which assets contribute to avatar and world build sizes. |
 | [Camera Utility](CameraUtility/README.md) | Match the position, rotation and lens of scene cameras and the Scene view. |
-| [ClientSim Storage Cleaner](ClientSimStorageCleaner/README.md) | Clear local ClientSim storage between play sessions in VRChat world projects. |
+| [ClientSim Storage Cleaner](ClientSimStorageCleaner/README.md) | Reset ClientSim runtime caches and local storage between Play sessions in VRChat world projects. |
 | [Clipping Tester](ClippingTester/README.md) | Preview avatar animations on a temporary copy to check clothing and accessories for clipping. |
 | [Controller Cleaner](ControllerCleaner/README.md) | Find and remove unused embedded objects from Animator Controllers. |
 | [Controllers+](ControllersPlus/README.md) | Edit Animator controllers, states, transitions, parameters and BlendTrees, with templates, searches, toggle creation and optional VRChat tools. |
@@ -20,6 +20,7 @@ Free tools for the Unity Editor.
 | [GoGoLoco Pose Changer](GoGoLocoPoseChanger/README.md) | Customize GoGoLoco poses using an NDMF build plugin. |
 | [Hierarchy+](HierarchyPlus/README.md) | Customize the Unity Hierarchy with component icons, labels, colors and virtual collection folders. |
 | [MatCap Maker](MatCapMaker/README.md) | Create and customize MatCap textures with editable presets, surface patterns, reflections, lighting and live previews. |
+| [MultiUploader](MultiUploader/README.md) | Batch PC and Quest avatar builds, tests and uploads with optional Quest material conversion and previews. |
 | [No Auto Game](NoAutoGame/README.md) | Control whether Unity switches to the Game view when entering Play Mode. |
 | [Package Importer](PackageImporter/README.md) | Queue and import Unity packages, review existing assets and skip unchanged packages. |
 | [Quick Toggle](QuickToggle/README.md) | Create object, component and blendshape animations, with optional VRCFury or Modular Avatar toggle setup. |
@@ -64,7 +65,7 @@ Based on CameraUtility by Dreadrith. Toolkit modifications by Fynn9563.
 
 ## ClientSim Storage Cleaner
 
-Automatically clear local ClientSim player data and player objects after Play Mode in VRChat world projects, with an option to clear them manually.
+Reset ClientSim runtime caches before Play Mode, delay script reloads until ClientSim stops, and optionally clear saved player data between test sessions.
 
 Created by [Fynn9563](https://github.com/Fynn9563).
 

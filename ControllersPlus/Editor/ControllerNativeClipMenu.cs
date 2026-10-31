@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
@@ -22,8 +23,17 @@ namespace FynnsTools.ControllerEditor
                 if (record && (bool)(state.GetType().GetProperty("canRecord", flags)?.GetValue(state, null) ?? false))
                     state.GetType().GetMethod("StartRecording", flags)?.Invoke(state, null);
                 FindInitializer()?.Repaint();
-            }, true));
+            }, true, AnimationMenuMotions(state)));
             return false;
+        }
+
+        internal static IEnumerable<Motion> AnimationMenuMotions(object state)
+        {
+            if (state == null) return Array.Empty<Motion>();
+            const BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+            var root = state.GetType().GetProperty("activeRootGameObject", flags)?.GetValue(state, null) as GameObject;
+            if (!root) root = state.GetType().GetProperty("activeGameObject", flags)?.GetValue(state, null) as GameObject;
+            return ControllerEditorInspection.AvatarMotions(root);
         }
     }
 }

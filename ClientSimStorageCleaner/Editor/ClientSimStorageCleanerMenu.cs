@@ -27,5 +27,17 @@ namespace FynnsTools.ClientSimStorageCleaner
 		{
 			return !EditorApplication.isPlayingOrWillChangePlaymode;
 		}
+
+		[MenuItem(ToolsMenu + "Reset Runtime Caches Now", false, 95)]
+		private static void ResetRuntimeCachesNow()
+		{
+			ClientSimRuntimeCaches.Reset();
+		}
+
+		[MenuItem(ToolsMenu + "Reset Runtime Caches Now", true, 95)]
+		private static bool CanResetRuntimeCachesNow()
+		{
+			return !EditorApplication.isPlayingOrWillChangePlaymode;
+		}
 	}
 }

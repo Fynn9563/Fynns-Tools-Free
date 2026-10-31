@@ -8,6 +8,11 @@
 
 ## Complete
 
+### [1.0.2] - 2026-10-31
+
+#### Added
+- Include MultiUploader in the avatar tools installer.
+
 ### [1.0.1] - 2026-10-15
 
 - Declare Avatar SDK compatibility and exclude World SDK tools from Complete.
@@ -108,6 +113,16 @@ Initial standalone source package.
 
 ## ClientSimStorageCleaner
 
+### [1.1.0] - 2026-10-31
+
+#### Added
+- Delay script reloads until ClientSim finishes exiting Play Mode, with a separate setting enabled by default.
+- Reset ClientSim player-object caches and destroyed Udon default-texture references before Play Mode when Reload Domain is disabled.
+- Add a separate runtime cache setting and manual reset command without deleting saved player data.
+
+#### Fixed
+- Stop pending storage deletion retries when another Play session starts or automatic deletion is disabled.
+
 ### [1.0.1] - 2026-10-15
 
 - Require the VRChat World SDK so VPM offers ClientSim Storage Cleaner for world projects.
@@ -123,6 +138,12 @@ First release.
 - Nothing under `Assets`, `Packages` or `Library` is touched, and a project without the folder is left alone
 
 ## ControllersPlus
+
+### [1.0.1] - 2026-10-31
+
+#### Fixed
+- Limit the Animation window's clip dropdown to animations referenced by its active avatar, including nested controllers and legacy animations.
+- Open the new-clip file dialog after the dropdown's layout scopes have closed.
 
 ### [1.0.0] - 2026-10-15
 
@@ -231,6 +252,16 @@ First release.
 - Bloom, PNG/EXR export up to 4096px, isolated material capture and reflection-probe capture.
 - Saved presets with embedded generated/captured textures and retained layer order.
 - One menu under **Tools > Fynn's Tools > MatCap Maker**, with Fynn9563 credit and no SDK dependency.
+
+## MultiUploader
+
+### [1.0.0] - 2026-10-31
+
+#### Added
+- Batch avatar builds, local tests and uploads for PC, Quest or both, with cancellation and return to the starting platform.
+- Optional Quest material conversion, material overrides and PC/Quest previews.
+- Hierarchy drag-and-drop and selection controls for separate upload and Quest conversion ignore lists.
+- Per-avatar conversion ignores preserve materials and animated material swaps on ignored objects and their children.
 
 ## NoAutoGame
 

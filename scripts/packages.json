@@ -26,7 +26,7 @@
   "ClientSimStorageCleaner": {
     "name": "com.fynn.tools.clientsimstoragecleaner",
     "displayName": "ClientSim Storage Cleaner",
-    "description": "Clear local ClientSim storage between play sessions.",
+    "description": "Reset ClientSim runtime caches and local player data between Play sessions.",
     "vpmDependencies": {
       "com.vrchat.worlds": ">=3.10.5"
     },
@@ -94,6 +94,15 @@
     "displayName": "MatCap Maker",
     "description": "Create and customize MatCap textures with editable presets, surface patterns, reflections, lighting and live previews.",
     "vpmDependencies": {}
+  },
+  "MultiUploader": {
+    "name": "com.fynn.tools.multiuploader",
+    "displayName": "MultiUploader",
+    "description": "Batch PC and Quest avatar builds, tests and uploads with optional Quest material conversion and previews.",
+    "vpmDependencies": {
+      "com.vrchat.avatars": ">=3.10.5",
+      "nadena.dev.ndmf": ">=1.14.8"
+    }
   },
   "NoAutoGame": {
     "name": "com.fynn.tools.noautogame",

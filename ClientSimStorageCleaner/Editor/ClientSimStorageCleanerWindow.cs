@@ -7,7 +7,7 @@ namespace FynnsTools.ClientSimStorageCleaner
 	{
 		private const string WindowTitle = "ClientSim Storage Cleaner";
 
-		private static readonly Vector2 MinWindowSize = new Vector2(380, 160);
+		private static readonly Vector2 MinWindowSize = new Vector2(380, 390);
 
 		public static void Open()
 		{
@@ -19,6 +19,26 @@ namespace FynnsTools.ClientSimStorageCleaner
 		private void OnGUI()
 		{
 			EditorGUILayout.Space();
+
+			using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
+			{
+				bool protect = ClientSimStorageCleanerSettings.ProtectAssemblyReloads;
+				bool wanted = EditorGUILayout.ToggleLeft("Delay script reloads until ClientSim stops", protect, EditorStyles.boldLabel);
+				if (wanted != protect) ClientSimStorageCleanerSettings.ProtectAssemblyReloads = wanted;
+				EditorGUILayout.LabelField(
+					"Defers assembly reloads during ClientSim Play sessions and shutdown. Script changes take effect after Play Mode ends.",
+					EditorStyles.wordWrappedMiniLabel);
+			}
+
+			using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
+			{
+				bool reset = ClientSimStorageCleanerSettings.ResetRuntimeCaches;
+				bool wanted = EditorGUILayout.ToggleLeft("Reset runtime caches before play (Reload Domain off)", reset, EditorStyles.boldLabel);
+				if (wanted != reset) ClientSimStorageCleanerSettings.ResetRuntimeCaches = wanted;
+				EditorGUILayout.LabelField(
+					"Clears ClientSim's cached player-object list and destroyed Udon default-texture references before startup. Keeps saved player data and leaves Reload Domain disabled.",
+					EditorStyles.wordWrappedMiniLabel);
+			}
 
 			using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
 			{

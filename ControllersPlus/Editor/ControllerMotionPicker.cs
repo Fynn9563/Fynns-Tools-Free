@@ -19,14 +19,19 @@ namespace FynnsTools.ControllerEditor
         private int selected;
         private Vector2 scroll;
         private bool focus = true;
-        internal ControllerMotionPicker(Action<Motion, bool> choose, bool clipsOnly = false)
+        internal ControllerMotionPicker(Action<Motion, bool> choose, bool clipsOnly = false, IEnumerable<Motion> candidates = null)
         {
             this.choose = choose;
             query = SessionState.GetString("FynnsTools.ControllerEditor.MotionSearch", "");
-            if (index == null) index = AssetDatabase.FindAssets("t:Motion").Select(AssetDatabase.GUIDToAssetPath).Distinct()
-                .SelectMany(path => AssetDatabase.LoadAllAssetsAtPath(path).OfType<Motion>()).Where(motion => motion)
+            if (candidates == null)
+            {
+                if (index == null) index = AssetDatabase.FindAssets("t:Motion").Select(AssetDatabase.GUIDToAssetPath).Distinct()
+                    .SelectMany(path => AssetDatabase.LoadAllAssetsAtPath(path).OfType<Motion>()).Where(motion => motion)
+                    .OrderBy(motion => motion.name, StringComparer.OrdinalIgnoreCase).ToArray();
+                candidates = index;
+            }
+            motions = candidates.Where(motion => motion && (!clipsOnly || motion is AnimationClip)).Distinct()
                 .OrderBy(motion => motion.name, StringComparer.OrdinalIgnoreCase).ToArray();
-            motions = index.Where(motion => motion && (!clipsOnly || motion is AnimationClip)).ToArray();
             Filter();
         }
         internal static int Score(string name, string query)
@@ -55,6 +60,7 @@ namespace FynnsTools.ControllerEditor
         public override Vector2 GetWindowSize() { return new Vector2(430, 420); }
         public override void OnGUI(Rect rect)
         {
+            bool createRequested = false;
             var current = Event.current;
             if (current.type == EventType.KeyDown)
             {
@@ -73,7 +79,7 @@ namespace FynnsTools.ControllerEditor
                 EditorGUI.BeginChangeCheck();
                 query = GUILayout.TextField(query, EditorStyles.toolbarSearchField);
                 if (EditorGUI.EndChangeCheck()) { SessionState.SetString("FynnsTools.ControllerEditor.MotionSearch", query); Filter(); }
-                if (GUILayout.Button("+", EditorStyles.toolbarButton, GUILayout.Width(25))) CreateClip();
+                if (GUILayout.Button("+", EditorStyles.toolbarButton, GUILayout.Width(25))) createRequested = true;
             }
             scroll = EditorGUILayout.BeginScrollView(scroll);
             for (int index = 0; index < matches.Length; index++)
@@ -90,8 +96,9 @@ namespace FynnsTools.ControllerEditor
             EditorGUILayout.EndScrollView();
             EditorGUILayout.LabelField("Enter: select   Ctrl+Enter or right-click: record", EditorStyles.miniLabel);
             if (focus && current.type == EventType.Repaint) { focus = false; GUI.FocusControl("MotionSearch"); }
+            if (createRequested) CreateClip();
         }
-        private void Accept(Motion motion, bool record) { choose(motion, record); editorWindow.Close(); }
+        private void Accept(Motion motion, bool record) { choose(motion, record); if (editorWindow) editorWindow.Close(); }
         private void CreateClip()
         {
             string path = EditorUtility.SaveFilePanelInProject("New Animation", string.IsNullOrWhiteSpace(query) ? "Animation" : query, "anim", "Save the animation clip");

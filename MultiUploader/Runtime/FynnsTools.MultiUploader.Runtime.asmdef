@@ -1,0 +1,7 @@
+{
+  "name": "FynnsTools.MultiUploader.Runtime",
+  "references": [
+    "nadena.dev.ndmf.runtime"
+  ],
+  "autoReferenced": true
+}

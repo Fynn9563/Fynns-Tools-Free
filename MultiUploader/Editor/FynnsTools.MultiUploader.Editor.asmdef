@@ -1,0 +1,14 @@
+{
+  "name": "FynnsTools.MultiUploader.Editor",
+  "references": [
+    "FynnsTools.MultiUploader.Runtime",
+    "nadena.dev.ndmf",
+    "VRC.SDK3A",
+    "VRC.SDK3A.Editor",
+    "VRC.SDKBase.Editor"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "autoReferenced": true
+}

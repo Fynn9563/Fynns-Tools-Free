@@ -157,6 +157,8 @@ namespace FynnsTools.ControllerEditor
             {
                 if (!component) continue;
                 if (component is Animator componentAnimator) Add(componentAnimator.runtimeAnimatorController);
+                if (component is Animation legacy)
+                    foreach (AnimationState state in legacy) Add(state.clip);
 #if FYNNS_CONTROLLER_EDITOR_AVATARS
                 if (component is VRC.SDK3.Avatars.Components.VRCAvatarDescriptor descriptor)
                 {

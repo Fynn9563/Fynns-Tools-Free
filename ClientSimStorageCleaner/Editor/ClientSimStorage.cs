@@ -47,6 +47,12 @@ namespace FynnsTools.ClientSimStorageCleaner
 
 		private static void TryClear()
 		{
+			// A previous session's retry must never delete a new session's saves.
+			if (EditorApplication.isPlayingOrWillChangePlaymode || !ClientSimStorageCleanerSettings.Enabled)
+			{
+				EditorApplication.update -= TryClear;
+				return;
+			}
 			if (EditorApplication.timeSinceStartup < _nextAttemptAt) return;
 
 			_attempts++;
