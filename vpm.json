@@ -92,6 +92,22 @@
             "com.vrchat.worlds": ">=3.10.5"
           },
           "zipSHA256": "6ae7e619b1dbc78e55974a7a9344f0631eab2bee7917dea6330641e81afeaf41"
+        },
+        "1.1.0": {
+          "author": {
+            "name": "Fynn9563"
+          },
+          "dependencies": {},
+          "description": "Reset ClientSim runtime caches and local player data between Play sessions.",
+          "displayName": "ClientSim Storage Cleaner",
+          "name": "com.fynn.tools.clientsimstoragecleaner",
+          "unity": "2022.3",
+          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/ClientSimStorageCleaner-v1.1.0/ClientSimStorageCleaner-1.1.0.zip",
+          "version": "1.1.0",
+          "vpmDependencies": {
+            "com.vrchat.worlds": ">=3.10.5"
+          },
+          "zipSHA256": "e60c863eccc6601e15043bcbf4dc6f0b06f1bdb6482f5ab82089a5a9e8709bda"
         }
       }
     },
@@ -150,6 +166,43 @@
             "com.vrchat.avatars": ">=3.10.5"
           },
           "zipSHA256": "db8c89e07bd7176d91a0f25a403094561653366c7287e03bdbe33bc7be3f1be6"
+        },
+        "1.0.2": {
+          "author": {
+            "name": "Fynn9563"
+          },
+          "dependencies": {},
+          "description": "Install all Fynn's Tools Free tools compatible with VRChat avatar projects.",
+          "displayName": "Fynn's Tools Free Complete \u2014 Avatars",
+          "name": "com.fynn.tools.complete",
+          "unity": "2022.3",
+          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/Complete-v1.0.2/Complete-1.0.2.zip",
+          "version": "1.0.2",
+          "vpmDependencies": {
+            "com.fynn.tools.animationhierarchyeditor": ">=1.1.0",
+            "com.fynn.tools.assetorganizer": ">=1.0.3",
+            "com.fynn.tools.buildsizeviewer": ">=1.0.0",
+            "com.fynn.tools.camerautility": ">=1.0.0",
+            "com.fynn.tools.clippingtester": ">=1.0.0",
+            "com.fynn.tools.controllercleaner": ">=1.0.0",
+            "com.fynn.tools.controllersplus": ">=1.0.1",
+            "com.fynn.tools.copycutpaste": ">=1.0.0",
+            "com.fynn.tools.dynamicsplus": ">=1.1.0",
+            "com.fynn.tools.faceemopatches": ">=1.0.0",
+            "com.fynn.tools.gogolocoposechanger": ">=1.0.0",
+            "com.fynn.tools.hierarchyplus": ">=1.0.1",
+            "com.fynn.tools.matcapmaker": ">=1.0.0",
+            "com.fynn.tools.multiuploader": ">=1.0.0",
+            "com.fynn.tools.noautogame": ">=1.0.0",
+            "com.fynn.tools.packageimporter": ">=1.0.0",
+            "com.fynn.tools.quicktoggle": ">=1.0.0",
+            "com.fynn.tools.resethumanoidtpose": ">=1.0.0",
+            "com.fynn.tools.texturetools": ">=1.0.0",
+            "com.fynn.tools.unitypetframework": ">=1.0.0",
+            "com.fynn.tools.vrcsdkplus": ">=1.0.0",
+            "com.vrchat.avatars": ">=3.10.5"
+          },
+          "zipSHA256": "d2c2da989965fda223fb569b599b30702fafa9c9e647fba3df426e0fb690d15d"
         }
       }
     },
@@ -225,6 +278,20 @@
           "version": "1.0.0",
           "vpmDependencies": {},
           "zipSHA256": "023bc254d073d0dd6c7d14e81ea3d0d180cf194cfe8b2f513a266cc7edc2ff8e"
+        },
+        "1.0.1": {
+          "author": {
+            "name": "Fynn9563"
+          },
+          "dependencies": {},
+          "description": "Edit Animator controllers, states, transitions, parameters and BlendTrees, with templates, searches, toggle creation and optional VRChat tools.",
+          "displayName": "Controllers+",
+          "name": "com.fynn.tools.controllersplus",
+          "unity": "2022.3",
+          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/ControllersPlus-v1.0.1/ControllersPlus-1.0.1.zip",
+          "version": "1.0.1",
+          "vpmDependencies": {},
+          "zipSHA256": "c0a3e300c4c042294534ab06c7bf5386f5e1691cbaf9883f50b9f9cbcb6cae7a"
         }
       }
     },
@@ -340,6 +407,27 @@
           "version": "1.0.0",
           "vpmDependencies": {},
           "zipSHA256": "b174027ee87ca290e27c5348b5fbe2b682594b3108f588045ffeedd9f42670a2"
+        }
+      }
+    },
+    "com.fynn.tools.multiuploader": {
+      "versions": {
+        "1.0.0": {
+          "author": {
+            "name": "Fynn9563"
+          },
+          "dependencies": {},
+          "description": "Batch PC and Quest avatar builds, tests and uploads with optional Quest material conversion and previews.",
+          "displayName": "MultiUploader",
+          "name": "com.fynn.tools.multiuploader",
+          "unity": "2022.3",
+          "url": "https://github.com/Fynn9563/Fynns-Tools-Free/releases/download/MultiUploader-v1.0.0/MultiUploader-1.0.0.zip",
+          "version": "1.0.0",
+          "vpmDependencies": {
+            "com.vrchat.avatars": ">=3.10.5",
+            "nadena.dev.ndmf": ">=1.14.8"
+          },
+          "zipSHA256": "83e72ed3bdf0890e497cbeb32250e6f2733a268f5bd06bb6928cf0d7ffb70245"
         }
       }
     },
